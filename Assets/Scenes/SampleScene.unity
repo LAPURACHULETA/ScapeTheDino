@@ -608,6 +608,7 @@ MonoBehaviour:
   firstPerson: {fileID: 1935015510}
   thirdPerson: {fileID: 928091022}
   cameraPerson: {fileID: 330585546}
+  timeToTranlate: 0.7
   canChangePerson: 0
 --- !u!54 &1195632953
 Rigidbody:

@@ -19,12 +19,13 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform firstPerson;
     [SerializeField] private Transform thirdPerson;
     [SerializeField] private Transform cameraPerson;
+    [SerializeField] private float timeToTranlate;
     [SerializeField] private bool canChangePerson;
-    
+
     private Rigidbody rb;
     private PlayerInput playerInput;
     private Vector2 input;
-   
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,11 +56,11 @@ public class Player : MonoBehaviour
                 timeCanRunPlayer = 0;
             }
         }
-        
+
     }
     public void RunPlayer(InputAction.CallbackContext context)
     {
-        if(context.performed && !canRunPlayer)
+        if (context.performed && !canRunPlayer)
         {
             speed += 5;
             Invoke("StopToRun", 2f);
@@ -71,23 +72,33 @@ public class Player : MonoBehaviour
         if (context.started)
         {
             canChangePerson = true;
-        } 
+        }
         if (context.canceled)
         {
             canChangePerson = false;
         }
         if (canChangePerson)
         {
-            cameraPerson.position = Vector3.Lerp(transform.position, firstPerson.position, 1000 * Time.deltaTime);
+            StartCoroutine(TranslateCamera(thirdPerson.position, firstPerson.position, timeToTranlate));
             cameraPerson.SetParent(firstPerson);
         }
         if (!canChangePerson)
         {
-            cameraPerson.position = Vector3.Lerp(transform.position, thirdPerson.position, 1000 * Time.deltaTime);
+            StartCoroutine(TranslateCamera(firstPerson.position, thirdPerson.position, timeToTranlate));
             cameraPerson.SetParent(thirdPerson);
         }
     }
-  
+    IEnumerator TranslateCamera(Vector3 start, Vector3 end, float timeToTranslate)
+    {
+        float time = 0f;
+        while (time < timeToTranslate)
+        {
+            cameraPerson.position = Vector3.Lerp(start, end, time / timeToTranslate);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        cameraPerson.position = end;
+    }
     private void StopToRun()
     {
         speed = maxSpeed;
