@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform firstPerson;
     [SerializeField] private Transform thirdPerson;
     [SerializeField] private Transform cameraPerson;
+    [SerializeField] private float timeToTranlate;
     [SerializeField] private bool canChangePerson;
     
     private Rigidbody rb;
@@ -78,16 +79,26 @@ public class Player : MonoBehaviour
         }
         if (canChangePerson)
         {
-            cameraPerson.position = Vector3.Lerp(transform.position, firstPerson.position, 1000 * Time.deltaTime);
+            StartCoroutine(TranslateCamera(thirdPerson.position, firstPerson.position, timeToTranlate));
             cameraPerson.SetParent(firstPerson);
         }
         if (!canChangePerson)
         {
-            cameraPerson.position = Vector3.Lerp(transform.position, thirdPerson.position, 1000 * Time.deltaTime);
+            StartCoroutine(TranslateCamera(firstPerson.position, thirdPerson.position, timeToTranlate));
             cameraPerson.SetParent(thirdPerson);
         }
     }
-  
+    IEnumerator TranslateCamera(Vector3 start, Vector3 end,float timeToTranslate)
+    {
+        float time = 0f;
+        while (time<timeToTranslate)
+        {
+            cameraPerson.position = Vector3.Lerp(start, end, time / timeToTranslate);
+            time+= Time.deltaTime;
+            yield return null;
+        }
+        cameraPerson.position = end;
+    }
     private void StopToRun()
     {
         speed = maxSpeed;
