@@ -29,7 +29,6 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         cameraPerson.position = Vector3.Lerp(cameraPerson.position, thirdPerson.position, 5 * Time.deltaTime);
         cameraPerson.SetParent(thirdPerson);
         rb = GetComponent<Rigidbody>();
@@ -39,11 +38,8 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        /// <summary>
-        /// movimiento del personaje
-        /// </summary>
-        input = playerInput.actions["Move"].ReadValue<Vector2>();
-        rb.AddForce(new Vector3(input.x, 0f, input.y) * speed);
+        
+        movimiento();
         /// <summary>
         /// control de recuperaion del personaje
         /// </summary>
@@ -58,6 +54,16 @@ public class Player : MonoBehaviour
         }
 
     }
+
+    /// <summary>
+    /// movimiento del personaje
+    /// </summary>
+    private void movimiento()
+    {
+        input = playerInput.actions["Move"].ReadValue<Vector2>();
+        rb.AddForce(new Vector3(input.x, 0f, input.y) * speed);
+    }
+
     public void RunPlayer(InputAction.CallbackContext context)
     {
         if (context.performed && !canRunPlayer)
