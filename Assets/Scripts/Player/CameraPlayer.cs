@@ -27,7 +27,6 @@ public class CameraPlayer : MonoBehaviour
     void Update()
     {
         LookMouse();
-        Debug.Log(changeValue);
     }
     public void OnChangeCamera(InputValue value)
     {

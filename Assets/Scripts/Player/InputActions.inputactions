@@ -16,12 +16,12 @@
                 },
                 {
                     "name": "Run",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "4357a82e-8297-482f-b7ba-0c194cb5eac0",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Look",
@@ -34,12 +34,12 @@
                 },
                 {
                     "name": "ChangeCamera",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "8b54b3fd-5c41-4de0-9338-5c0a3a4b45b4",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
