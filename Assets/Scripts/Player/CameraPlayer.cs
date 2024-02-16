@@ -12,6 +12,8 @@ public class CameraPlayer : MonoBehaviour
     [Header("Camera")]
     [Space(10)]
     [SerializeField] private Vector2 look;
+    [SerializeField] private Vector2 move;
+    [SerializeField] private Vector2 nextPosition;
     [SerializeField] private Quaternion nextRotation;
     [SerializeField] private float rotationLerp;
     [SerializeField] private float rotationSpeed;
@@ -21,6 +23,7 @@ public class CameraPlayer : MonoBehaviour
     [Header("Cambio de Vista")]
     [Space(10)]
     public float changeValue;
+    public float speed;
     Cinemachine.CinemachineImpulseSource source;
    
     // Update is called once per frame
@@ -31,19 +34,20 @@ public class CameraPlayer : MonoBehaviour
     public void OnChangeCamera(InputValue value)
     {
         changeValue = value.Get<float>();
+        
     }
     public void OnLook(InputValue value)
     {
         look = value.Get<Vector2>();
     }
-    public void ChangePerson()
-    {
-        source = GetComponent<Cinemachine.CinemachineImpulseSource>();
-        /// <summary>
-        /// direccion de avanze de la camara
-        /// </summary>
-        source.GenerateImpulse(Camera.main.transform.forward);
-    }
+    //public void ChangePerson()
+    //{
+    //    source = GetComponent<Cinemachine.CinemachineImpulseSource>();
+    //    /// <summary>
+    //    /// direccion de avanze de la camara
+    //    /// </summary>
+    //    source.GenerateImpulse(Camera.main.transform.forward);
+    //}
 
     public void LookMouse()
     {
@@ -72,7 +76,35 @@ public class CameraPlayer : MonoBehaviour
         {
             angles.x = 40;
         }
-        
+        followTransform.transform.localEulerAngles = angles;
+
+        nextRotation = Quaternion.Lerp(followTransform.transform.rotation, nextRotation, Time.deltaTime * rotationLerp);
+
+        /// <summary>
+        /// si el objeto esta en miviento o no calcula su posicion basada en su velociedad de direccion
+        /// </summary>
+        if (move.x == 0 && move.y == 0)
+        {
+            nextPosition = transform.position;
+
+            if (changeValue == 1)
+            {
+                ///<summary>
+                ///Establecer la rotación del jugador basada en la transformación de la mirada
+                ///</summary>
+                transform.rotation = Quaternion.Euler(0, followTransform.transform.rotation.eulerAngles.y, 0);
+                ///<summary>
+                ///Restablecer la rotación en el eje Y de la transformación de la mirada
+                ///</summary>
+                followTransform.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
+            }
+
+            return;
+        }
+        float moveSpeed = speed / 100f;
+        Vector3 position = (transform.forward * move.y * moveSpeed) + (transform.right * move.x * moveSpeed);
+        nextPosition = transform.position + position;
+
         /// <summary>
         /// configuramos la rotacion en la rotacion local de la tranformacion del objetivo
         /// </summary>
