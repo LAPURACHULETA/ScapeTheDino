@@ -5,9 +5,9 @@ public class Player : MonoBehaviour
 {
     [Header("Moving Player")]
     [Space(10)]
-    [SerializeField] private float speed;  
-    [SerializeField] private float timeCanRunPlayer, recoveryTime;
-    [SerializeField] private bool canRunPlayer;
+    [SerializeField] protected float speed;  
+    [SerializeField] protected float timeCanRunPlayer, recoveryTime;
+    [SerializeField] protected bool canRunPlayer;
 
     private float maxSpeed;
     private Rigidbody rb;
@@ -26,7 +26,6 @@ public class Player : MonoBehaviour
     {
         Movimiento();
         Recuperacion();
-        Debug.Log(runValue);
     }
     private void Recuperacion()
     {
@@ -50,12 +49,16 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Movimiento()
     {
-        input = playerInput.actions["Move"].ReadValue<Vector2>();
-        rb.AddForce(new Vector3(input.x, 0f, input.y) * speed);
-        if (input.x <= 0||input.y<=0)
-        {
-            rb.AddForce(new Vector3(0,0,0));
-        }
+        //input = playerInput.actions["Move"].ReadValue<Vector2>();
+        //rb.AddForce(new Vector3(input.x, 0f, input.y) * speed);
+        //if (input.x <= 0 || input.y <= 0)
+        //{
+        //    rb.AddForce(new Vector3(0, 0, 0));
+        //}
+        float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
+        float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
+        rb.AddForce(new Vector3(horizontal * speed/*agent.m_maxVel**/, 0f, vertical * speed /*agent.m_maxVel*/));
+
     }
 
     public void OnRun(InputValue context)

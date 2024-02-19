@@ -24,8 +24,13 @@ public class CameraPlayer : MonoBehaviour
     [Space(10)]
     public float changeValue;
     public float speed;
+    Player player;
     Cinemachine.CinemachineImpulseSource source;
-   
+
+    private void Start()
+    {
+        player = GetComponent<Player>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -40,14 +45,14 @@ public class CameraPlayer : MonoBehaviour
     {
         look = value.Get<Vector2>();
     }
-    //public void ChangePerson()
-    //{
-    //    source = GetComponent<Cinemachine.CinemachineImpulseSource>();
-    //    /// <summary>
-    //    /// direccion de avanze de la camara
-    //    /// </summary>
-    //    source.GenerateImpulse(Camera.main.transform.forward);
-    //}
+    public void ChangePersonEfect()
+    {
+        source = GetComponent<Cinemachine.CinemachineImpulseSource>();
+        /// <summary>
+        /// direccion de avanze de la camara
+        /// </summary>
+        source.GenerateImpulse(Camera.main.transform.forward);
+    }
 
     public void LookMouse()
     {
@@ -86,7 +91,7 @@ public class CameraPlayer : MonoBehaviour
         if (move.x == 0 && move.y == 0)
         {
             nextPosition = transform.position;
-
+         
             if (changeValue == 1)
             {
                 ///<summary>
