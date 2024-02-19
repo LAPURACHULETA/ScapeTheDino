@@ -1,37 +1,22 @@
-using Microsoft.Win32.SafeHandles;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [Header("Movimiento Player")]
+    [Header("Moving Player")]
     [Space(10)]
-    [SerializeField] private float speed;
-    [SerializeField] private float timeCanRunPlayer, recoveryTime;
-    [SerializeField] private bool canRunPlayer;
-    private float maxSpeed;
+    [SerializeField] protected float speed;  
+    [SerializeField] protected float timeCanRunPlayer, recoveryTime;
+    [SerializeField] protected bool canRunPlayer;
 
-    [Header("Cambio de Vista")]
-    [Space(10)]
-    [SerializeField] private Transform firstPerson;
-    [SerializeField] private Transform thirdPerson;
-    [SerializeField] private Transform cameraPerson;
-    [SerializeField] private float timeToTranlate;
-    [SerializeField] private bool canChangePerson;
-    
+    private float maxSpeed;
     private Rigidbody rb;
     private PlayerInput playerInput;
     private Vector2 input;
-   
+    private float runValue;
     // Start is called before the first frame update
     void Start()
     {
-
-        cameraPerson.position = Vector3.Lerp(cameraPerson.position, thirdPerson.position, 5 * Time.deltaTime);
-        cameraPerson.SetParent(thirdPerson);
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         maxSpeed = speed;
@@ -39,11 +24,11 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        /// <summary>
-        /// movimiento del personaje
-        /// </summary>
-        input = playerInput.actions["Move"].ReadValue<Vector2>();
-        rb.AddForce(new Vector3(input.x, 0f, input.y) * speed);
+        Movimiento();
+        Recuperacion();
+    }
+    private void Recuperacion()
+    {
         /// <summary>
         /// control de recuperaion del personaje
         /// </summary>
@@ -54,51 +39,40 @@ public class Player : MonoBehaviour
             {
                 canRunPlayer = false;
                 timeCanRunPlayer = 0;
+                
             }
         }
-        
     }
-    public void RunPlayer(InputAction.CallbackContext context)
+
+    /// <summary>
+    /// movimiento del personaje
+    /// </summary>
+    private void Movimiento()
     {
-        if(context.performed && !canRunPlayer)
+        //input = playerInput.actions["Move"].ReadValue<Vector2>();
+        //rb.AddForce(new Vector3(input.x, 0f, input.y) * speed);
+        //if (input.x <= 0 || input.y <= 0)
+        //{
+        //    rb.AddForce(new Vector3(0, 0, 0));
+        //}
+        float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
+        float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
+        rb.AddForce(new Vector3(horizontal * speed/*agent.m_maxVel**/, 0f, vertical * speed /*agent.m_maxVel*/));
+
+    }
+
+    public void OnRun(InputValue context)
+    {
+        runValue = context.Get<float>();
+        if (runValue == 1 && !canRunPlayer)
         {
             speed += 5;
             Invoke("StopToRun", 2f);
             canRunPlayer = true;
+            runValue = 0;
         }
     }
-    public void ChangePersone(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            canChangePerson = true;
-        } 
-        if (context.canceled)
-        {
-            canChangePerson = false;
-        }
-        if (canChangePerson)
-        {
-            StartCoroutine(TranslateCamera(thirdPerson.position, firstPerson.position, timeToTranlate));
-            cameraPerson.SetParent(firstPerson);
-        }
-        if (!canChangePerson)
-        {
-            StartCoroutine(TranslateCamera(firstPerson.position, thirdPerson.position, timeToTranlate));
-            cameraPerson.SetParent(thirdPerson);
-        }
-    }
-    IEnumerator TranslateCamera(Vector3 start, Vector3 end,float timeToTranslate)
-    {
-        float time = 0f;
-        while (time<timeToTranslate)
-        {
-            cameraPerson.position = Vector3.Lerp(start, end, time / timeToTranslate);
-            time+= Time.deltaTime;
-            yield return null;
-        }
-        cameraPerson.position = end;
-    }
+  
     private void StopToRun()
     {
         speed = maxSpeed;
