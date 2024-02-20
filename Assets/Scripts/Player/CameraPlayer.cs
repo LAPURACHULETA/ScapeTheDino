@@ -31,7 +31,6 @@ public class CameraPlayer : MonoBehaviour
     {
         player = GetComponent<Player>();
     }
-    // Update is called once per frame
     void Update()
     {
         LookMouse();
@@ -102,8 +101,12 @@ public class CameraPlayer : MonoBehaviour
                 ///Restablecer la rotación en el eje Y de la transformación de la mirada
                 ///</summary>
                 followTransform.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
+                
             }
-
+            //if (changeValue != 1)
+            //{
+            //    transform.rotation = Quaternion.identity;
+            //}
             return;
         }
         float moveSpeed = speed / 100f;

@@ -48,17 +48,16 @@ public class Player : MonoBehaviour
     /// movimiento del personaje
     /// </summary>
     private void Movimiento()
-    {
-        //input = playerInput.actions["Move"].ReadValue<Vector2>();
-        //rb.AddForce(new Vector3(input.x, 0f, input.y) * speed);
-        //if (input.x <= 0 || input.y <= 0)
-        //{
-        //    rb.AddForce(new Vector3(0, 0, 0));
-        //}
+    {  
         float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
         float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
-        rb.AddForce(new Vector3(horizontal * speed/*agent.m_maxVel**/, 0f, vertical * speed /*agent.m_maxVel*/));
 
+        float angle = Vector3.Angle(transform.forward, Vector3.forward); 
+
+        Vector3 Mov = new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime; 
+        Vector3 newForw = Quaternion.AngleAxis(angle, Vector3.up) * Mov; 
+        transform.Translate(newForw, Space.World); 
+        rb.AddForce(newForw);
     }
 
     public void OnRun(InputValue context)
