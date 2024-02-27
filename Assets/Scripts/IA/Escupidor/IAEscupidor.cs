@@ -8,7 +8,7 @@ public class IAEscupidor : MonoBehaviour
     [SerializeField] private Transform eyesPercept, earsPercept;
     [SerializeField] private float explosionDistance = 5f; // Definir la distancia para detonar la explosión
     Rigidbody rb;
-    Collider[] col__eyesPerceibed, col_earspPerceibed;
+    Collider[] col_eyesPerceibed, col_earspPerceibed;
     BasicAgent basicAgent;
     /// <summary>
     /// ComingMisil comingMisil;
@@ -32,7 +32,7 @@ public class IAEscupidor : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        col__eyesPerceibed = Physics.OverlapSphere(eyesPercept.position, eyesPerceptRadious);
+        col_eyesPerceibed = Physics.OverlapSphere(eyesPercept.position, eyesPerceptRadious);
         col_earspPerceibed = Physics.OverlapSphere(earsPercept.position, earsPerceptRadious);
 
         perceptionManager();
@@ -47,9 +47,9 @@ public class IAEscupidor : MonoBehaviour
         basicAgent.targetPlayer = null;
        /// basicAgent.targetLeader = null;
 
-        if (col__eyesPerceibed != null)
+        if (col_eyesPerceibed != null)
         {
-            foreach (Collider tmp in col__eyesPerceibed)
+            foreach (Collider tmp in col_eyesPerceibed)
             {
                 if (tmp.CompareTag(enemyTag))
                 {

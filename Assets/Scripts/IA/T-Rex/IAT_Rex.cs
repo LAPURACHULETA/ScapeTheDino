@@ -111,8 +111,10 @@ public class IAT_Rex : MonoBehaviour
     private void Attack()
     {
         rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
-        //rb.velocity = SreeringBehaviours.seek(basicAgent, basicAgent.target.position);
-        SreeringBehaviours.lookAt(transform, rb.velocity);
+        //rb.velocity = SreeringBehaviours.seek(basicAgent, basicAgent.targetPlayer.position);
+        //SreeringBehaviours.lookAt2(transform, rb.velocity,basicAgent.targetPlayer.GetComponent<BasicAgent>());
+        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+
         if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
         {
             rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
@@ -147,7 +149,7 @@ public class IAT_Rex : MonoBehaviour
             if (tmp.CompareTag(enemyTag))
             {
                 rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
-                SreeringBehaviours.lookAt(transform, rb.velocity);
+                //SreeringBehaviours.lookAt(transform, rb.velocity);
             }
         }
     }
