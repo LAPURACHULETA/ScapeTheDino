@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IAMeele : MonoBehaviour
+public class IAT_Rex : MonoBehaviour
 {
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
 
     [SerializeField] private float slowingRadious, thershold;
-    [SerializeField] private float timerToHit;
+    [SerializeField] private float damageToPlayer;
+    [SerializeField] private float timeToExplod;
 
     [SerializeField] private Transform eyesPercept, earsPercept;
 
     Rigidbody rb;
     Collider[] col_eyesPerceibed, col_earspPerceibed;
     BasicAgent basicAgent;
-    //Boid boid;
 
     AgentStates agentStates;
     [SerializeField]
@@ -50,7 +50,7 @@ public class IAMeele : MonoBehaviour
                 {
                     basicAgent.targetPlayer = tmp.transform;
                 }
-             
+
             }
         }
         if (col_earspPerceibed != null)
@@ -61,11 +61,11 @@ public class IAMeele : MonoBehaviour
                 {
                     basicAgent.targetPlayer = tmp.transform;
                 }
-                
+
             }
         }
     }
-   
+
     void DecisionManager()
     {
         if (basicAgent.targetPlayer != null)
@@ -73,13 +73,14 @@ public class IAMeele : MonoBehaviour
             if (basicAgent.targetPlayer.CompareTag(enemyTag))
             {
                 agentStates = AgentStates.Attack;
+            
             }
         }
         ActionManager();
 
         MovementManager();
     }
-  
+
     void ActionManager()
     {
         switch (agentStates)
@@ -90,7 +91,7 @@ public class IAMeele : MonoBehaviour
                 break;
             case AgentStates.Evade:
                 break;
-        
+          
         }
     }
     void MovementManager()
@@ -103,7 +104,7 @@ public class IAMeele : MonoBehaviour
             case AgentStates.Attack:
                 Attack();
                 break;
-           
+        
         }
     }
 
@@ -122,7 +123,7 @@ public class IAMeele : MonoBehaviour
             if (tmp.CompareTag(enemyTag))
             {
                 timerHit += Time.deltaTime;
-                if (timerHit >= timerToHit)
+                if (timerHit >= timeToExplod)
                 {
                     if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
                     {
@@ -133,11 +134,13 @@ public class IAMeele : MonoBehaviour
                     //    healthEnemy.TakeDamageEnemy(damageHeal);
                     //}
 
-                    Debug.Log("Le pego");
+                    Debug.Log("Persige");
                     timerHit = 0;
+                    Destroy(gameObject);
                 }
             }
-
+            // Mensaje de depuracion para verificar la explosion
+            Debug.Log("Explosion realizada");
         }
         foreach (Collider tmp in col_earspPerceibed)
         {
@@ -148,12 +151,11 @@ public class IAMeele : MonoBehaviour
             }
         }
     }
-
-   
     private enum AgentStates
     {
         None,
         Attack,
+        Exploted,
         Evade,
         LeaderFollow,
 

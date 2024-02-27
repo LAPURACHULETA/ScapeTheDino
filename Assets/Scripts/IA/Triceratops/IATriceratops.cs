@@ -2,24 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IAMeele : MonoBehaviour
+public class IATriceratops : MonoBehaviour
 {
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
 
     [SerializeField] private float slowingRadious, thershold;
-    [SerializeField] private float timerToHit;
+
+    [SerializeField] private float timeToSeek, timeToStunned;
 
     [SerializeField] private Transform eyesPercept, earsPercept;
 
     Rigidbody rb;
     Collider[] col_eyesPerceibed, col_earspPerceibed;
     BasicAgent basicAgent;
-    //Boid boid;
 
     AgentStates agentStates;
     [SerializeField]
 
-    private float timerHit;
+    private float timerToSee;
     public string enemyTag;
     // Start is called before the first frame update
     void Start()
@@ -40,7 +40,6 @@ public class IAMeele : MonoBehaviour
     public void PerceptionManager()
     {
         basicAgent.targetPlayer = null;
-        basicAgent.targetWall = null;
 
         if (col_eyesPerceibed != null)
         {
@@ -50,7 +49,7 @@ public class IAMeele : MonoBehaviour
                 {
                     basicAgent.targetPlayer = tmp.transform;
                 }
-             
+
             }
         }
         if (col_earspPerceibed != null)
@@ -61,11 +60,11 @@ public class IAMeele : MonoBehaviour
                 {
                     basicAgent.targetPlayer = tmp.transform;
                 }
-                
+
             }
         }
     }
-   
+
     void DecisionManager()
     {
         if (basicAgent.targetPlayer != null)
@@ -75,12 +74,12 @@ public class IAMeele : MonoBehaviour
                 agentStates = AgentStates.Attack;
             }
         }
-        ActionManager();
-
-        MovementManager();
+        
+        actionManager();
+        movementManager();
     }
-  
-    void ActionManager()
+
+    void actionManager()
     {
         switch (agentStates)
         {
@@ -90,10 +89,12 @@ public class IAMeele : MonoBehaviour
                 break;
             case AgentStates.Evade:
                 break;
-        
+            case AgentStates.Hit:
+                break;
+           
         }
     }
-    void MovementManager()
+    void movementManager()
     {
         switch (agentStates)
         {
@@ -103,57 +104,66 @@ public class IAMeele : MonoBehaviour
             case AgentStates.Attack:
                 Attack();
                 break;
-           
         }
     }
 
+
     private void Attack()
     {
-        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
-        //rb.velocity = SreeringBehaviours.seek(basicAgent, basicAgent.target.position);
-        SreeringBehaviours.lookAt(transform, rb.velocity);
-        if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
+        Debug.Log(timerToSee);
+        foreach (Collider tmp in col_earspPerceibed)
         {
-            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
+            if (tmp.CompareTag(enemyTag))
+            {
+                timerToSee += Time.deltaTime;
+                
+                if (timerToSee <=4f)
+                {
+                    rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.getTarget().GetComponent<BasicAgent>());
+                    SreeringBehaviours.lookAt(transform, rb.velocity);
+                }
+                else if(timerToSee <= 10f)
+                {
+                    rb.velocity = transform.forward*basicAgent.m_speed;
+                }
+                else if (timerToSee <= 20)
+                {
+                    timerToSee = 0;
+                }
+            }
+
         }
 
         foreach (Collider tmp in col_eyesPerceibed)
         {
             if (tmp.CompareTag(enemyTag))
             {
-                timerHit += Time.deltaTime;
-                if (timerHit >= timerToHit)
+                if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
                 {
-                    if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
-                    {
-                        life.DamagePlayer();
-                    }
-                    //if (tmp.GetComponent<HealthEnemy>() is var healthEnemy && healthEnemy != null)
-                    //{
-                    //    healthEnemy.TakeDamageEnemy(damageHeal);
-                    //}
-
-                    Debug.Log("Le pego");
-                    timerHit = 0;
+                    life.DamagePlayer();
                 }
+
             }
 
         }
-        foreach (Collider tmp in col_earspPerceibed)
+
+        if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
         {
-            if (tmp.CompareTag(enemyTag))
-            {
-                rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
-                SreeringBehaviours.lookAt(transform, rb.velocity);
-            }
+            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
         }
-    }
+        if (Vector3.Distance(transform.position, basicAgent.targetWall.position) <= slowingRadious)
+        {
+            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
 
-   
+        }
+       
+    }
+ 
     private enum AgentStates
     {
         None,
         Attack,
+        Hit,
         Evade,
         LeaderFollow,
 

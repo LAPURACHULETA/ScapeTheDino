@@ -5,16 +5,24 @@ using UnityEngine;
 public class BasicAgent : MonoBehaviour
 {
 
-    [SerializeField] float m_speed, m_maxSteerForce;
+    public float m_speed, m_maxSteerForce;
     public float m_maxVel;
     public float m_wanderDisplacement, m_wanderRadious;
-    public Transform target;
-    public Transform targetLeader;
+
+    public float m_vida;
+    protected float m_vidaActual;
+
+    public Transform targetPlayer;
+    public Transform targetWall;
     public Vector3? wanderNextPosition;
 
     internal float MAX_QUEUE_RADIUS;
     internal Vector3 m_queueAHEAD;
 
+    private void Start()
+    {
+        m_vidaActual = m_vida;
+    }
     /// <summary>
     /// Gives access to max speed of agent
     /// </summary>
@@ -43,11 +51,21 @@ public class BasicAgent : MonoBehaviour
     }
     public Transform getTarget()
     {
-        return target;
+        return targetPlayer;
 
     }
     public Transform getTargetLeader()
     {
-        return targetLeader;
+        return targetWall;
     }
+    public void Die(GameObject obj)
+    {
+        Destroy(obj);
+        Debug.Log("Me mori");
+    }
+    public void TakeDamage(float damage)
+    {
+        m_vidaActual -= damage;
+    }
+ 
 }

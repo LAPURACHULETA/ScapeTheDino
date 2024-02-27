@@ -9,11 +9,8 @@ public class HealthPlayer : MonoBehaviour
     [Header("Vida de Jugador")]
     [Space(10)]
     [SerializeField]private Image imagenSangre;
-    [SerializeField]private float vida;
-    HealthManager healthManager;
 
-    private float vidaActual;
-
+    BasicAgent basicAgent;
     private float r;
     private float g;
     private float b;
@@ -22,8 +19,7 @@ public class HealthPlayer : MonoBehaviour
     // Update is called once per frame
     private void Start()
     {
-        healthManager = FindObjectOfType<HealthManager>();
-        vidaActual = vida;
+        basicAgent=GetComponent<BasicAgent>();
         r = imagenSangre.color.r;
         g = imagenSangre.color.g;
         b = imagenSangre.color.b;
@@ -38,19 +34,16 @@ public class HealthPlayer : MonoBehaviour
         MyHelath();
     }
 
-    private void OnTriggerEnter(Collider col)
+    public void DamagePlayer()
     {
-        if (col.gameObject.CompareTag("Enemy"))
-        {
-            healthManager.TakeDamagePlayer(5,vida,vidaActual);
-            a += 1f;
-        }
+        basicAgent.TakeDamage(5);
+        a += 1f;
     }
     private void MyHelath()
     {
-        if(vidaActual <= 0)
+        if(basicAgent.m_vida <= 0)
         {
-            healthManager.Die();
+            basicAgent.Die(this.gameObject);
         }
     }
     private void ChangeColor()

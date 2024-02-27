@@ -24,12 +24,12 @@ public class CameraPlayer : MonoBehaviour
     [Space(10)]
     public float changeValue;
     public float speed;
-    Player player;
+    PlayerController player;
     Cinemachine.CinemachineImpulseSource source;
 
     private void Start()
     {
-        player = GetComponent<Player>();
+        player = GetComponent<PlayerController>();
     }
     void Update()
     {
