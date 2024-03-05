@@ -111,7 +111,8 @@ public class IAMeele : MonoBehaviour
     {
         rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
         //rb.velocity = SreeringBehaviours.seek(basicAgent, basicAgent.target.position);
-        SreeringBehaviours.lookAt(transform, rb.velocity);
+        //SreeringBehaviours.lookAt(transform, rb.velocity);
+        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
         if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
         {
             rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
@@ -144,7 +145,7 @@ public class IAMeele : MonoBehaviour
             if (tmp.CompareTag(enemyTag))
             {
                 rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
-                SreeringBehaviours.lookAt(transform, rb.velocity);
+                //SreeringBehaviours.lookAt(transform, rb.velocity);
             }
         }
     }

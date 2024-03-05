@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class IAEscupidor : MonoBehaviour
 {
@@ -10,20 +12,23 @@ public class IAEscupidor : MonoBehaviour
     Rigidbody rb;
     Collider[] col_eyesPerceibed, col_earspPerceibed;
     BasicAgent basicAgent;
+
     /// <summary>
     /// ComingMisil comingMisil;
     /// </summary>
 
-    [SerializeField] GameObject prf_misil, prf_bullet, spawnPointMisil, spawnPointBullet;
+    public GameObject prf_bullet, spawnPointBullet;
     ShooterAgentStates agentStates;
-
-    float timerBullet, timerMisil;
-    public string enemyTag, enemyLeaderTag;
+    float timerBullet, timerEvade;
+    bool evadir,inEyes,inEars;
+    public string enemyTag;
     void Start()
     {
         basicAgent = GetComponent<BasicAgent>();
         rb = GetComponent<Rigidbody>();
         agentStates = ShooterAgentStates.None;
+        inEyes = false;
+        inEars = false;
 
     }
 
@@ -45,8 +50,9 @@ public class IAEscupidor : MonoBehaviour
     public void perceptionManager()
     {
         basicAgent.targetPlayer = null;
-       /// basicAgent.targetLeader = null;
-
+        inEyes = false;
+        inEars = false;
+        
         if (col_eyesPerceibed != null)
         {
             foreach (Collider tmp in col_eyesPerceibed)
@@ -54,11 +60,12 @@ public class IAEscupidor : MonoBehaviour
                 if (tmp.CompareTag(enemyTag))
                 {
                     basicAgent.targetPlayer = tmp.transform;
-
+                   
+                    inEyes = true;
                 }
             }
         }
-
+        
         if (col_earspPerceibed != null)
         {
             foreach (Collider tmp in col_earspPerceibed)
@@ -66,7 +73,7 @@ public class IAEscupidor : MonoBehaviour
                 if (tmp.CompareTag(enemyTag))
                 {
                     basicAgent.targetPlayer = tmp.transform;
-
+                    
                 }
             }
         }
@@ -74,11 +81,19 @@ public class IAEscupidor : MonoBehaviour
     void decisionManager_EnemyTower()
     {
 
-        if (basicAgent.targetPlayer != null)
+        if (inEars)
         {
-            agentStates = ShooterAgentStates.ShootTower;
+            evadir = true;
+            agentStates = ShooterAgentStates.Evade;
         }
-      
+        else if (inEyes)
+        {
+            agentStates = ShooterAgentStates.Shoot;
+        }
+        else
+        {
+            agentStates = ShooterAgentStates.None;
+        }
         actionManager();
 
         movementManager();
@@ -90,8 +105,13 @@ public class IAEscupidor : MonoBehaviour
         {
             case ShooterAgentStates.None:
                 break;
-            case ShooterAgentStates.ShootTower:
+            case ShooterAgentStates.Shoot:
+                ShootTower();
                 break;
+            case ShooterAgentStates.Evade:
+                break;
+                
+       
         }
     }
     void movementManager()
@@ -101,54 +121,41 @@ public class IAEscupidor : MonoBehaviour
             case ShooterAgentStates.None:
                 rb.velocity = Vector3.zero;
                 break;
-            case ShooterAgentStates.ShootTower:
-                ShootTower();
+            case ShooterAgentStates.Shoot:
+                rb.velocity = Vector3.zero;
                 break;
-
-            
+            case ShooterAgentStates.Evade:
+                Evade();
+                break;
+          
         }
+    }
+    private void Evade()
+    {
+        rb.velocity = SreeringBehaviours.Evade(basicAgent, basicAgent.targetPlayer);
     }
     private void ShootTower()
     {
-        SreeringBehaviours.lookAt(transform, basicAgent.getTarget().position - transform.position);
+        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
         timerBullet += Time.deltaTime;
-        timerMisil += Time.deltaTime;
         if (timerBullet >= 2f)
         {
             Bullet();
             timerBullet = 0;
         }
-        if (timerMisil >= 3f)
-        {
-            //Misil();
-            timerMisil = 0;
-        }
     }
-   
-    /// <summary>
-    /// Instancia una bala en el punto de aparici?n de balas.
-    /// </summary>
     private void Bullet()
     {
-        Instantiate(prf_bullet, spawnPointBullet.transform.position, transform.rotation);
+        var proyectil=Instantiate(prf_bullet, spawnPointBullet.transform.position, spawnPointBullet.transform.rotation);
+        var bullet= proyectil.GetComponent<Bullets>();
+        bullet.SetSpawnPoint(spawnPointBullet.transform);
+        bullet.SetAgent(basicAgent.targetPlayer.transform);
     }
-
-    /// <summary>
-    /// Instancia un misil en el punto de aparici?n de misiles y configura su l?gica.
-    /// </summary>
-    //private void Misil()
-    //{
-    //    Vector3 missileSpawn = spawnPointMisil.transform.position;
-    //    GameObject misil = Instantiate(prf_misil, missileSpawn, transform.rotation);
-    //    comingMisil = misil.GetComponent<ComingMisil>();
-    //    comingMisil.MisilLogic(basicAgent.target.GetComponent<BasicAgent>(), basicAgent.target.transform);
-    //}
- 
     private enum ShooterAgentStates
     {
         None,
-        ShootTower,
-      
+        Shoot,
+        Evade
     }
     private void OnDrawGizmos()
     {

@@ -87,11 +87,6 @@ public class IATriceratops : MonoBehaviour
                 break;
             case AgentStates.Attack:
                 break;
-            case AgentStates.Evade:
-                break;
-            case AgentStates.Hit:
-                break;
-           
         }
     }
     void movementManager()
@@ -120,7 +115,8 @@ public class IATriceratops : MonoBehaviour
                 if (timerToSee <=4f)
                 {
                     rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.getTarget().GetComponent<BasicAgent>());
-                    SreeringBehaviours.lookAt(transform, rb.velocity);
+                    //SreeringBehaviours.lookAt(transform, rb.velocity);
+                    SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
                 }
                 else if(timerToSee <= 10f)
                 {
@@ -131,7 +127,6 @@ public class IATriceratops : MonoBehaviour
                     timerToSee = 0;
                 }
             }
-
         }
 
         foreach (Collider tmp in col_eyesPerceibed)
@@ -142,9 +137,7 @@ public class IATriceratops : MonoBehaviour
                 {
                     life.DamagePlayer();
                 }
-
             }
-
         }
 
         if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
@@ -163,10 +156,6 @@ public class IATriceratops : MonoBehaviour
     {
         None,
         Attack,
-        Hit,
-        Evade,
-        LeaderFollow,
-
     }
     private void OnDrawGizmos()
     {

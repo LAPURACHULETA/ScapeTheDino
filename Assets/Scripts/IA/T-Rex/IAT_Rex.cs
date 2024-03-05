@@ -89,9 +89,6 @@ public class IAT_Rex : MonoBehaviour
                 break;
             case AgentStates.Attack:
                 break;
-            case AgentStates.Evade:
-                break;
-          
         }
     }
     void MovementManager()
@@ -157,10 +154,6 @@ public class IAT_Rex : MonoBehaviour
     {
         None,
         Attack,
-        Exploted,
-        Evade,
-        LeaderFollow,
-
     }
     private void OnDrawGizmos()
     {

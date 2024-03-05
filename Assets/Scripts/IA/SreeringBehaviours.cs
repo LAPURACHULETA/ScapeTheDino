@@ -178,7 +178,6 @@ public class SreeringBehaviours : MonoBehaviour
         Vector3 relativePos = target.transform.position - rb.transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
         rb.transform.rotation = Quaternion.Lerp(rb.transform.rotation, rotation, Time.deltaTime * speed);
-        //rb.transform.rotation = new(rb.transform.rotation.x,0,rb.transform.rotation.y,Time.deltaTime*speed);
         rb.transform.rotation = Quaternion.Euler(0, rb.transform.rotation.eulerAngles.y, 0);
     }
     private static Vector3 truncate(Vector3 vector, float maxValue)
