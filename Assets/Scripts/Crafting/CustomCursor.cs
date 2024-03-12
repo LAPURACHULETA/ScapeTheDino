@@ -12,10 +12,15 @@ public class CustomCursor : MonoBehaviour
     }
     private void Awake()
     {
-        transform.position=valueButton;
+        var mouse = Mouse.current.position;
+        //Debug.Log(mouse.ReadValue());
+        transform.position = mouse.ReadValue();
     }
     private void Update()
     {
-        transform.position=valueButton;
+        //transform.position=valueButton;
+        var mouse = Mouse.current.position;
+        //Debug.Log(mouse.ReadValue());
+        transform.position = mouse.ReadValue();
     }
 }

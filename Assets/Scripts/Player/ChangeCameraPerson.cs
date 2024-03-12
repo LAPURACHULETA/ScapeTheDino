@@ -21,14 +21,21 @@ public class ChangeCameraPerson : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (input.changeValue == 1f && !firtsPerson.activeInHierarchy)
+        //llamaer la funcion de todo lo de abajo
+        if (input.changeValue != 1f /*tomar el component chinemachine y ve si termino de trans*/)
+        {
+            return;
+        }
+       
+        //poner varibale flipflop para el cambio correcto de las camara con un bool
+        if (thirdPerson.activeInHierarchy && !firtsPerson.activeInHierarchy)
         {
             thirdPerson.SetActive(false);
             firtsPerson.SetActive(true);
 
             StartCoroutine(ShowReticle());
         }
-        else if (input.changeValue == 1f && !thirdPerson.activeInHierarchy)
+        else if (!thirdPerson.activeInHierarchy && firtsPerson.activeInHierarchy)
         {
             thirdPerson.SetActive(true);
             firtsPerson.SetActive(false);
