@@ -22,7 +22,7 @@ public class Selected : MonoBehaviour
     void Update()
     {
         DetectionOfObject();
-        Debug.Log(valueButton);
+  
     }
     public void OnInteractive(InputValue context)
     {
@@ -65,6 +65,5 @@ public class Selected : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-       
     }
 }

@@ -1,15 +1,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Moving Player")]
-    [Space(10)]
-    [SerializeField] protected float speed;  
+    [Space(10)] 
     [SerializeField] protected float timeCanRunPlayer, recoveryTime;
-    [SerializeField] protected bool canRunPlayer;
+    protected bool canRunPlayer;
+
 
     private float maxSpeed;
+    BasicAgent agent;
     private Rigidbody rb;
     private PlayerInput playerInput;
     private Vector2 input;
@@ -17,9 +18,10 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        agent = GetComponent<BasicAgent>();
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
-        maxSpeed = speed;
+        maxSpeed = agent.m_speed;
         canRunPlayer = false;
     }
     private void FixedUpdate()
@@ -48,17 +50,19 @@ public class Player : MonoBehaviour
     /// movimiento del personaje
     /// </summary>
     private void Movimiento()
-    {
-        //input = playerInput.actions["Move"].ReadValue<Vector2>();
-        //rb.AddForce(new Vector3(input.x, 0f, input.y) * speed);
-        //if (input.x <= 0 || input.y <= 0)
-        //{
-        //    rb.AddForce(new Vector3(0, 0, 0));
-        //}
-        float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
-        float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
-        rb.AddForce(new Vector3(horizontal * speed/*agent.m_maxVel**/, 0f, vertical * speed /*agent.m_maxVel*/));
+    {  
+        input = playerInput.actions["Move"].ReadValue<Vector2>();
 
+        //float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
+        //float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
+
+        float angle = Vector3.Angle(transform.forward, Vector3.forward); 
+
+        Vector3 Mov = new Vector3(input.x, 0, input.y) * agent.m_speed * Time.deltaTime; 
+        Vector3 newForw = Quaternion.AngleAxis(angle, Vector3.up) * Mov; 
+        transform.Translate(newForw, Space.World);
+        rb.velocity = newForw;
+        //rb.AddForce(newForw);
     }
 
     public void OnRun(InputValue context)
@@ -66,7 +70,7 @@ public class Player : MonoBehaviour
         runValue = context.Get<float>();
         if (runValue == 1 && !canRunPlayer)
         {
-            speed += 5;
+            agent.m_speed += 5;
             Invoke("StopToRun", 2f);
             canRunPlayer = true;
             runValue = 0;
@@ -75,6 +79,6 @@ public class Player : MonoBehaviour
   
     private void StopToRun()
     {
-        speed = maxSpeed;
+        agent.m_speed = maxSpeed;
     }
 }

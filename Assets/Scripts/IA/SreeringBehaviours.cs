@@ -66,7 +66,6 @@ public class SreeringBehaviours : MonoBehaviour
         Vector3 distance = target.transform.position - agent.transform.position;
         float T = distance.magnitude / agent.m_maxVel;
         Vector3 futurePosition = target.transform.position + rb * T;
-
         return seek(agent, futurePosition);
     }
     public static Vector3 Evade(BasicAgent agent, Transform targetPosition)
@@ -172,6 +171,14 @@ public class SreeringBehaviours : MonoBehaviour
     public static void lookAt(Transform agent, Vector3 currentVel)
     {
         agent.transform.LookAt(agent.position + currentVel);
+    } 
+   
+    public static void rotation(Transform rb,float speed,BasicAgent target)
+    {
+        Vector3 relativePos = target.transform.position - rb.transform.position;
+        Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+        rb.transform.rotation = Quaternion.Lerp(rb.transform.rotation, rotation, Time.deltaTime * speed);
+        rb.transform.rotation = Quaternion.Euler(0, rb.transform.rotation.eulerAngles.y, 0);
     }
     private static Vector3 truncate(Vector3 vector, float maxValue)
     {
