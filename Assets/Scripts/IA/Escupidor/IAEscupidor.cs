@@ -29,7 +29,6 @@ public class IAEscupidor : MonoBehaviour
         agentStates = ShooterAgentStates.None;
         inEyes = false;
         inEars = false;
-
     }
 
     /// <summary>
@@ -60,7 +59,6 @@ public class IAEscupidor : MonoBehaviour
                 if (tmp.CompareTag(enemyTag))
                 {
                     basicAgent.targetPlayer = tmp.transform;
-                   
                     inEyes = true;
                 }
             }
@@ -73,7 +71,7 @@ public class IAEscupidor : MonoBehaviour
                 if (tmp.CompareTag(enemyTag))
                 {
                     basicAgent.targetPlayer = tmp.transform;
-                    
+                    inEars = true;
                 }
             }
         }
@@ -88,6 +86,7 @@ public class IAEscupidor : MonoBehaviour
         }
         else if (inEyes)
         {
+            inEars = false;
             agentStates = ShooterAgentStates.Shoot;
         }
         else
@@ -146,10 +145,7 @@ public class IAEscupidor : MonoBehaviour
     }
     private void Bullet()
     {
-        var proyectil=Instantiate(prf_bullet, spawnPointBullet.transform.position, spawnPointBullet.transform.rotation);
-        var bullet= proyectil.GetComponent<Bullets>();
-        bullet.SetSpawnPoint(spawnPointBullet.transform);
-        bullet.SetAgent(basicAgent.targetPlayer.transform);
+        Instantiate(prf_bullet, spawnPointBullet.transform.position, transform.rotation);
     }
     private enum ShooterAgentStates
     {

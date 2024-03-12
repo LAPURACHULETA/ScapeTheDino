@@ -28,7 +28,7 @@ public class ChangeCameraPerson : MonoBehaviour
 
             StartCoroutine(ShowReticle());
         }
-        else if (input.changeValue != 1f && !thirdPerson.activeInHierarchy)
+        else if (input.changeValue == 1f && !thirdPerson.activeInHierarchy)
         {
             thirdPerson.SetActive(true);
             firtsPerson.SetActive(false);
