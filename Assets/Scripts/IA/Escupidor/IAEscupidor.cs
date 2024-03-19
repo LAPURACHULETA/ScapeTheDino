@@ -8,7 +8,6 @@ public class IAEscupidor : MonoBehaviour
 {
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious, damageHeal;
     [SerializeField] private Transform eyesPercept, earsPercept;
-    [SerializeField] private float explosionDistance = 5f; // Definir la distancia para detonar la explosión
     Rigidbody rb;
     Collider[] col_eyesPerceibed, col_earspPerceibed;
     BasicAgent basicAgent;

@@ -22,7 +22,7 @@ public class CameraPlayer : MonoBehaviour
 
     [Header("Cambio de Vista")]
     [Space(10)]
-    public float changeValue;
+    public int changeValueCamera;
     public float speed;
     PlayerController player;
     Cinemachine.CinemachineImpulseSource source;
@@ -37,7 +37,7 @@ public class CameraPlayer : MonoBehaviour
     }
     public void OnChangeCamera(InputValue value)
     {
-        changeValue = value.Get<float>();
+        changeValueCamera = value.Get<int>();
         
     }
     public void OnLook(InputValue value)
@@ -91,7 +91,7 @@ public class CameraPlayer : MonoBehaviour
         {
             nextPosition = transform.position;
          
-            if (changeValue == 1)
+            if (changeValueCamera == 1)
             {
                 ///<summary>
                 ///Establecer la rotación del jugador basada en la transformación de la mirada

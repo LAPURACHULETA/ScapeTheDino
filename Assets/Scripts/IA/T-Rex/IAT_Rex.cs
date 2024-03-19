@@ -5,7 +5,6 @@ using UnityEngine;
 public class IAT_Rex : MonoBehaviour
 {
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
-
     [SerializeField] private float slowingRadious, thershold;
     [SerializeField] private float damageToPlayer;
     [SerializeField] private float timeToExplod;

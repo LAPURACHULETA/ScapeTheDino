@@ -20,7 +20,6 @@ public class Bullets : MonoBehaviour
     /// </summary>
     public void Start()
     {
-        //basicAgent = GetComponent<BasicAgent>();
         basicAgent = FindObjectOfType<BasicAgent>();
         rb = GetComponent<Rigidbody>();
     }
