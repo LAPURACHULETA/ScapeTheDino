@@ -58,9 +58,8 @@ public class Selected : MonoBehaviour
                     rb.AddForce(Vector3.up * jumpforce);
                 }
             }
-
-
         }
+       
     }
     private void OnDrawGizmos()
     {

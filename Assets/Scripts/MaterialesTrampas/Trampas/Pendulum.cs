@@ -1,28 +1,28 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Pendulum : MonoBehaviour
 {
-    [SerializeField] private float groundPerceptRadious, barbsPerceptRadious, damageHeal;
-    [SerializeField] private Transform groundPercept, barbsPercept;
+    [SerializeField] private float groundPerceptRadious, damageHeal;
+    [SerializeField] private Transform groundPercept;
 
-    Collider[] col_GroundPerceibed, col_BarbsPerceibed;
+    Collider[] col_GroundPerceibed;
     BasicAgent basicAgent;
 
     ShooterAgentStates agentStates;
-    float timerBarbs;
-    bool inGround, inBrabs;
-    public string enemyTag, groundTag;
+    bool inGround;
+    float timerToDestroy;
+    public string enemyTag;
+
     void Start()
     {
         basicAgent = GetComponent<BasicAgent>();
         inGround = false;
-        inBrabs = false;
     }
 
     private void FixedUpdate()
     {
         col_GroundPerceibed = Physics.OverlapSphere(groundPercept.position, groundPerceptRadious);
-        col_BarbsPerceibed = Physics.OverlapSphere(barbsPercept.position, barbsPerceptRadious);
 
         perceptionManager();
         decisionManager_EnemyTower();
@@ -35,28 +35,15 @@ public class Pendulum : MonoBehaviour
     {
         basicAgent.targetPlayer = null;
         inGround = false;
-        inBrabs = false;
 
         if (col_GroundPerceibed != null)
         {
             foreach (Collider tmp in col_GroundPerceibed)
             {
-                if (tmp.CompareTag(groundTag))
-                {
-                    basicAgent.targetPlayer = tmp.transform;
-                    inGround = true;
-                }
-            }
-        }
-
-        if (col_BarbsPerceibed != null)
-        {
-            foreach (Collider tmp in col_BarbsPerceibed)
-            {
                 if (tmp.CompareTag(enemyTag))
                 {
                     basicAgent.targetPlayer = tmp.transform;
-                    inBrabs = true;
+                    inGround = true;
                 }
             }
         }
@@ -64,13 +51,8 @@ public class Pendulum : MonoBehaviour
     void decisionManager_EnemyTower()
     {
 
-        if (inBrabs)
+        if (inGround)
         {
-            agentStates = ShooterAgentStates.InGround;
-        }
-        else if (inGround)
-        {
-            inBrabs = false;
             agentStates = ShooterAgentStates.InGround;
         }
         else
@@ -79,14 +61,13 @@ public class Pendulum : MonoBehaviour
         }
         actionManager();
 
-        movementManager();
-
     }
     void actionManager()
     {
         switch (agentStates)
         {
             case ShooterAgentStates.None:
+                PendulumInLive();
                 break;
 
             case ShooterAgentStates.InGround:
@@ -95,40 +76,38 @@ public class Pendulum : MonoBehaviour
 
         }
     }
-    void movementManager()
-    {
-        switch (agentStates)
-        {
-            case ShooterAgentStates.None:
-                break;
-            case ShooterAgentStates.InGround:
-                break;
 
+    private void PendulumInLive()
+    {
+        timerToDestroy += Time.deltaTime;
+        if (timerToDestroy >= 2f)
+        {
+            Destroy(gameObject);
         }
+        Debug.Log(timerToDestroy);
     }
     private void PendulumDamage()
     {
-        timerBarbs += Time.deltaTime;
-        if (timerBarbs >= 2f)
+      
+        foreach (Collider tmp in col_GroundPerceibed)
         {
-            foreach (Collider tmp in col_GroundPerceibed)
+            if (tmp.CompareTag(enemyTag))
             {
-                if (tmp.CompareTag(enemyTag))
+                if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
                 {
-                    if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
-                    {
-                        life.DamagePlayer();
-                    }
-                }
-                else
-                {
+                    life.DamagePlayer();
+                    Destroy(gameObject);
 
                 }
             }
-            Destroy(gameObject);
-        }
-    }
+            else
+            {
 
+            }
+        }
+       
+    }
+ 
     private enum ShooterAgentStates
     {
         None,
@@ -139,7 +118,5 @@ public class Pendulum : MonoBehaviour
         //Percepcion ojos y  escuha 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundPercept.position, groundPerceptRadious);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(barbsPercept.position, barbsPerceptRadious);
     }
 }

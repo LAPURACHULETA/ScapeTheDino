@@ -22,7 +22,7 @@ public class CameraPlayer : MonoBehaviour
 
     [Header("Cambio de Vista")]
     [Space(10)]
-    public int changeValueCamera;
+    public float changeValueCamera;
     public float speed;
     PlayerController player;
     Cinemachine.CinemachineImpulseSource source;
@@ -37,7 +37,7 @@ public class CameraPlayer : MonoBehaviour
     }
     public void OnChangeCamera(InputValue value)
     {
-        changeValueCamera = value.Get<int>();
+        changeValueCamera = value.Get<float>();
         
     }
     public void OnLook(InputValue value)

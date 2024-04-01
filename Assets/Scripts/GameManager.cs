@@ -6,14 +6,15 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
-    
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject crafting;
     ShooterAgentStates agentStates;
 
     private int craft;
     private int game;
     void Start()
     {
-       
+        crafting.SetActive(false);
     }
     /// <summary>
     /// Realiza operaciones de f?sica y l?gica de juego a una velocidad fija.
@@ -62,10 +63,12 @@ public class GameManager : MonoBehaviour
     }
     private void InGame()
     {
-      
+        crafting.SetActive(false);
+        player.SetActive(true);
     }
     private void Crafting()
     {
-        
+        player.SetActive(false);
+        crafting.SetActive(true);
     }
 }
