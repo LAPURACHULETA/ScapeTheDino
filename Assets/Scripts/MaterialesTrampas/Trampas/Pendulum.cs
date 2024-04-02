@@ -33,9 +33,15 @@ public class Pendulum : MonoBehaviour
     /// </summary>
     public void perceptionManager()
     {
+        if (!basicAgent)
+        {
+            return;
+        }
+
         basicAgent.targetPlayer = null;
         inGround = false;
 
+       
         if (col_GroundPerceibed != null)
         {
             foreach (Collider tmp in col_GroundPerceibed)

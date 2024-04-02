@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class SpawnInventory : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class SpawnInventory : MonoBehaviour
     public void SpawnDroppedItem()
     {
         Vector3 playerPos=new Vector3(player.position.x,player.position.y,player.position.z+10);
-        Instantiate(item,playerPos,Quaternion.identity);
+        var obj = Instantiate(item,playerPos,Quaternion.identity);
+        Debug.Log(obj);
+        EditorGUIUtility.PingObject(obj);
     }
 }

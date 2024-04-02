@@ -37,6 +37,10 @@ public class Molotov : MonoBehaviour
     /// </summary>
     public void perceptionManager()
     {
+        if (!basicAgent)
+        {
+            return;
+        }
         basicAgent.targetPlayer = null;
         inGround = false;
         inExplosion = false;

@@ -35,6 +35,10 @@ public class Barbs : MonoBehaviour
     /// </summary>
     public void perceptionManager()
     {
+        if (!basicAgent)
+        {
+            return;
+        }
         basicAgent.targetPlayer = null;
         inGround = false;
         inBrabs = false;
