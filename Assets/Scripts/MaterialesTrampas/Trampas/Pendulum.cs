@@ -90,7 +90,6 @@ public class Pendulum : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        Debug.Log(timerToDestroy);
     }
     private void PendulumDamage()
     {

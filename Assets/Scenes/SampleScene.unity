@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -901,7 +901,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 38.366184, y: 10.879314, z: -4.4164505}
+  m_LocalPosition: {x: -5.233816, y: 10.879314, z: -4.1264505}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1195,7 +1195,7 @@ GameObject:
   m_Component:
   - component: {fileID: 353630000}
   - component: {fileID: 353630002}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FollowTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3728,7 +3728,7 @@ GameObject:
   - component: {fileID: 1195632962}
   - component: {fileID: 1195632963}
   - component: {fileID: 1195632964}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -3916,7 +3916,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195632951}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.4, y: 1.29, z: -5.84}
+  m_LocalPosition: {x: -18.2, y: 1.29, z: -5.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4074,7 +4074,7 @@ GameObject:
   - component: {fileID: 1254280989}
   - component: {fileID: 1254280988}
   - component: {fileID: 1254280987}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4541,7 +4541,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406958665}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 38.366184, y: 10.879314, z: -4.4164505}
+  m_LocalPosition: {x: -5.233816, y: 10.879314, z: -4.1264505}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6275,7 +6275,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 574914d4bcc6e244ba08aeef225024fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemysMeele: []
+  enemysMeele:
+  - {fileID: 399994245}
+  - {fileID: 399994245}
+  - {fileID: 399994245}
   enemysCheft: []
   spawnPointsEnemys:
   - {fileID: 1363457197}
@@ -6289,10 +6292,15 @@ MonoBehaviour:
   escupidor: {fileID: 0}
   triceraptos: {fileID: 0}
   LevelPreceptRadious: 10
+  startDelayOledad: 5
+  spawnIntervalTime: 1
   LevelPercept:
   - {fileID: 1725851364}
   - {fileID: 2022145160}
   - {fileID: 610319548}
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 0
   playerTag: Player
 --- !u!4 &2000510474
 Transform:

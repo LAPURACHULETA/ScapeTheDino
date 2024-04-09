@@ -19,19 +19,24 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float LevelPreceptRadious;
     [SerializeField] private float startDelayOledad,spawnIntervalTime;
     [SerializeField] private Transform[] LevelPercept;
+    [SerializeField] private LayerMask whatIsPlayer;
 
     Collider[] col_LevelPerceibed;
+   
+
     BasicAgent basicAgent;
 
     ShooterAgentStates agentStates;
     float timerBullet, timerEvade;
     bool inLevel1, inLevel2, inLevel3;
-    int index,random,numEnemys,numEnemyInOleda;
+    int index,random,numEnemys;
+    int numEnemyInOleda = 5;
     public string playerTag;
+
     void Start()
     {
         basicAgent = GetComponent<BasicAgent>();
-        agentStates = ShooterAgentStates.Level_1;
+        agentStates = ShooterAgentStates.None;
         inLevel1 = false;
         inLevel2 = false;
         inLevel3 = false;
@@ -42,12 +47,23 @@ public class SpawnManager : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        col_LevelPerceibed = Physics.OverlapSphere(LevelPercept[0].position, LevelPreceptRadious);
-        col_LevelPerceibed = Physics.OverlapSphere(LevelPercept[1].position, LevelPreceptRadious);
-        col_LevelPerceibed = Physics.OverlapSphere(LevelPercept[3].position, LevelPreceptRadious);
-
+        col_LevelPerceibed = Physics.OverlapSphere(LevelPercept[0].position, LevelPreceptRadious, whatIsPlayer);
+        if (col_LevelPerceibed == null)
+        {
+            col_LevelPerceibed = Physics.OverlapSphere(LevelPercept[1].position, LevelPreceptRadious, whatIsPlayer);
+        }
+        
+        if (col_LevelPerceibed == null)
+        {
+            col_LevelPerceibed = Physics.OverlapSphere(LevelPercept[2].position, LevelPreceptRadious, whatIsPlayer);
+        }
+        
+        if (col_LevelPerceibed == null)
+        {
+            return;
+        }
         perceptionManager();
-        decisionManager_EnemyTower();
+        decisionManager();
     }
 
     /// <summary>
@@ -55,46 +71,51 @@ public class SpawnManager : MonoBehaviour
     /// </summary>
     public void perceptionManager()
     {
-        basicAgent.targetPlayer = null;
-        inLevel1 = false;
-        inLevel2 = false;
-        inLevel3 = false;
+        if (basicAgent)
+        {
+            basicAgent.targetPlayer = null;
+            inLevel1 = false;
+            inLevel2 = false;
+            inLevel3 = false;
+        }
 
-        if (col_LevelPerceibed[0] != null)
-        {
-            foreach (Collider tmp in col_LevelPerceibed)
+        if (col_LevelPerceibed != null)
+        {  
+            if (true )///comparar el tag para detectar player
             {
-                if (tmp.CompareTag(playerTag))
-                {
-                    basicAgent.targetPlayer = tmp.transform;
-                    inLevel1 = true;
-                }
+                //basicAgent.targetPlayer = tmp.transform;
+                inLevel1 = true;
+                Debug.Log("Spawn1");
             }
         }
-        if (col_LevelPerceibed[1] != null)
-        {
-            foreach (Collider tmp in col_LevelPerceibed)
-            {
-                if (tmp.CompareTag(playerTag))
-                {
-                    basicAgent.targetPlayer = tmp.transform;
-                    inLevel1 = true;
-                }
-            }
-        }
-        if (col_LevelPerceibed[2] != null)
-        {
-            foreach (Collider tmp in col_LevelPerceibed)
-            {
-                if (tmp.CompareTag(playerTag))
-                {
-                    basicAgent.targetPlayer = tmp.transform;
-                    inLevel1 = true;
-                }
-            }
-        }
+      
+        //if (col_LevelPerceibed[1] != null)
+        //{
+        //    foreach (Collider tmp in col_LevelPerceibed)
+        //    {
+        //        if (tmp.CompareTag(playerTag))
+        //        {
+        //            //basicAgent.targetPlayer = tmp.transform;
+        //            inLevel1 = true;
+        //            Debug.Log("Spawn2");
+        //        }
+        //    }
+        //}
+     
+        //if (col_LevelPerceibed[2] != null)
+        //{
+        //    foreach (Collider tmp in col_LevelPerceibed)
+        //    {
+        //        if (tmp.CompareTag(playerTag))
+        //        {
+        //            //basicAgent.targetPlayer = tmp.transform;
+        //            inLevel1 = true;
+        //            Debug.Log("Spawn3");
+        //        }
+        //    }
+        //}
     }
-    void decisionManager_EnemyTower()
+    void decisionManager()
     {
         if (inLevel1)
         {
@@ -109,42 +130,30 @@ public class SpawnManager : MonoBehaviour
             agentStates = ShooterAgentStates.Level_3;
         }
         actionManager();
-        movementManager();
-
     }
     void actionManager()
     {
         switch (agentStates)
         {
             case ShooterAgentStates.Level_1:
+                Debug.Log("Default");
+                SpawnLevel1();
                 break;
             case ShooterAgentStates.Level_2:              
                 break; 
             case ShooterAgentStates.Level_3:
                 break;
-
+            //default:
+                
         }
     }
-    void movementManager()
+
+    void SpawnLevel1()
     {
-        switch (agentStates)
-        {
-            case ShooterAgentStates.Level_1:
-                InvokeRepeating("Spawn", startDelayOledad, spawnIntervalTime);
-                break;
-            case ShooterAgentStates.Level_2:
-                break;
-            case ShooterAgentStates.Level_3:
-                break;
-
-        }
+       //InvokeRepeating("Spawn", startDelayOledad, spawnIntervalTime);
+        Invoke("Spawn", spawnIntervalTime);
+        agentStates = ShooterAgentStates.Level_2;
     }
-    //void SpawnLevel1()
-    //{
-    //    index = Random.Range(0, enemysMeele.Length);
-    //    // instantiate ball at random spawn location
-    //    Instantiate(spawnPointsEnemys[index], Random.Range(spawnPointsEnemys, spawnPointsEnemys), spawnPointsEnemys[index].transform.rotation);
-    //}
     void SpawnLevel2()
     {
 
@@ -159,8 +168,12 @@ public class SpawnManager : MonoBehaviour
 
         for (int i = 0; i < enemigosGenerados; i++)
         {
-            //random = Mathf.RoundToInt(Random.Range(0f, spawnPointsEnemys.Length));
-            Instantiate(spawnPointsEnemys[random], spawnPointsEnemys[random].transform.position, Quaternion.identity);
+            int random = Mathf.RoundToInt(UnityEngine.Random.Range(0, spawnPointsEnemys.Length-1));
+
+            Debug.Log(spawnPointsEnemys[random].name);
+            UnityEditor.EditorGUIUtility.PingObject(enemysMeele[random]);
+            Instantiate(enemysMeele[random], spawnPointsEnemys[random].transform.position, Quaternion.identity);
+
         }
 
     }
@@ -180,6 +193,7 @@ public class SpawnManager : MonoBehaviour
     }
     private enum ShooterAgentStates
     {
+        None,
         Level_1,
         Level_2,
         Level_3
