@@ -45,11 +45,11 @@ public class IAEscupidor : MonoBehaviour
     /// <summary>
     /// Gestiona la percepci?n del agente y establece el objetivo.
     /// </summary>
-    public void perceptionManager()
+   public void perceptionManager()
     {
         basicAgent.targetPlayer = null;
         inEyes = false;
-        inEars = false;
+        inEars = false; 
         
         if (col_eyesPerceibed != null)
         {
