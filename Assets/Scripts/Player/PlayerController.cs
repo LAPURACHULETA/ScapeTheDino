@@ -58,11 +58,11 @@ public class PlayerController : MonoBehaviour
 
         float angle = Vector3.Angle(transform.forward, Vector3.forward); 
 
-        Vector3 Mov = new Vector3(input.x, 0, input.y) * agent.m_speed * Time.deltaTime; 
+        Vector3 Mov = new Vector3(input.x, 0, input.y) * /*agent.m_speed*/10 * Time.deltaTime; 
         Vector3 newForw = Quaternion.AngleAxis(angle, Vector3.up) * Mov; 
         transform.Translate(newForw, Space.World);
-        rb.velocity = newForw;
-        //rb.AddForce(newForw);
+        //rb.velocity = newForw;
+        rb.AddForce(newForw);
     }
 
     public void OnRun(InputValue context)

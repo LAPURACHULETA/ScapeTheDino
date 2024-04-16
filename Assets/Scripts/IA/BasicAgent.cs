@@ -11,6 +11,7 @@ public class BasicAgent : MonoBehaviour
 
     public float m_vida;
     protected float m_vidaActual;
+    public bool inAlive;
 
     public Transform targetPlayer;
     public Transform targetWall;
@@ -22,6 +23,7 @@ public class BasicAgent : MonoBehaviour
     private void Start()
     {
         m_vidaActual = m_vida;
+        inAlive = true;
     }
     /// <summary>
     /// Gives access to max speed of agent
@@ -60,6 +62,7 @@ public class BasicAgent : MonoBehaviour
     }
     public void Die(GameObject obj)
     {
+        inAlive = false;
         Destroy(obj);
         Debug.Log("Me mori");
     }

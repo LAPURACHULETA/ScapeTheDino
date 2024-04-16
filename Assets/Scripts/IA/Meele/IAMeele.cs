@@ -39,6 +39,10 @@ public class IAMeele : MonoBehaviour
     }
     public void PerceptionManager()
     {
+        if (!basicAgent)
+        {
+            return;
+        }
         basicAgent.targetPlayer = null;
         basicAgent.targetWall = null;
 

@@ -3,131 +3,132 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class SpawnManager : MonoBehaviour
 {
+    [Header("Prefabs")]
     [SerializeField] private GameObject[] enemysMeele;
     [SerializeField] private GameObject[] enemysCheft;
 
-    [SerializeField] private GameObject[] spawnPointsEnemys;
-    [SerializeField] private GameObject[] spawnPointsMaterials;
+    [SerializeField] private GameObject prf_T_Rex;
+    [SerializeField] private GameObject prf_escupidor;
+    [SerializeField] private GameObject prf_triceraptos;
 
-    [SerializeField] private GameObject t_Rex;
-    [SerializeField] private GameObject escupidor;
-    [SerializeField] private GameObject triceraptos;
+    [Header("Spawn Points Level 1")]
+    [SerializeField] private GameObject[] spawnPointsEnemysLv1;
+    [SerializeField] private GameObject[] spawnPointsMaterialsLv1;
+    [Header("Spawn Points Level 2")]
+    [SerializeField] private GameObject[] spawnPointsEnemysLv2;
+    [SerializeField] private GameObject[] spawnPointsMaterialsLv2;
+    [Header("Spawn Points Level 3")]
+    [SerializeField] private GameObject[] spawnPointsEnemysLv3;
+    [SerializeField] private GameObject[] spawnPointsMaterialsLv3;
 
-    [SerializeField] private float LevelPreceptRadious;
+    [Header("Spawn Time contoller")]
+    [SerializeField] private float spawningTime;
+    [SerializeField] private float waveNumber;
+    [SerializeField] private float spawnTimer;
+
+    [Header("Percepcion Levels")]
+    [SerializeField] private float levelPreceptRadious;
     [SerializeField] private float startDelayOledad,spawnIntervalTime;
     [SerializeField] private Transform[] LevelPercept;
-    [SerializeField] private LayerMask whatIsPlayer;
-
-    Collider[] col_LevelPerceibed;
    
-
+    Collider[] col_LevelPerceibed_Nivel1;
+    Collider[] col_LevelPerceibed_Nivel2;
+    Collider[] col_LevelPerceibed_Nivel3;
+   
     BasicAgent basicAgent;
 
-    ShooterAgentStates agentStates;
-    float timerBullet, timerEvade;
+    LevelStates agentStates;
     bool inLevel1, inLevel2, inLevel3;
+    bool inPause;
     int index,random,numEnemys;
-    int numEnemyInOleda = 5;
-    public string playerTag;
-
+    public string playerTag,enemyTag,enemyCheft;
+  
     void Start()
     {
         basicAgent = GetComponent<BasicAgent>();
-        agentStates = ShooterAgentStates.None;
+        agentStates = LevelStates.None;
         inLevel1 = false;
         inLevel2 = false;
         inLevel3 = false;
+        inPause = false;
     }
 
-    /// <summary>
-    /// Realiza operaciones de f?sica y l?gica de juego a una velocidad fija.
-    /// </summary>
     private void FixedUpdate()
     {
-        col_LevelPerceibed = Physics.OverlapSphere(LevelPercept[0].position, LevelPreceptRadious, whatIsPlayer);
-        if (col_LevelPerceibed == null)
-        {
-            col_LevelPerceibed = Physics.OverlapSphere(LevelPercept[1].position, LevelPreceptRadious, whatIsPlayer);
-        }
-        
-        if (col_LevelPerceibed == null)
-        {
-            col_LevelPerceibed = Physics.OverlapSphere(LevelPercept[2].position, LevelPreceptRadious, whatIsPlayer);
-        }
-        
-        if (col_LevelPerceibed == null)
-        {
-            return;
-        }
+        col_LevelPerceibed_Nivel1 = Physics.OverlapSphere(LevelPercept[0].position, levelPreceptRadious);
+        col_LevelPerceibed_Nivel2 = Physics.OverlapSphere(LevelPercept[1].position, levelPreceptRadious);
+        col_LevelPerceibed_Nivel3 = Physics.OverlapSphere(LevelPercept[2].position, levelPreceptRadious);
+
         perceptionManager();
         decisionManager();
     }
 
-    /// <summary>
-    /// Gestiona la percepci?n del agente y establece el objetivo.
-    /// </summary>
     public void perceptionManager()
     {
-        if (basicAgent)
-        {
-            basicAgent.targetPlayer = null;
-            inLevel1 = false;
-            inLevel2 = false;
-            inLevel3 = false;
-        }
+        inLevel1 = false;
+        inLevel2 = false;
+        inLevel3 = false;
 
-        if (col_LevelPerceibed != null)
-        {  
-            if (true )///comparar el tag para detectar player
+        if (col_LevelPerceibed_Nivel1.Length > 0/*col_LevelPerceibed_Nivel1[0] != null*/)
+        {
+            foreach (Collider tmp in col_LevelPerceibed_Nivel1)
             {
-                //basicAgent.targetPlayer = tmp.transform;
-                inLevel1 = true;
-                Debug.Log("Spawn1");
+                if (tmp.CompareTag(playerTag))
+                {
+                    inLevel1 = true;
+                    Debug.Log("Spawn1");
+                }
             }
         }
-      
-        //if (col_LevelPerceibed[1] != null)
-        //{
-        //    foreach (Collider tmp in col_LevelPerceibed)
-        //    {
-        //        if (tmp.CompareTag(playerTag))
-        //        {
-        //            //basicAgent.targetPlayer = tmp.transform;
-        //            inLevel1 = true;
-        //            Debug.Log("Spawn2");
-        //        }
-        //    }
-        //}
-     
-        //if (col_LevelPerceibed[2] != null)
-        //{
-        //    foreach (Collider tmp in col_LevelPerceibed)
-        //    {
-        //        if (tmp.CompareTag(playerTag))
-        //        {
-        //            //basicAgent.targetPlayer = tmp.transform;
-        //            inLevel1 = true;
-        //            Debug.Log("Spawn3");
-        //        }
-        //    }
-        //}
+   
+        if (col_LevelPerceibed_Nivel2.Length > 0/*col_LevelPerceibed_Nivel2[1] != null*/)
+        {
+            foreach (Collider tmp in col_LevelPerceibed_Nivel2)
+            {
+                if (tmp.CompareTag(playerTag))
+                {
+                    inLevel2 = true;
+                    Debug.Log("Spawn2");
+                    
+                }
+            }
+        }
+
+        if (col_LevelPerceibed_Nivel3.Length > 0/*col_LevelPerceibed_Nivel3[2] != null*/)
+        {
+            foreach (Collider tmp in col_LevelPerceibed_Nivel3)
+            {
+                if (tmp.CompareTag(playerTag))
+                {
+                    inLevel3 = true;
+                    Debug.Log("Spawn3");
+                   
+                }
+            }
+        }
     }
     void decisionManager()
     {
         if (inLevel1)
         {
-            agentStates = ShooterAgentStates.Level_1;
+            agentStates = LevelStates.Level_1;
         }
         else if(inLevel2)
         {
-            agentStates = ShooterAgentStates.Level_2;
+            agentStates = LevelStates.Level_2;
         }
         else if (inLevel3)
         {
-            agentStates = ShooterAgentStates.Level_3;
+            agentStates = LevelStates.Level_3;
+        }
+        else
+        {
+            agentStates = LevelStates.None;
         }
         actionManager();
     }
@@ -135,74 +136,96 @@ public class SpawnManager : MonoBehaviour
     {
         switch (agentStates)
         {
-            case ShooterAgentStates.Level_1:
-                Debug.Log("Default");
+            case LevelStates.None:
+                break;
+            case LevelStates.Level_1:
                 SpawnLevel1();
                 break;
-            case ShooterAgentStates.Level_2:              
+            case LevelStates.Level_2:
+                SpawnLevel2();
                 break; 
-            case ShooterAgentStates.Level_3:
-                break;
-            //default:
+            case LevelStates.Level_3:
+                SpawnLevel3();
+                break;           
                 
         }
     }
-
     void SpawnLevel1()
     {
-       //InvokeRepeating("Spawn", startDelayOledad, spawnIntervalTime);
-        Invoke("Spawn", spawnIntervalTime);
-        agentStates = ShooterAgentStates.Level_2;
+        spawningTime += Time.deltaTime;
+        if (spawningTime >= spawnTimer && !inPause)
+        {
+            for (int i = 0; i < waveNumber; ++i)
+            random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv1.Length ));
+            Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv1[random].transform.position+new Vector3(0,1,0), Quaternion.identity);
+
+            spawningTime = 0;
+            numEnemys ++;
+        }
+        else if (numEnemys == 3)
+        {
+            inPause = true;
+            Instantiate(prf_T_Rex, spawnPointsEnemysLv1[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+            numEnemys++;
+        }
+        
     }
     void SpawnLevel2()
     {
+        spawningTime += Time.deltaTime;
+        if (spawningTime >= spawnTimer && !inPause)
+        {
+            for (int i = 0; i < waveNumber; ++i)
+            {
+                random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv2.Length));
+                Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv2[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
 
+            }
+
+            spawningTime = 0;
+            numEnemys++;
+        }
+        else if (numEnemys == 3)
+        {
+            inPause = true;
+
+            Instantiate(prf_escupidor, spawnPointsEnemysLv2[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);            
+            numEnemys++;
+        }
 
     }
     void SpawnLevel3()
     {
-
-    }
-    private void SpawnNewEnemy(int enemigosGenerados)
-    {
-
-        for (int i = 0; i < enemigosGenerados; i++)
+        spawningTime += Time.deltaTime;
+        if (spawningTime >= spawnTimer && !inPause)
         {
-            int random = Mathf.RoundToInt(UnityEngine.Random.Range(0, spawnPointsEnemys.Length-1));
+            for (int i = 0; i < waveNumber; ++i)
+                random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv3.Length));
+            Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv3[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
 
-            Debug.Log(spawnPointsEnemys[random].name);
-            UnityEditor.EditorGUIUtility.PingObject(enemysMeele[random]);
-            Instantiate(enemysMeele[random], spawnPointsEnemys[random].transform.position, Quaternion.identity);
-
+            spawningTime = 0;
+            numEnemys++;
         }
-
-    }
-    //Spawn Level 1
-    private void Spawn()
-    {
-        SpawnNewEnemy(numEnemyInOleda);
-    }
-    private void EnemigosActuales()
-    {
-        numEnemys = FindObjectsOfType<IAMeele>().Length;
-        if (numEnemys == 0)
+        else if (numEnemys == 3)
         {
-            numEnemyInOleda++;
-            Spawn();
+            inPause = true;
+            Instantiate(prf_triceraptos, spawnPointsEnemysLv3[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
         }
     }
-    private enum ShooterAgentStates
+    
+    private enum LevelStates
     {
         None,
         Level_1,
         Level_2,
         Level_3
     }
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(LevelPercept[0].position, LevelPreceptRadious);
-        Gizmos.DrawWireSphere(LevelPercept[1].position, LevelPreceptRadious);
-        Gizmos.DrawWireSphere(LevelPercept[2].position, LevelPreceptRadious);
+        Gizmos.DrawWireSphere(LevelPercept[0].position, levelPreceptRadious);
+        Gizmos.DrawWireSphere(LevelPercept[1].position, levelPreceptRadious);
+        Gizmos.DrawWireSphere(LevelPercept[2].position, levelPreceptRadious);
     }
 }
