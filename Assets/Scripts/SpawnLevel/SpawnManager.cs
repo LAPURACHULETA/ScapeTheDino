@@ -73,7 +73,7 @@ public class SpawnManager : MonoBehaviour
         inLevel1 = false;
         inLevel2 = false;
         inLevel3 = false;
-
+        inPause = false;
         if (col_LevelPerceibed_Nivel1.Length > 0/*col_LevelPerceibed_Nivel1[0] != null*/)
         {
             foreach (Collider tmp in col_LevelPerceibed_Nivel1)

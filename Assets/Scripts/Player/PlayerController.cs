@@ -7,22 +7,26 @@ public class PlayerController : MonoBehaviour
     [Space(10)] 
     [SerializeField] protected float timeCanRunPlayer, recoveryTime;
     protected bool canRunPlayer;
-
-
     private float maxSpeed;
     BasicAgent agent;
+    ComboManager comboManager;
     private Rigidbody rb;
     private PlayerInput playerInput;
     private Vector2 input;
     private float runValue;
+    private float craftValue;
+
+    public bool combo;
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<BasicAgent>();
+        comboManager = FindObjectOfType<ComboManager>();
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         maxSpeed = agent.m_speed;
         canRunPlayer = false;
+        combo = false;
     }
     private void FixedUpdate()
     {
@@ -76,7 +80,17 @@ public class PlayerController : MonoBehaviour
             runValue = 0;
         }
     }
-  
+    public void OnPrueba(InputValue context)
+    {
+        craftValue = context.Get<float>();
+        if (craftValue == 1)
+        {
+            Debug.Log("se preicono");
+            comboManager.ActivateRandomObject();
+        }
+       
+        
+    }
     private void StopToRun()
     {
         agent.m_speed = maxSpeed;
