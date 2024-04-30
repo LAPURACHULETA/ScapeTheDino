@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - Wall
   - Ground
+  - Torre
   layers:
   - Default
   - TransparentFX
