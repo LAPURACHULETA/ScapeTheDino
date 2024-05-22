@@ -73,7 +73,6 @@ public class SpawnManager : MonoBehaviour
         inLevel1 = false;
         inLevel2 = false;
         inLevel3 = false;
-        inPause = false;
         if (col_LevelPerceibed_Nivel1.Length > 0/*col_LevelPerceibed_Nivel1[0] != null*/)
         {
             foreach (Collider tmp in col_LevelPerceibed_Nivel1)
@@ -153,63 +152,82 @@ public class SpawnManager : MonoBehaviour
     void SpawnLevel1()
     {
         spawningTime += Time.deltaTime;
+        Debug.Log(spawningTime+"Level1");
         if (spawningTime >= spawnTimer && !inPause)
         {
             for (int i = 0; i < waveNumber; ++i)
-            random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv1.Length ));
+            {
+                random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv1.Length ));
+            }
             Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv1[random].transform.position+new Vector3(0,1,0), Quaternion.identity);
 
             spawningTime = 0;
             numEnemys ++;
         }
+        if (spawningTime >= 10)
+        {
+            inPause = false;
+            numEnemys = 0;
+            spawningTime = 0;
+        }
         else if (numEnemys == 3)
         {
             inPause = true;
-            Instantiate(prf_T_Rex, spawnPointsEnemysLv1[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
-            numEnemys++;
         }
-        
     }
     void SpawnLevel2()
     {
         spawningTime += Time.deltaTime;
+        Debug.Log(spawningTime + "Level2");
         if (spawningTime >= spawnTimer && !inPause)
         {
             for (int i = 0; i < waveNumber; ++i)
             {
                 random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv2.Length));
-                Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv2[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
 
             }
+            Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv2[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
 
             spawningTime = 0;
             numEnemys++;
         }
+        if (spawningTime >= 10)
+        {
+            inPause = false;
+            numEnemys = 0;
+            spawningTime = 0;
+        }
         else if (numEnemys == 3)
         {
             inPause = true;
-
-            Instantiate(prf_escupidor, spawnPointsEnemysLv2[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);            
-            numEnemys++;
         }
 
     }
     void SpawnLevel3()
     {
         spawningTime += Time.deltaTime;
+        Debug.Log(spawningTime + "Level3");
         if (spawningTime >= spawnTimer && !inPause)
         {
             for (int i = 0; i < waveNumber; ++i)
+            {
                 random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv3.Length));
+
+            }
             Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv3[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
 
             spawningTime = 0;
             numEnemys++;
         }
+        if (spawningTime >= 10)
+        {
+            inPause = false;
+            numEnemys = 0;
+            spawningTime = 0;
+        }
         else if (numEnemys == 3)
         {
             inPause = true;
-            Instantiate(prf_triceraptos, spawnPointsEnemysLv3[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
         }
     }
     

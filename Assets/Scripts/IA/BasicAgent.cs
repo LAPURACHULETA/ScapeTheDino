@@ -10,7 +10,7 @@ public class BasicAgent : MonoBehaviour
     public float m_wanderDisplacement, m_wanderRadious;
 
     public float m_vida;
-    protected float m_vidaActual;
+    public float m_vidaActual;
     public bool inAlive;
 
     public Transform targetPlayer;
@@ -69,6 +69,7 @@ public class BasicAgent : MonoBehaviour
     public void TakeDamage(float damage)
     {
         m_vidaActual -= damage;
+      
     }
  
 }

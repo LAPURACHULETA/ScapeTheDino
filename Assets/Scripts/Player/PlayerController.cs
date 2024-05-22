@@ -9,24 +9,20 @@ public class PlayerController : MonoBehaviour
     protected bool canRunPlayer;
     private float maxSpeed;
     BasicAgent agent;
-    ComboManager comboManager;
+    GameManager gameManager;
     private Rigidbody rb;
     private PlayerInput playerInput;
-    private Vector2 input;
     private float runValue;
-    private float craftValue;
-
-    public bool combo;
+    private float valueButton;
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         agent = GetComponent<BasicAgent>();
-        comboManager = FindObjectOfType<ComboManager>();
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         maxSpeed = agent.m_speed;
         canRunPlayer = false;
-        combo = false;
     }
     private void FixedUpdate()
     {
@@ -55,17 +51,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Movimiento()
     {  
-        input = playerInput.actions["Move"].ReadValue<Vector2>();
+        //input = playerInput.actions["Move"].ReadValue<Vector2>();
 
-        //float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
-        //float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
+        float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
+        float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
         float angle = Vector3.Angle(transform.forward, Vector3.forward); 
 
-        Vector3 Mov = new Vector3(input.x, 0, input.y) * /*agent.m_speed*/10 * Time.deltaTime; 
+        Vector3 Mov = new Vector3(horizontal, 0, vertical) * /*agent.m_speed*/10 * Time.deltaTime; 
         Vector3 newForw = Quaternion.AngleAxis(angle, Vector3.up) * Mov; 
         transform.Translate(newForw, Space.World);
-        //rb.velocity = newForw;
         rb.AddForce(newForw);
     }
 
@@ -80,17 +75,18 @@ public class PlayerController : MonoBehaviour
             runValue = 0;
         }
     }
-    public void OnPrueba(InputValue context)
+
+    public void OnPause(InputValue context)
     {
-        craftValue = context.Get<float>();
-        if (craftValue == 1)
+        valueButton = context.Get<float>();
+        if (valueButton==1)
         {
-            Debug.Log("se preicono");
-            comboManager.ActivateRandomObject();
+            Debug.Log("pausa");
+            gameManager.ButtonPause();
+            
         }
-       
-        
     }
+
     private void StopToRun()
     {
         agent.m_speed = maxSpeed;

@@ -26,24 +26,6 @@ public class ChangeCameraPerson : MonoBehaviour
 
     private void Change()
     {
-        //if (input.changeValueCamera != 1f /*tomar el component chinemachine y ve si termino de trans*/)
-        //{
-        //    return;
-        //}
-
-        ////poner varibale flipflop para el cambio correcto de las camara con un bool
-        //if (thirdPerson.activeInHierarchy && !firtsPerson.activeInHierarchy)
-        //{
-        //    thirdPerson.SetActive(false);
-        //    firtsPerson.SetActive(true);
-
-        //    StartCoroutine(ShowReticle());
-        //}
-        //else if (!thirdPerson.activeInHierarchy && firtsPerson.activeInHierarchy)
-        //{
-        //    thirdPerson.SetActive(true);
-        //    firtsPerson.SetActive(false);
-        //}
         if (input.changeValueCamera == 1f && !firtsPerson.activeInHierarchy)
         {
             thirdPerson.SetActive(false);
@@ -51,7 +33,7 @@ public class ChangeCameraPerson : MonoBehaviour
 
             StartCoroutine(ShowReticle());
         }
-        else if (input.changeValueCamera == 1f && !thirdPerson.activeInHierarchy)
+        else if (input.changeValueCamera == 0f && !thirdPerson.activeInHierarchy)
         {
             thirdPerson.SetActive(true);
             firtsPerson.SetActive(false);

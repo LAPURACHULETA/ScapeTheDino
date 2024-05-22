@@ -5,15 +5,20 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class Combos : MonoBehaviour
 {
     [SerializeField] private List<InputActionReference> comboActions; // Lista de acciones de entrada para cada botón del combo
     [SerializeField] private float comboTimeout; // Tiempo límite para realizar el combo en segundos
     [SerializeField] private GameObject objCombo;
+    [SerializeField] private GameObject imPuzzle;
+    [SerializeField] private GameObject doorCombo;
+
 
     private List<InputAction> currentCombo;
     private Coroutine comboTimeoutCoroutine;
+    private bool puzzleComplete;
 
     private void Start()
     {
@@ -37,7 +42,6 @@ public class Combos : MonoBehaviour
             actionReference.action.Disable();
         }
     }
-
     private void CheckCombo(InputAction.CallbackContext input)
     {
         currentCombo.Add(input.action);
@@ -50,7 +54,10 @@ public class Combos : MonoBehaviour
         if (CheckComboMatch())
         {
             Debug.Log("Combo exitoso!");
+            Destroy(doorCombo);
+            puzzleComplete = true;
             objCombo.SetActive(false);
+            
             // combo exitoso
             ResetCombo();
         }
@@ -82,7 +89,6 @@ public class Combos : MonoBehaviour
 
         return true;
     }
-
     private void ResetCombo()
     {
         currentCombo.Clear();

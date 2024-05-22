@@ -3,21 +3,21 @@ using UnityEngine.Rendering;
 
 public class Pendulum : MonoBehaviour
 {
-    [SerializeField] private float groundPerceptRadious, damageHeal;
+    [SerializeField] private float groundPerceptRadious;
+    [SerializeField] private int damageToEnemy;
     [SerializeField] private Transform groundPercept;
 
     Collider[] col_GroundPerceibed;
-    BasicAgent basicAgent;
 
     ShooterAgentStates agentStates;
-    bool inGround;
+    bool inEnemy;
     float timerToDestroy;
     public string enemyTag;
 
+
     void Start()
     {
-        basicAgent = GetComponent<BasicAgent>();
-        inGround = false;
+        inEnemy = false;
     }
 
     private void FixedUpdate()
@@ -33,14 +33,7 @@ public class Pendulum : MonoBehaviour
     /// </summary>
     public void perceptionManager()
     {
-        if (!basicAgent)
-        {
-            return;
-        }
-
-        basicAgent.targetPlayer = null;
-        inGround = false;
-
+        inEnemy = false;
        
         if (col_GroundPerceibed != null)
         {
@@ -48,8 +41,7 @@ public class Pendulum : MonoBehaviour
             {
                 if (tmp.CompareTag(enemyTag))
                 {
-                    basicAgent.targetPlayer = tmp.transform;
-                    inGround = true;
+                    inEnemy = true;
                 }
             }
         }
@@ -57,9 +49,9 @@ public class Pendulum : MonoBehaviour
     void decisionManager_EnemyTower()
     {
 
-        if (inGround)
+        if (inEnemy)
         {
-            agentStates = ShooterAgentStates.InGround;
+            agentStates = ShooterAgentStates.InEnemy;
         }
         else
         {
@@ -76,21 +68,13 @@ public class Pendulum : MonoBehaviour
                 PendulumInLive();
                 break;
 
-            case ShooterAgentStates.InGround:
+            case ShooterAgentStates.InEnemy:
                 PendulumDamage();
                 break;
 
         }
     }
 
-    private void PendulumInLive()
-    {
-        timerToDestroy += Time.deltaTime;
-        if (timerToDestroy >= 2f)
-        {
-            Destroy(gameObject);
-        }
-    }
     private void PendulumDamage()
     {
       
@@ -98,25 +82,27 @@ public class Pendulum : MonoBehaviour
         {
             if (tmp.CompareTag(enemyTag))
             {
-                if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
+                if (tmp.GetComponent<HealthEnemy>() is var life && life != null)
                 {
-                    life.DamagePlayer();
-                    Destroy(gameObject);
-
+                    life.DamageEnemy(damageToEnemy);
                 }
-            }
-            else
-            {
-
             }
         }
        
+    }
+    private void PendulumInLive()
+    {
+        timerToDestroy += Time.deltaTime;
+        if (timerToDestroy >= 10f)
+        {
+            Destroy(gameObject);
+        }
     }
  
     private enum ShooterAgentStates
     {
         None,
-        InGround,
+        InEnemy,
     }
     private void OnDrawGizmos()
     {

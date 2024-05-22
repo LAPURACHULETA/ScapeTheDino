@@ -6,9 +6,8 @@ public class Barbs : MonoBehaviour
 {
     [SerializeField] private float groundPerceptRadious, barbsPerceptRadious, damageHeal;
     [SerializeField] private Transform groundPercept, barbsPercept;
-
+    [SerializeField] private int damageToEnemy;
     Collider[] col_GroundPerceibed, col_BarbsPerceibed;
-    BasicAgent basicAgent;
 
     ShooterAgentStates agentStates;
     float timerBarbs;
@@ -16,7 +15,7 @@ public class Barbs : MonoBehaviour
     public string enemyTag, groundTag;
     void Start()
     {
-        basicAgent = GetComponent<BasicAgent>();
+       
         inGround = false;
         inBrabs = false;
     }
@@ -35,11 +34,7 @@ public class Barbs : MonoBehaviour
     /// </summary>
     public void perceptionManager()
     {
-        if (!basicAgent)
-        {
-            return;
-        }
-        basicAgent.targetPlayer = null;
+      
         inGround = false;
         inBrabs = false;
 
@@ -49,7 +44,7 @@ public class Barbs : MonoBehaviour
             {
                 if (tmp.CompareTag(groundTag))
                 {
-                    basicAgent.targetPlayer = tmp.transform;
+                    
                     inGround = true;
                 }
             }
@@ -61,7 +56,7 @@ public class Barbs : MonoBehaviour
             {
                 if (tmp.CompareTag(enemyTag))
                 {
-                    basicAgent.targetPlayer = tmp.transform;
+                   
                     inBrabs = true;
                 }
             }
@@ -85,8 +80,6 @@ public class Barbs : MonoBehaviour
         }
         actionManager();
 
-        movementManager();
-
     }
     void actionManager()
     {
@@ -96,45 +89,33 @@ public class Barbs : MonoBehaviour
                 break;
 
             case ShooterAgentStates.InGround:
+                TimeDestroy();
                 BarbsDamage();
-                break;
-
-        }
-    }
-    void movementManager()
-    {
-        switch (agentStates)
-        {
-            case ShooterAgentStates.None:
-                break;
-            case ShooterAgentStates.InGround:
                 break;
 
         }
     }
     private void BarbsDamage()
     {
+        foreach (Collider tmp in col_GroundPerceibed)
+        {
+            if (tmp.CompareTag(enemyTag))
+            {
+                if (tmp.GetComponent<HealthEnemy>() is var life && life != null)
+                {
+                    life.DamageEnemy(damageToEnemy);
+                }
+            }
+        }
+    }
+    private void TimeDestroy()
+    {
         timerBarbs += Time.deltaTime;
         if (timerBarbs >= 2f)
         {
-            foreach (Collider tmp in col_GroundPerceibed)
-            {
-                if (tmp.CompareTag(enemyTag))
-                {
-                    if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
-                    {
-                        life.DamagePlayer();
-                    }
-                }
-                else
-                {
-
-                }
-            }
             Destroy(gameObject);
         }
     }
-
     private enum ShooterAgentStates
     {
         None,

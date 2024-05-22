@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
-[RequireComponent(typeof(PlayerInput))]
+using UnityEngine.UI;
+
 public class CraftingManager : MonoBehaviour
 {
     private Item currentItem;
@@ -14,20 +14,15 @@ public class CraftingManager : MonoBehaviour
     [SerializeField] private string[] recipes;
     [SerializeField] private Item[] recipesResults;
     [SerializeField] private Slot resultSlot;
-    private Vector2 valueButton;
-    private int valueButtonInt;
-    public void OnMouse(InputValue context)
+    CustomCursor custom;
+    private void Start()
     {
-        valueButton = context.Get<Vector2>();
-    } 
-    public void MouseClick(InputValue context)
-    {
-        valueButtonInt = context.Get<int>();
+        custom=FindObjectOfType<CustomCursor>();
     }
-
     private void Update()
     {
-        if (valueButtonInt == 0)
+        var mouse = Mouse.current.position;
+        if (!custom.canMover)
         {
             if (currentItem != null)
             {
@@ -36,7 +31,10 @@ public class CraftingManager : MonoBehaviour
                 float shortestDistance = float.MaxValue;
                 foreach (Slot slot in craftingSlots)
                 {
-                    var dist = Vector2.Distance(valueButton, slot.transform.position);
+             
+                    var posMouse = mouse.ReadValue();
+
+                    float dist = Vector2.Distance(posMouse, slot.transform.position);
                     if (dist < shortestDistance)
                     {
                         shortestDistance = dist;
@@ -51,6 +49,7 @@ public class CraftingManager : MonoBehaviour
                 CheckForCreatedRecipes();
             }
         }
+        
     }
     private void CheckForCreatedRecipes()
     {

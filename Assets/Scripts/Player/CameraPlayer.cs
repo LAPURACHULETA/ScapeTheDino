@@ -60,10 +60,8 @@ public class CameraPlayer : MonoBehaviour
         /// rotacion del jugador 
         /// </summary>
         followTransform.transform.rotation *= Quaternion.AngleAxis(look.x * rotationSpeed, Vector3.up);
-        /// <summary>
-        /// verificacion de rotacion actual en x del objetivo
-        /// </summary>
-        followTransform.transform.rotation *= Quaternion.AngleAxis(look.y * rotationSpeed, Vector3.right);
+     
+        followTransform.transform.rotation *= Quaternion.AngleAxis(look.y * -rotationSpeed, Vector3.right);
 
         var angles = followTransform.transform.localEulerAngles;
         angles.z = 0;
@@ -103,10 +101,7 @@ public class CameraPlayer : MonoBehaviour
                 followTransform.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
                 
             }
-            //if (changeValue != 1)
-            //{
-            //    transform.rotation = Quaternion.identity;
-            //}
+           
             return;
         }
         float moveSpeed = speed / 100f;

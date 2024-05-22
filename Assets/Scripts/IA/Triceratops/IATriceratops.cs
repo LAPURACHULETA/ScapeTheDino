@@ -5,7 +5,7 @@ using UnityEngine;
 public class IATriceratops : MonoBehaviour
 {
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
-
+    [SerializeField] private int damageToPlayer;
     [SerializeField] private float slowingRadious, thershold;
 
     [SerializeField] private float timeToSeek, timeToStunned;
@@ -135,7 +135,7 @@ public class IATriceratops : MonoBehaviour
             {
                 if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
                 {
-                    life.DamagePlayer();
+                    life.DamagePlayer(damageToPlayer);
                 }
             }
         }

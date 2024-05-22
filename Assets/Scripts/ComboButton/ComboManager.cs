@@ -7,11 +7,6 @@ public class ComboManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> combos;
   
-    //private void Start()
-    //{
-    //    player = GetComponent<PlayerController>();
-    //    ActivateRandomObject();
-    //}
     public void ActivateRandomObject()
     {
         int randomIndex = Random.Range(0, combos.Count);

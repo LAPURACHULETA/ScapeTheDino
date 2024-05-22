@@ -2,73 +2,82 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject crafting;
-    ShooterAgentStates agentStates;
+    [SerializeField] private GameObject craftingObj;
+    [SerializeField] private GameObject inventoryObj;
+    [SerializeField] private GameObject pauseObj;
+    [SerializeField] private GameObject winner;
 
-    private int craft;
-    private int game;
-    void Start()
+    public enum State
     {
-        crafting.SetActive(false);
+        None,
+        Resume,
+        Pause,
+        GameOver,
+        Win
     }
-    /// <summary>
-    /// Realiza operaciones de f?sica y l?gica de juego a una velocidad fija.
-    /// </summary>
-    private void FixedUpdate()
+    
+    public State state;
+    public void changeState(State newState)
     {
-        decisionManager();
-    }
+        if (newState == state)
+        {
+            return;
+        }
 
-    /// <summary>
-    /// Gestiona la percepci?n del agente y establece el objetivo.
-    /// </summary>
-   
-    void decisionManager()
-    {
-        if (craft == 1)
+        state = newState;
+
+        switch (state)
         {
-            agentStates = ShooterAgentStates.Crafting;
-        }
-        if (craft == 1)
-        {
-            agentStates = ShooterAgentStates.InGame;
-        }
-        actionManager();
-    }
-    void actionManager()
-    {
-        switch (agentStates)
-        {
-            case ShooterAgentStates.InGame:
-                InGame();
+            case State.None:
+                ButtonResume();
                 break;
-            case ShooterAgentStates.Crafting:
-                Crafting();
+            case State.Resume:
+                ButtonResume();
+                break;
+            case State.Pause:
+                ButtonPause();
+                break;
+            case State.GameOver:
+                GameOver();
+                break;
+            case State.Win:
+                Winner();
                 break;
         }
     }
-    private enum ShooterAgentStates
+    public void ButtonPlay()
     {
-        InGame,
-        Crafting,
+        SceneManager.LoadScene(1);
+        ButtonResume();
     }
-    public void OnCrafting(InputValue context)
+    public void ButtonExit()
     {
-        craft = context.Get<int>();
+        Application.Quit();
     }
-    private void InGame()
+    public void ButtonPause()
     {
-        crafting.SetActive(false);
-        player.SetActive(true);
+        Time.timeScale = 0;
     }
-    private void Crafting()
+    public void ButtonGoToMenu()
     {
-        player.SetActive(false);
-        crafting.SetActive(true);
+        SceneManager.LoadScene(0);
+    }
+    public void ButtonResume()
+    {
+        Time.timeScale = 1;
+    }
+    public void GameOver()
+    {
+        craftingObj.SetActive(false);
+        inventoryObj.SetActive(false);
+        pauseObj.SetActive(true);
+        ButtonPause();
+    }
+    public void Winner()
+    {
+        ButtonPause();
     }
 }

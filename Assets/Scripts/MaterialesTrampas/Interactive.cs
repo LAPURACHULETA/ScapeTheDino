@@ -7,10 +7,13 @@ public class Interactive : MonoBehaviour
 {
     private Inventory inventory;
     public GameObject item;
+    private LaserPuzle laser;
+
     private void Start()
     {
-        inventory=GameObject.FindGameObjectWithTag("Player")
-            .GetComponent<Inventory>(); 
+       
+        inventory=GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>(); 
+        laser=gameObject.GetComponent<LaserPuzle>();
     }
     public void TakeObject()
     {
@@ -23,8 +26,14 @@ public class Interactive : MonoBehaviour
                 inventory.isFull[i] = true;
                 Instantiate(item, inventory.slots[i].transform,false);
                 Destroy(gameObject);
+                //gameObject.SetActive(false);
                 break;
             }
         }
     }
+    public void RatateLaser()
+    {
+       laser.isRotating = true;
+    }
+    
 }

@@ -6,7 +6,7 @@ public class IAT_Rex : MonoBehaviour
 {
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
     [SerializeField] private float slowingRadious, thershold;
-    [SerializeField] private float damageToPlayer;
+    [SerializeField] private int damageToPlayer;
     [SerializeField] private float timeToExplod;
 
     [SerializeField] private Transform eyesPercept, earsPercept;
@@ -111,6 +111,10 @@ public class IAT_Rex : MonoBehaviour
 
     private void Attack()
     {
+        if (!basicAgent)
+        {
+            return;
+        }
         rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
         //rb.velocity = SreeringBehaviours.seek(basicAgent, basicAgent.targetPlayer.position);
         //SreeringBehaviours.lookAt2(transform, rb.velocity,basicAgent.targetPlayer.GetComponent<BasicAgent>());
@@ -130,13 +134,8 @@ public class IAT_Rex : MonoBehaviour
                 {
                     if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
                     {
-                        life.DamagePlayer();
+                        life.DamagePlayer(damageToPlayer);
                     }
-                    //if (tmp.GetComponent<HealthEnemy>() is var healthEnemy && healthEnemy != null)
-                    //{
-                    //    healthEnemy.TakeDamageEnemy(damageHeal);
-                    //}
-
                     Debug.Log("Persige");
                     timerHit = 0;
                     Destroy(gameObject);

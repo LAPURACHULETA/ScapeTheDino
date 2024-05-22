@@ -9,20 +9,21 @@ public class Selected : MonoBehaviour
     [SerializeField]private float distanceMaterial;
     [SerializeField]private float distanceObstacle;
     [SerializeField]private float jumpforce;
- 
+    [SerializeField]private Camera camPlayer;
+    [SerializeField] private GameObject puzzleCombo;
+    [SerializeField] private GameObject puzzleKeypad;
+
     private float valueButton;
     private Rigidbody rb;
 
     // Update is called once per frame
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
- 
+        rb = GetComponent<Rigidbody>();     
     }
     void Update()
     {
         DetectionOfObject();
-  
     }
     public void OnInteractive(InputValue context)
     {
@@ -43,26 +44,42 @@ public class Selected : MonoBehaviour
                     hit.collider.gameObject.GetComponent<Interactive>().TakeObject();
                 }
             }
-
-       
-        }
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distanceObstacle))
-        {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.red);
-
             if (hit.collider.tag == "Obstacle")
             {
                 if (valueButton == 1)
                 {
-                    //hit.collider.gameObject.GetComponent<Interactive>().Parkour(rb,jumpforce);
                     rb.AddForce(Vector3.up * jumpforce);
                 }
             }
+            if (hit.collider.tag == "Torre")
+            {
+                if (valueButton == 1)
+                {
+                    hit.collider.gameObject.GetComponent<Interactive>().RatateLaser();
+                }
+            }
+            if (hit.collider.tag == "DoorCombo")
+            {
+                if (valueButton == 1)
+                {
+                    Debug.Log("combo");
+                    puzzleCombo.SetActive(true);
+                }
+               
+            }
+            if (hit.collider.tag == "DoorKeypad")
+            {
+                if (valueButton == 1)
+                {
+                    Debug.Log("keypad");
+                    puzzleKeypad.SetActive(true);
+                }
+            }
+
         }
-       
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
+        void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+        }
     }
 }

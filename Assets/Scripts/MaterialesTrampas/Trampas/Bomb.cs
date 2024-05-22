@@ -6,19 +6,17 @@ public class Bomb : MonoBehaviour
 {
     [SerializeField] private float groundPerceptRadious, explosionPerceptRadious, damageHeal;
     [SerializeField] private Transform groundPercept, explosionPercept;
+    [SerializeField] private int damageToEnemy;
 
     Collider[] col_GroundPerceibed, col_ExplosionPerceibed;
-    BasicAgent basicAgent;
-
     ShooterAgentStates agentStates;
     float timerMolotov;
-    bool inGround, inExplosion;
+    bool inGround;
     public string enemyTag, groundTag;
     void Start()
     {
-        basicAgent = GetComponent<BasicAgent>();
+ 
         inGround = false;
-        inExplosion = false;
     }
 
     private void FixedUpdate()
@@ -35,13 +33,8 @@ public class Bomb : MonoBehaviour
     /// </summary>
     public void perceptionManager()
     {
-        if (!basicAgent)
-        {
-            return;
-        }
-        basicAgent.targetPlayer = null;
+       
         inGround = false;
-        inExplosion = false;
 
         if (col_GroundPerceibed != null)
         {
@@ -49,34 +42,18 @@ public class Bomb : MonoBehaviour
             {
                 if (tmp.CompareTag(groundTag))
                 {
-                    basicAgent.targetPlayer = tmp.transform;
+                 
                     inGround = true;
                 }
-            }
-        }
 
-        if (col_ExplosionPerceibed != null)
-        {
-            foreach (Collider tmp in col_ExplosionPerceibed)
-            {
-                if (tmp.CompareTag(enemyTag))
-                {
-                    basicAgent.targetPlayer = tmp.transform;
-                    inExplosion = true;
-                }
             }
         }
     }
     void decisionManager_EnemyTower()
     {
 
-        if (inExplosion)
+        if (inGround)
         {
-            agentStates = ShooterAgentStates.InGround;
-        }
-        else if (inGround)
-        {
-            inExplosion = false;
             agentStates = ShooterAgentStates.InGround;
         }
         else
@@ -84,8 +61,6 @@ public class Bomb : MonoBehaviour
             agentStates = ShooterAgentStates.None;
         }
         actionManager();
-
-        movementManager();
 
     }
     void actionManager()
@@ -101,17 +76,6 @@ public class Bomb : MonoBehaviour
 
         }
     }
-    void movementManager()
-    {
-        switch (agentStates)
-        {
-            case ShooterAgentStates.None:
-                break;
-            case ShooterAgentStates.InGround:
-                break;
-
-        }
-    }
     private void Explosion()
     {
         timerMolotov += Time.deltaTime;
@@ -121,20 +85,18 @@ public class Bomb : MonoBehaviour
             {
                 if (tmp.CompareTag(enemyTag))
                 {
-                    if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
+                    if (tmp.GetComponent<HealthEnemy>() is var life && life != null)
                     {
-                        life.DamagePlayer();
+                        life.DamageEnemy(damageToEnemy);
                     }
                 }
-                else
-                {
-
-                }
             }
+
             Destroy(gameObject);
         }
+       
     }
-
+   
     private enum ShooterAgentStates
     {
         None,

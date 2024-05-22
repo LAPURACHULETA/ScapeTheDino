@@ -7,9 +7,10 @@ public class Molotov : MonoBehaviour
 
     [SerializeField] private float groundPerceptRadious, explosionPerceptRadious, damageHeal;
     [SerializeField] private Transform groundPercept, explosionPercept;
+    [SerializeField] private int damageToEnemy;
+
     Rigidbody rb;
     Collider[] col_GroundPerceibed, col_ExplosionPerceibed;
-    BasicAgent basicAgent;
 
     ShooterAgentStates agentStates;
     float timerMolotov;
@@ -17,7 +18,7 @@ public class Molotov : MonoBehaviour
     public string enemyTag, groundTag;
     void Start()
     {
-        basicAgent = GetComponent<BasicAgent>();
+        
         rb = GetComponent<Rigidbody>();
         inGround = false;
         inExplosion = false;
@@ -37,11 +38,7 @@ public class Molotov : MonoBehaviour
     /// </summary>
     public void perceptionManager()
     {
-        if (!basicAgent)
-        {
-            return;
-        }
-        basicAgent.targetPlayer = null;
+     
         inGround = false;
         inExplosion = false;
 
@@ -51,7 +48,7 @@ public class Molotov : MonoBehaviour
             {
                 if (tmp.CompareTag(groundTag))
                 {
-                    basicAgent.targetPlayer = tmp.transform;
+                  
                     inGround = true;
                 }
             }
@@ -63,7 +60,7 @@ public class Molotov : MonoBehaviour
             {
                 if (tmp.CompareTag(enemyTag))
                 {
-                    basicAgent.targetPlayer = tmp.transform;
+                    Debug.Log(tmp.tag);
                     inExplosion = true;
                 }
             }
@@ -76,9 +73,8 @@ public class Molotov : MonoBehaviour
         {
             agentStates = ShooterAgentStates.InExplosion;
         }
-        else if (inGround)
+        if (inGround)
         {
-            inExplosion = false;
             agentStates = ShooterAgentStates.InGround;
         }
         else
@@ -86,8 +82,6 @@ public class Molotov : MonoBehaviour
             agentStates = ShooterAgentStates.None;
         }
         actionManager();
-
-        movementManager();
 
     }
     void actionManager()
@@ -101,44 +95,30 @@ public class Molotov : MonoBehaviour
                 Ground();
                 break;
             case ShooterAgentStates.InExplosion:
-                Explosion();
+           
                 break;
-
-
         }
     }
-    void movementManager()
-    {
-        switch (agentStates)
-        {
-            case ShooterAgentStates.None:
-                break;
-            case ShooterAgentStates.InGround:
-                break;
-            case ShooterAgentStates.InExplosion:
-                break;
 
-        }
-    }
     private void Ground()
     {
+        if (inGround)
+        {
+            foreach (Collider tmp in col_GroundPerceibed)
+            {
+                if (tmp.CompareTag(enemyTag))
+                {
+                    if (tmp.GetComponent<HealthEnemy>() is var life && life != null)
+                    {
+                        life.DamageEnemy(damageToEnemy);
+                    }
+                }
+            }
+        }
         timerMolotov += Time.deltaTime;
         if (timerMolotov >= 2f)
         {
             Destroy(gameObject);
-        }
-    }
-    private void Explosion()
-    {
-        foreach (Collider tmp in col_GroundPerceibed)
-        {
-            if (tmp.CompareTag(enemyTag))
-            {
-                if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
-                {
-                    life.DamagePlayer();
-                }
-            }
         }
     }
 

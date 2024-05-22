@@ -5,7 +5,7 @@ using UnityEngine;
 public class IAMeele : MonoBehaviour
 {
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
-
+    [SerializeField] private int damageToPlayer;
     [SerializeField] private float slowingRadious, thershold;
     [SerializeField] private float timerToHit;
 
@@ -113,6 +113,10 @@ public class IAMeele : MonoBehaviour
 
     private void Attack()
     {
+        if (!basicAgent)
+        {
+            return;
+        }
         rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
         //rb.velocity = SreeringBehaviours.seek(basicAgent, basicAgent.target.position);
         //SreeringBehaviours.lookAt(transform, rb.velocity);
@@ -131,7 +135,7 @@ public class IAMeele : MonoBehaviour
                 {
                     if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
                     {
-                        life.DamagePlayer();
+                        life.DamagePlayer(damageToPlayer);
                     }
                     //if (tmp.GetComponent<HealthEnemy>() is var healthEnemy && healthEnemy != null)
                     //{

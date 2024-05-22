@@ -36,7 +36,7 @@
                     "name": "ChangeCamera",
                     "type": "Value",
                     "id": "8b54b3fd-5c41-4de0-9338-5c0a3a4b45b4",
-                    "expectedControlType": "Integer",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -60,15 +60,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "MouseCrafting",
-                    "type": "Value",
-                    "id": "beecc905-2937-49d7-8a6d-18b9ca53b9d3",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "MouseClick",
                     "type": "Value",
                     "id": "9fd99e6e-d230-4dd2-856f-780ab347cdee",
@@ -78,13 +69,13 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Prueba",
-                    "type": "Button",
-                    "id": "4f02afd6-afe1-40c8-9bee-bc9d4fcb5d87",
-                    "expectedControlType": "Button",
+                    "name": "Pause",
+                    "type": "Value",
+                    "id": "b110fada-dcea-43e0-867a-5a9f16d92745",
+                    "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -190,7 +181,7 @@
                 {
                     "name": "",
                     "id": "614970b2-82cb-4f60-9087-82aa15f63518",
-                    "path": "<Keyboard>/z",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -233,17 +224,6 @@
                 },
                 {
                     "name": "",
-                    "id": "133f04b2-8356-439f-8c89-2efeb94b920f",
-                    "path": "<Pointer>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseCrafting",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "6a6bd041-1360-4251-b3fb-60de19b0be3b",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -255,53 +235,52 @@
                 },
                 {
                     "name": "",
-                    "id": "fb216dd3-5b84-481b-9091-b4567fac8763",
-                    "path": "<Keyboard>/q",
+                    "id": "94073bbf-277b-4190-9c0f-719cdfa6b9c5",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Prueba",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "UI",
-            "id": "875bb6cb-e60a-4f27-9ee5-739feadcab28",
+            "name": "CombosTeclas",
+            "id": "3bb7fae5-380a-45ff-86d7-1a6cd61f21e7",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "H",
                     "type": "Button",
-                    "id": "dc4e06c0-89bd-44af-b40c-6e49be93e422",
+                    "id": "93b584af-53a8-42d0-a770-3cb70b25997f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
-                    "name": "",
-                    "id": "92961131-f368-456c-ae43-56f71651c728",
-                    "path": "",
-                    "interactions": "",
+                    "name": "J",
+                    "type": "Button",
+                    "id": "21a7b2a7-a988-4a05-a1a4-8778bbaa44f0",
+                    "expectedControlType": "Button",
                     "processors": "",
-                    "groups": "",
-                    "action": "New action",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Combos1",
-            "id": "4d20aef6-1786-45be-ae37-52c70cd16034",
-            "actions": [
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "K",
+                    "type": "Button",
+                    "id": "6560f5ff-d0e2-4b62-830a-ce8ad02f5872",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
                 {
                     "name": "L",
                     "type": "Button",
-                    "id": "f20c8a23-69a1-4eab-89e3-622c08b76c74",
+                    "id": "7b970dce-4622-4f4c-957a-e25c5e6aa23a",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -310,16 +289,16 @@
                 {
                     "name": "O",
                     "type": "Button",
-                    "id": "4ccb89ec-69af-4e56-b15d-f02e19292585",
+                    "id": "8c6b173a-d322-477d-96a8-3de42a970901",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "M",
+                    "name": "P",
                     "type": "Button",
-                    "id": "2ad9b4d8-5098-4d76-b68c-5cd6fce2b3fb",
+                    "id": "ab275e56-2525-4745-a754-40d38f98008f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -329,7 +308,40 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "2004699c-de88-4fde-83db-480b1b3b5b9a",
+                    "id": "684f3319-98b7-460f-8af7-acf89d929ef3",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "H",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "25017632-f95d-4d28-b10e-b9f749b68030",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "J",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fdabd9fb-6e90-41dd-b5a7-9e0fbed479fa",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "K",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "79bf2db3-d70f-434f-b93e-9327b18eb522",
                     "path": "<Keyboard>/l",
                     "interactions": "",
                     "processors": "",
@@ -340,7 +352,7 @@
                 },
                 {
                     "name": "",
-                    "id": "f2fa4d37-c6be-4241-bb9d-c7de1a91d96a",
+                    "id": "4d8de404-3e8b-4de0-a5e2-5bc8c2b9c9e8",
                     "path": "<Keyboard>/o",
                     "interactions": "",
                     "processors": "",
@@ -351,12 +363,12 @@
                 },
                 {
                     "name": "",
-                    "id": "023942bc-ccb6-4866-9b3e-38a49d628bfa",
-                    "path": "<Keyboard>/m",
+                    "id": "dfa6efc7-d499-428f-af88-97cb6260a1d5",
+                    "path": "<Keyboard>/p",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "M",
+                    "action": "P",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
