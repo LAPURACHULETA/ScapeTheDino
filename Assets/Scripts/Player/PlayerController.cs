@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private float maxSpeed;
     BasicAgent agent;
     GameManager gameManager;
+    ChangeCameraPerson changeCameraPerson;
     private Rigidbody rb;
     private PlayerInput playerInput;
     private float runValue;
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        changeCameraPerson=FindObjectOfType<ChangeCameraPerson>();
         agent = GetComponent<BasicAgent>();
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
@@ -59,11 +61,14 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(horizontal, 0, vertical).normalized; // Normalizar para evitar movimiento más rápido en diagonales
 
         // Si hay movimiento, calcular la nueva rotación
-        if (movement.magnitude > 0.1f)
-        {
-            // Calcular la rotación deseada
-            Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * speed);
+        if (!changeCameraPerson.firtsPerson.activeInHierarchy&& gameManager.state == GameManager.State.InGame)
+        { 
+            if (movement.magnitude > 0.1f)
+            {
+                // Calcular la rotación deseada
+                Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * speed);
+            }
         }
 
         // Calcular el movimiento
@@ -75,7 +80,7 @@ public class PlayerController : MonoBehaviour
             transform.Translate(movementWithSpeed, Space.World);
             rb.AddForce(movementWithSpeed, ForceMode.VelocityChange);
         }
-
+        
     }
 
     public void OnRun(InputValue context)
