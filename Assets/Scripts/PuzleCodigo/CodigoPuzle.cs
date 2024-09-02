@@ -11,6 +11,12 @@ public class CodigoPuzle : MonoBehaviour
     [SerializeField] private GameObject doorKeypad;
 
     public bool puzzleComplete;
+    GameManager manager;
+    private void Start()
+    {
+        manager=FindObjectOfType<GameManager>();
+       
+    }
     public void Number(int number)
     {
         text.text += number.ToString();
@@ -23,10 +29,12 @@ public class CodigoPuzle : MonoBehaviour
             Destroy(doorKeypad);
             keyPad.gameObject.SetActive(false);
             puzzleComplete = true;  
+            manager.changeState(GameManager.State.InGame);
         }
         else
         {
             text.text = "";
+            
         }
     }
 }

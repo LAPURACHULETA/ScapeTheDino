@@ -80,6 +80,10 @@ public class IAT_Rex : MonoBehaviour
             
             }
         }
+        else
+        {
+            agentStates= AgentStates.None;
+        }
         ActionManager();
 
         MovementManager();

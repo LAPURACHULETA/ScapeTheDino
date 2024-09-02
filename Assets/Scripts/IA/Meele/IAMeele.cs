@@ -79,6 +79,10 @@ public class IAMeele : MonoBehaviour
                 agentStates = AgentStates.Attack;
             }
         }
+        else
+        {
+            agentStates = AgentStates.None;
+        }
         ActionManager();
 
         MovementManager();

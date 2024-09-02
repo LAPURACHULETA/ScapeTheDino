@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Moving Player")]
     [Space(10)] 
-    [SerializeField] protected float timeCanRunPlayer, recoveryTime;
+    [SerializeField] protected float timeCanRunPlayer, recoveryTime,speed;
     protected bool canRunPlayer;
     private float maxSpeed;
     BasicAgent agent;
@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private float runValue;
     private float valueButton;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,18 +51,31 @@ public class PlayerController : MonoBehaviour
     /// movimiento del personaje
     /// </summary>
     private void Movimiento()
-    {  
-        //input = playerInput.actions["Move"].ReadValue<Vector2>();
-
+    {
         float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
         float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
-        float angle = Vector3.Angle(transform.forward, Vector3.forward); 
+        // Crear un vector de movimiento basado en la entrada
+        Vector3 movement = new Vector3(horizontal, 0, vertical).normalized; // Normalizar para evitar movimiento más rápido en diagonales
 
-        Vector3 Mov = new Vector3(horizontal, 0, vertical) * /*agent.m_speed*/10 * Time.deltaTime; 
-        Vector3 newForw = Quaternion.AngleAxis(angle, Vector3.up) * Mov; 
-        transform.Translate(newForw, Space.World);
-        rb.AddForce(newForw);
+        // Si hay movimiento, calcular la nueva rotación
+        if (movement.magnitude > 0.1f)
+        {
+            // Calcular la rotación deseada
+            Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * speed);
+        }
+
+        // Calcular el movimiento
+        Vector3 movementWithSpeed = movement * speed * Time.deltaTime;
+
+        if (gameManager.state == GameManager.State.InGame)
+        {
+            // Mover el personaje
+            transform.Translate(movementWithSpeed, Space.World);
+            rb.AddForce(movementWithSpeed, ForceMode.VelocityChange);
+        }
+
     }
 
     public void OnRun(InputValue context)

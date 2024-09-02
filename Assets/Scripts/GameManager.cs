@@ -5,21 +5,26 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject craftingObj;
-    [SerializeField] private GameObject inventoryObj;
     [SerializeField] private GameObject pauseObj;
+    [SerializeField] private GameObject gameOver;
     [SerializeField] private GameObject winner;
-
+    CameraPlayer camera;
     public enum State
     {
-        None,
+        InGame,
         Resume,
         Pause,
+        InPuzzle,
         GameOver,
         Win
     }
     
     public State state;
+    private void Start()
+    {
+        camera = FindObjectOfType<CameraPlayer>();
+    }
+    
     public void changeState(State newState)
     {
         if (newState == state)
@@ -31,8 +36,9 @@ public class GameManager : MonoBehaviour
 
         switch (state)
         {
-            case State.None:
+            case State.InGame:
                 ButtonResume();
+                camera.LookMouse();
                 break;
             case State.Resume:
                 ButtonResume();
@@ -46,6 +52,10 @@ public class GameManager : MonoBehaviour
             case State.Win:
                 Winner();
                 break;
+            case State.InPuzzle:
+
+                break;
+
         }
     }
     public void ButtonPlay()
@@ -64,6 +74,11 @@ public class GameManager : MonoBehaviour
     public void ButtonGoToMenu()
     {
         SceneManager.LoadScene(0);
+    } 
+    public void Reiniciar()
+    {
+        SceneManager.LoadScene(1);
+        Time.timeScale = 1;
     }
     public void ButtonResume()
     {
@@ -71,9 +86,7 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-        craftingObj.SetActive(false);
-        inventoryObj.SetActive(false);
-        pauseObj.SetActive(true);
+        gameOver.SetActive(true);
         ButtonPause();
     }
     public void Winner()

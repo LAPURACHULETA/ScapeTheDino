@@ -26,14 +26,18 @@ public class CameraPlayer : MonoBehaviour
     public float speed;
     PlayerController player;
     Cinemachine.CinemachineImpulseSource source;
-
+    GameManager gameManager;
     private void Start()
     {
         player = GetComponent<PlayerController>();
+        gameManager=FindObjectOfType<GameManager>();    
     }
     void Update()
     {
-        LookMouse();
+        if(gameManager.state == GameManager.State.InGame)
+        {
+            LookMouse();
+        }
     }
     public void OnChangeCamera(InputValue value)
     {

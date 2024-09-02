@@ -74,7 +74,10 @@ public class IATriceratops : MonoBehaviour
                 agentStates = AgentStates.Attack;
             }
         }
-        
+        else
+        {
+            agentStates = AgentStates.None;
+        }
         actionManager();
         movementManager();
     }

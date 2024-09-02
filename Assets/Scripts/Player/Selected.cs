@@ -15,11 +15,12 @@ public class Selected : MonoBehaviour
 
     private float valueButton;
     private Rigidbody rb;
-
+    GameManager manager;
     // Update is called once per frame
     private void Start()
     {
         rb = GetComponent<Rigidbody>();     
+        manager=FindObjectOfType<GameManager>();
     }
     void Update()
     {
@@ -32,18 +33,10 @@ public class Selected : MonoBehaviour
     void DetectionOfObject()
     {
         RaycastHit hit;
-
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distanceMaterial))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.black);
 
-            if (hit.collider.tag == "MaterialTrampas")
-            {
-                if (valueButton == 1)
-                {
-                    hit.collider.gameObject.GetComponent<Interactive>().TakeObject();
-                }
-            }
             if (hit.collider.tag == "Obstacle")
             {
                 if (valueButton == 1)
@@ -60,22 +53,26 @@ public class Selected : MonoBehaviour
             }
             if (hit.collider.tag == "DoorCombo")
             {
+                
                 if (valueButton == 1)
                 {
                     Debug.Log("combo");
+                    manager.changeState(GameManager.State.InPuzzle); 
                     puzzleCombo.SetActive(true);
                 }
-               
             }
+         
             if (hit.collider.tag == "DoorKeypad")
             {
+               
                 if (valueButton == 1)
                 {
                     Debug.Log("keypad");
+                    manager.changeState(GameManager.State.InPuzzle);
                     puzzleKeypad.SetActive(true);
                 }
             }
-
+           
         }
         void OnDrawGizmos()
         {

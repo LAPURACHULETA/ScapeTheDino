@@ -10,12 +10,13 @@ public class ChangeCameraPerson : MonoBehaviour
 
     public GameObject thirdPerson;
     public GameObject firtsPerson;
- 
 
+    private Quaternion originalRotation;
     // Start is called before the first frame update
     void Start()
     {
         input = GetComponent<CameraPlayer>();
+        originalRotation = transform.rotation;
     }
 
     // Update is called once per frame
@@ -37,6 +38,7 @@ public class ChangeCameraPerson : MonoBehaviour
         {
             thirdPerson.SetActive(true);
             firtsPerson.SetActive(false);
+            transform.rotation = originalRotation;
         }
 
     }

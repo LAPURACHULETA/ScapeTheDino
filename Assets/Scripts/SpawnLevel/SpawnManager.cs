@@ -152,7 +152,7 @@ public class SpawnManager : MonoBehaviour
     void SpawnLevel1()
     {
         spawningTime += Time.deltaTime;
-        Debug.Log(spawningTime+"Level1");
+        //Debug.Log(spawningTime+"Level1");
         if (spawningTime >= spawnTimer && !inPause)
         {
             for (int i = 0; i < waveNumber; ++i)
@@ -164,21 +164,21 @@ public class SpawnManager : MonoBehaviour
             spawningTime = 0;
             numEnemys ++;
         }
-        if (spawningTime >= 10)
-        {
-            inPause = false;
-            numEnemys = 0;
-            spawningTime = 0;
-        }
-        else if (numEnemys == 3)
+        if (numEnemys == 3)
         {
             inPause = true;
+        }
+        if (spawningTime >= 10)
+        {
+            numEnemys = 0;
+            spawningTime = 0;
+            inPause = false;
         }
     }
     void SpawnLevel2()
     {
         spawningTime += Time.deltaTime;
-        Debug.Log(spawningTime + "Level2");
+        //Debug.Log(spawningTime + "Level2");
         if (spawningTime >= spawnTimer && !inPause)
         {
             for (int i = 0; i < waveNumber; ++i)
@@ -191,22 +191,22 @@ public class SpawnManager : MonoBehaviour
             spawningTime = 0;
             numEnemys++;
         }
-        if (spawningTime >= 10)
-        {
-            inPause = false;
-            numEnemys = 0;
-            spawningTime = 0;
-        }
-        else if (numEnemys == 3)
+        if (numEnemys == 3)
         {
             inPause = true;
+        }
+        if (spawningTime >= 10)
+        {
+            numEnemys = 0;
+            spawningTime = 0;
+            inPause = false;
         }
 
     }
     void SpawnLevel3()
     {
         spawningTime += Time.deltaTime;
-        Debug.Log(spawningTime + "Level3");
+        //Debug.Log(spawningTime + "Level3");
         if (spawningTime >= spawnTimer && !inPause)
         {
             for (int i = 0; i < waveNumber; ++i)
@@ -219,15 +219,15 @@ public class SpawnManager : MonoBehaviour
             spawningTime = 0;
             numEnemys++;
         }
-        if (spawningTime >= 10)
-        {
-            inPause = false;
-            numEnemys = 0;
-            spawningTime = 0;
-        }
-        else if (numEnemys == 3)
+        if (numEnemys == 3)
         {
             inPause = true;
+        }
+        if (spawningTime >= 10)
+        {
+            numEnemys = 0;
+            spawningTime = 0;
+            inPause = false;
         }
     }
     
