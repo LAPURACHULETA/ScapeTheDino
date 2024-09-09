@@ -9,13 +9,22 @@ public class CodigoPuzle : MonoBehaviour
     [SerializeField] private string code;
     [SerializeField] private GameObject keyPad;
     [SerializeField] private GameObject doorKeypad;
+    [SerializeField] private float timeResetCode;
 
     public bool puzzleComplete;
+    public bool reset;
     GameManager manager;
     private void Start()
     {
         manager=FindObjectOfType<GameManager>();
-       
+        reset=true;
+    }
+    private void Update()
+    {
+        if (reset==false)
+        {
+            StartCoroutine(TimeReset());
+        }
     }
     public void Number(int number)
     {
@@ -31,10 +40,17 @@ public class CodigoPuzle : MonoBehaviour
             puzzleComplete = true;  
             manager.changeState(GameManager.State.InGame);
         }
-        else
+        if(text.text != code)
         {
-            text.text = "";
-            
+            text.text = "Error";
+            reset = false;   
         }
+       
+    }
+    private IEnumerator TimeReset()
+    {
+        yield return new WaitForSeconds(timeResetCode);
+        text.text = "";  
+        reset = true;
     }
 }

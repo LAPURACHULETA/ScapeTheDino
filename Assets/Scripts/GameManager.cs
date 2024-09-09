@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOver;
     [SerializeField] private GameObject winner;
     CameraPlayer camera;
+  
     public enum State
     {
         InGame,
@@ -70,6 +71,8 @@ public class GameManager : MonoBehaviour
     public void ButtonPause()
     {
         Time.timeScale = 0;
+        pauseObj.SetActive(true);
+        changeState(GameManager.State.InPuzzle);
     }
     public void ButtonGoToMenu()
     {
@@ -83,6 +86,8 @@ public class GameManager : MonoBehaviour
     public void ButtonResume()
     {
         Time.timeScale = 1;
+        pauseObj.SetActive(false);
+        changeState(GameManager.State.InGame);
     }
     public void GameOver()
     {

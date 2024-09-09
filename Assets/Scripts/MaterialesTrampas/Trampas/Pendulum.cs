@@ -8,7 +8,7 @@ public class Pendulum : MonoBehaviour
     [SerializeField] private Transform groundPercept;
 
     Collider[] col_GroundPerceibed;
-
+   
     ShooterAgentStates agentStates;
     bool inEnemy;
     float timerToDestroy;
@@ -23,7 +23,7 @@ public class Pendulum : MonoBehaviour
     private void FixedUpdate()
     {
         col_GroundPerceibed = Physics.OverlapSphere(groundPercept.position, groundPerceptRadious);
-
+        
         perceptionManager();
         decisionManager_EnemyTower();
     }
@@ -65,9 +65,9 @@ public class Pendulum : MonoBehaviour
         switch (agentStates)
         {
             case ShooterAgentStates.None:
+                
                 PendulumInLive();
                 break;
-
             case ShooterAgentStates.InEnemy:
                 PendulumDamage();
                 break;

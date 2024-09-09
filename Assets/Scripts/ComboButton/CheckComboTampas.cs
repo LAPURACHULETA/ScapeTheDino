@@ -1,29 +1,32 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
+using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
-public class Combos : MonoBehaviour
+public class CheckComboTampas : MonoBehaviour
 {
     [SerializeField] private List<InputActionReference> comboActions; // Lista de acciones de entrada para cada botón del combo
     [SerializeField] private float comboTimeout; // Tiempo límite para realizar el combo en segundos
     [SerializeField] private GameObject objCombo;
-    [SerializeField] private GameObject doorCombo;
     [SerializeField] private InputActionReference anyKeyAction;
 
     private List<InputAction> currentCombo;
     private Coroutine comboTimeoutCoroutine;
-    private bool puzzleComplete;
+    
     GameManager gameManager;
+    ComboManagerTrampas comboManager;
+    Interactive interactive;
+    Selected selected;
     private void Start()
     {
         currentCombo = new List<InputAction>();
-        gameManager=FindObjectOfType<GameManager>();
+        gameManager = FindObjectOfType<GameManager>();
+        comboManager = FindObjectOfType<ComboManagerTrampas>();
+        interactive=FindObjectOfType<Interactive>();        
+        selected = FindObjectOfType<Selected>();
     }
 
     private void OnEnable()
@@ -38,7 +41,6 @@ public class Combos : MonoBehaviour
             anyKeyAction.action.performed += CheckAnyKey;
             anyKeyAction.action.Enable();
         }
-
     }
 
     private void OnDisable()
@@ -48,22 +50,22 @@ public class Combos : MonoBehaviour
             actionReference.action.performed -= CheckCombo;
             actionReference.action.Disable();
         }
-
         if (anyKeyAction != null)
         {
             anyKeyAction.action.performed -= CheckAnyKey;
             anyKeyAction.action.Disable();
         }
+
+
     }
     private void Update()
     {
         comboTimeoutCoroutine = StartCoroutine(ComboTimeoutRoutine());
-       
     }
     private void CheckAnyKey(InputAction.CallbackContext input)
     {
         // Verificar si la acción es parte del combo
-        bool isValidAction = comboActions.Any(actionReference => actionReference.action == input.action);
+        bool isValidAction = comboActions.Any(actionReference => actionReference.action.name == input.action.name);
 
         if (!isValidAction)
         {
@@ -73,32 +75,30 @@ public class Combos : MonoBehaviour
     }
     private void CheckCombo(InputAction.CallbackContext input)
     {
+        if (anyKeyAction != null)
+        {
+            anyKeyAction.action.Disable();
+        }
+
         currentCombo.Add(input.action);
         if (currentCombo.Count > comboActions.Count)
         {
             currentCombo.RemoveAt(0); // Mantener el tamaño del combo dentro de los límites
-        } 
+        }
         if (CheckComboMatch())
         {
             Debug.Log("Combo exitoso!");
-            Destroy(doorCombo);
-            puzzleComplete = true;
             objCombo.SetActive(false);
-
+            checkedTrampActivated();
             // combo exitoso
             gameManager.changeState(GameManager.State.InGame);
             ResetCombo();
         }
-        //else
-        //{
-        //    // Si no se detecta un combo, se apaga
-        //    //gameManager.changeState(GameManager.State.InGame);
-        //    //if (comboTimeoutCoroutine != null)
-        //    //{
-        //    //    StopCoroutine(comboTimeoutCoroutine);
-        //    //}
-        //    //comboTimeoutCoroutine = StartCoroutine(ComboTimeoutRoutine());
-        //}
+
+        if (anyKeyAction != null)
+        {
+            anyKeyAction.action.Enable();
+        }
     }
 
     private bool CheckComboMatch()
@@ -107,10 +107,11 @@ public class Combos : MonoBehaviour
         {
             return false;
         }
-        
+
+        // Comparar las acciones por su nombre
         for (int i = 0; i < comboActions.Count; i++)
         {
-            if (currentCombo[i] != comboActions[i].action)
+            if (currentCombo[i].name != comboActions[i].action.name)
             {
                 return false;
             }
@@ -128,13 +129,35 @@ public class Combos : MonoBehaviour
         objCombo.SetActive(false);
         gameManager.changeState(GameManager.State.InGame);
     }
-   
+
     private IEnumerator ComboTimeoutRoutine()
     {
         yield return new WaitForSeconds(comboTimeout);
         Debug.Log("tiempo terminado!");
         ResetCombo();
-       
+
+    }
+    private void checkedTrampActivated()
+    {
+        if (interactive.nameOfTrampa == "Pendulum")
+        {
+            comboManager.changeState(ComboManagerTrampas.State.Pendulum);
+            return;
+        }
+        if (interactive.nameOfTrampa == "Molotov")
+        {
+            comboManager.changeState(ComboManagerTrampas.State.Molotov);
+            return;
+        }
+        if (interactive.nameOfTrampa == "Bomb")
+        {
+            comboManager.changeState(ComboManagerTrampas.State.Bomb);
+            return;
+        }
+        if (interactive.nameOfTrampa == "Barbs")
+        {
+            comboManager.changeState(ComboManagerTrampas.State.Barbs);
+            return;
+        }
     }
 }
-

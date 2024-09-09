@@ -12,6 +12,9 @@ TagManager:
   - Torre
   - DoorCombo
   - DoorKeypad
+  - Trampa
+  - Pendulum
+  - Barbs
   layers:
   - Default
   - TransparentFX

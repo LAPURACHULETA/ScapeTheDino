@@ -138,18 +138,18 @@ public class SpawnManager : MonoBehaviour
             case LevelStates.None:
                 break;
             case LevelStates.Level_1:
-                SpawnLevel1();
+                SpawnLevel1Enemys();
                 break;
             case LevelStates.Level_2:
-                SpawnLevel2();
+                SpawnLevel2Enemys();
                 break; 
             case LevelStates.Level_3:
-                SpawnLevel3();
+                SpawnLevel3Enemys();
                 break;           
                 
         }
     }
-    void SpawnLevel1()
+    void SpawnLevel1Enemys()
     {
         spawningTime += Time.deltaTime;
         //Debug.Log(spawningTime+"Level1");
@@ -175,7 +175,33 @@ public class SpawnManager : MonoBehaviour
             inPause = false;
         }
     }
-    void SpawnLevel2()
+    void SpawnLevel1Trampas()
+    {
+        spawningTime += Time.deltaTime;
+        //Debug.Log(spawningTime+"Level1");
+        if (spawningTime >= spawnTimer && !inPause)
+        {
+            for (int i = 0; i < waveNumber; ++i)
+            {
+                random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv1.Length));
+            }
+            Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv1[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+
+            spawningTime = 0;
+            numEnemys++;
+        }
+        if (numEnemys == 3)
+        {
+            inPause = true;
+        }
+        if (spawningTime >= 10)
+        {
+            numEnemys = 0;
+            spawningTime = 0;
+            inPause = false;
+        }
+    }
+    void SpawnLevel2Enemys()
     {
         spawningTime += Time.deltaTime;
         //Debug.Log(spawningTime + "Level2");
@@ -203,7 +229,7 @@ public class SpawnManager : MonoBehaviour
         }
 
     }
-    void SpawnLevel3()
+    void SpawnLevel3Enemys()
     {
         spawningTime += Time.deltaTime;
         //Debug.Log(spawningTime + "Level3");

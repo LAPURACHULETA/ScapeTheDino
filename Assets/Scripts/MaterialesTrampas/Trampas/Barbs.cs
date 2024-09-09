@@ -111,7 +111,7 @@ public class Barbs : MonoBehaviour
     private void TimeDestroy()
     {
         timerBarbs += Time.deltaTime;
-        if (timerBarbs >= 2f)
+        if (timerBarbs >= 10f)
         {
             Destroy(gameObject);
         }
