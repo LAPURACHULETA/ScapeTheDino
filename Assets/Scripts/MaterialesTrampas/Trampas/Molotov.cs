@@ -8,6 +8,7 @@ public class Molotov : MonoBehaviour
     [SerializeField] private float groundPerceptRadious, explosionPerceptRadious, damageHeal;
     [SerializeField] private Transform groundPercept, explosionPercept;
     [SerializeField] private int damageToEnemy;
+    [SerializeField] private GameObject myTramp;
 
     Rigidbody rb;
     Collider[] col_GroundPerceibed, col_ExplosionPerceibed;
@@ -118,7 +119,7 @@ public class Molotov : MonoBehaviour
         timerMolotov += Time.deltaTime;
         if (timerMolotov >= 2f)
         {
-            Destroy(gameObject);
+            Destroy(myTramp);
         }
     }
 

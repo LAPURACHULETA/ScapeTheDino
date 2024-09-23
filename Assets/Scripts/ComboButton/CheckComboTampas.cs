@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 
 public class CheckComboTampas : MonoBehaviour
 {
+    public static CheckComboTampas Instance { get; private set; }
     [SerializeField] private List<InputActionReference> comboActions; // Lista de acciones de entrada para cada botón del combo
     [SerializeField] private float comboTimeout; // Tiempo límite para realizar el combo en segundos
     [SerializeField] private GameObject objCombo;
@@ -15,18 +16,30 @@ public class CheckComboTampas : MonoBehaviour
 
     private List<InputAction> currentCombo;
     private Coroutine comboTimeoutCoroutine;
-    
-    GameManager gameManager;
-    ComboManagerTrampas comboManager;
+    public bool trampActivate;
+  
     Interactive interactive;
     Selected selected;
+
+    private void Awake()
+    {
+        // Implementación Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Para mantener la instancia al cargar nuevas escenas.
+        }
+        else
+        {
+            Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+        }
+    }
     private void Start()
     {
         currentCombo = new List<InputAction>();
-        gameManager = FindObjectOfType<GameManager>();
-        comboManager = FindObjectOfType<ComboManagerTrampas>();
         interactive=FindObjectOfType<Interactive>();        
         selected = FindObjectOfType<Selected>();
+        trampActivate = false;
     }
 
     private void OnEnable()
@@ -89,9 +102,9 @@ public class CheckComboTampas : MonoBehaviour
         {
             Debug.Log("Combo exitoso!");
             objCombo.SetActive(false);
-            checkedTrampActivated();
+            checkedTrampActivated(selected.collider);
             // combo exitoso
-            gameManager.changeState(GameManager.State.InGame);
+            //GameManager.Instance.changeState(GameManager.State.InGame);
             ResetCombo();
         }
 
@@ -100,7 +113,30 @@ public class CheckComboTampas : MonoBehaviour
             anyKeyAction.action.Enable();
         }
     }
-
+    private void checkedTrampActivated(Collider other)
+    {
+        
+        Debug.Log("trampa activada");
+        switch (other.tag)
+        {
+            case "Pendulum":
+                ComboManagerTrampas.Instance.changeState(ComboManagerTrampas.State.Pendulum); 
+                break;
+            case "Molotov":
+                ComboManagerTrampas.Instance.changeState(ComboManagerTrampas.State.Molotov);
+            
+                break;
+            case "Bomb":
+                ComboManagerTrampas.Instance.changeState(ComboManagerTrampas.State.Bomb);
+            
+                break;
+            case "Barbs":
+                ComboManagerTrampas.Instance.changeState(ComboManagerTrampas.State.Barbs);
+               
+                break;
+        }
+        
+    }
     private bool CheckComboMatch()
     {
         if (currentCombo.Count != comboActions.Count)
@@ -119,15 +155,16 @@ public class CheckComboTampas : MonoBehaviour
 
         return true;
     }
+
     private void ResetCombo()
     {
+        GameManager.Instance.changeState(GameManager.State.InGame);
         currentCombo.Clear();
         if (comboTimeoutCoroutine != null)
         {
             StopCoroutine(comboTimeoutCoroutine);
         }
         objCombo.SetActive(false);
-        gameManager.changeState(GameManager.State.InGame);
     }
 
     private IEnumerator ComboTimeoutRoutine()
@@ -137,27 +174,5 @@ public class CheckComboTampas : MonoBehaviour
         ResetCombo();
 
     }
-    private void checkedTrampActivated()
-    {
-        if (interactive.nameOfTrampa == "Pendulum")
-        {
-            comboManager.changeState(ComboManagerTrampas.State.Pendulum);
-            return;
-        }
-        if (interactive.nameOfTrampa == "Molotov")
-        {
-            comboManager.changeState(ComboManagerTrampas.State.Molotov);
-            return;
-        }
-        if (interactive.nameOfTrampa == "Bomb")
-        {
-            comboManager.changeState(ComboManagerTrampas.State.Bomb);
-            return;
-        }
-        if (interactive.nameOfTrampa == "Barbs")
-        {
-            comboManager.changeState(ComboManagerTrampas.State.Barbs);
-            return;
-        }
-    }
+
 }

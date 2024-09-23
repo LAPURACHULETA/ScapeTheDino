@@ -13,10 +13,10 @@ public class CodigoPuzle : MonoBehaviour
 
     public bool puzzleComplete;
     public bool reset;
-    GameManager manager;
+
     private void Start()
     {
-        manager=FindObjectOfType<GameManager>();
+       
         reset=true;
     }
     private void Update()
@@ -37,8 +37,8 @@ public class CodigoPuzle : MonoBehaviour
             text.text = "Correct";
             Destroy(doorKeypad);
             keyPad.gameObject.SetActive(false);
-            puzzleComplete = true;  
-            manager.changeState(GameManager.State.InGame);
+            puzzleComplete = true;
+            GameManager.Instance.changeState(GameManager.State.InGame);
         }
         if(text.text != code)
         {

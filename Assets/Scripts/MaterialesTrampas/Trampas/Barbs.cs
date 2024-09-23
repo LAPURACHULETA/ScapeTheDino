@@ -7,6 +7,7 @@ public class Barbs : MonoBehaviour
     [SerializeField] private float groundPerceptRadious, barbsPerceptRadious, damageHeal;
     [SerializeField] private Transform groundPercept, barbsPercept;
     [SerializeField] private int damageToEnemy;
+    [SerializeField] private GameObject myTramp;
     Collider[] col_GroundPerceibed, col_BarbsPerceibed;
 
     ShooterAgentStates agentStates;
@@ -113,7 +114,7 @@ public class Barbs : MonoBehaviour
         timerBarbs += Time.deltaTime;
         if (timerBarbs >= 10f)
         {
-            Destroy(gameObject);
+            Destroy(myTramp);
         }
     }
     private enum ShooterAgentStates

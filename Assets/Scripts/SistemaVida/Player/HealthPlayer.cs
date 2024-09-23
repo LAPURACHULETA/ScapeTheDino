@@ -9,8 +9,7 @@ public class HealthPlayer : MonoBehaviour
 {
     [Header("Vida de Jugador")]
     [Space(10)]
-    [SerializeField]private Image imagenSangre;
-    GameManager gameManager;
+    [SerializeField]private Image imagenSangre; 
     BasicAgent basicAgent;
     private float r;
     private float g;
@@ -21,7 +20,7 @@ public class HealthPlayer : MonoBehaviour
     private void Start()
     {
         basicAgent=GetComponent<BasicAgent>();
-        gameManager=FindObjectOfType<GameManager>();
+       
         r = imagenSangre.color.r;
         g = imagenSangre.color.g;
         b = imagenSangre.color.b;
@@ -45,7 +44,7 @@ public class HealthPlayer : MonoBehaviour
     {
         if(basicAgent.m_vidaActual <= 0)
         {
-            gameManager.changeState(GameManager.State.GameOver);
+            GameManager.Instance.changeState(GameManager.State.GameOver);
             this.gameObject.SetActive(false);
             //basicAgent.Die(this.gameObject);
         }

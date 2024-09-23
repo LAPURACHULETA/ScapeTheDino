@@ -17,11 +17,9 @@ public class CheckComboPuzzle : MonoBehaviour
     private List<InputAction> currentCombo;
     private Coroutine comboTimeoutCoroutine;
     private bool puzzleComplete;
-    GameManager gameManager;
     private void Start()
     {
         currentCombo = new List<InputAction>();
-        gameManager=FindObjectOfType<GameManager>();
     }
 
     private void OnEnable()
@@ -86,9 +84,9 @@ public class CheckComboPuzzle : MonoBehaviour
             Destroy(doorCombo);
             puzzleComplete = true;
             objCombo.SetActive(false);
-            
+
             // combo exitoso
-            gameManager.changeState(GameManager.State.InGame);
+            GameManager.Instance.changeState(GameManager.State.InGame);
             ResetCombo();
         }
 
@@ -124,7 +122,7 @@ public class CheckComboPuzzle : MonoBehaviour
             StopCoroutine(comboTimeoutCoroutine);
         }
         objCombo.SetActive(false);
-        gameManager.changeState(GameManager.State.InGame);
+        GameManager.Instance.changeState(GameManager.State.InGame);
     }
    
     private IEnumerator ComboTimeoutRoutine()

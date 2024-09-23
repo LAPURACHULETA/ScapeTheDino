@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class ComboManagerTrampas : MonoBehaviour
 {
+    public static ComboManagerTrampas Instance { get; private set; }
     [SerializeField] private List<GameObject> combos;
     [SerializeField] private GameObject pendulum;
     [SerializeField] private GameObject molotov;
@@ -14,6 +15,20 @@ public class ComboManagerTrampas : MonoBehaviour
 
     Interactive interactive;
     Selected selected;
+
+    private void Awake()
+    {
+        // Implementación Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Para mantener la instancia al cargar nuevas escenas.
+        }
+        else
+        {
+            Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+        }
+    }
     public void ActivateRandomObject()
     {
         int randomIndex = Random.Range(0, combos.Count);

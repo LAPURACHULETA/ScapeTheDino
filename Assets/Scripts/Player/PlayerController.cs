@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     protected bool canRunPlayer;
     private float maxSpeed;
     BasicAgent agent;
-    GameManager gameManager;
+   
     ChangeCameraPerson changeCameraPerson;
     private Rigidbody rb;
     private PlayerInput playerInput;
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+       
         changeCameraPerson=FindObjectOfType<ChangeCameraPerson>();
         agent = GetComponent<BasicAgent>();
         rb = GetComponent<Rigidbody>();
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(horizontal, 0, vertical).normalized; // Normalizar para evitar movimiento más rápido en diagonales
 
         // Si hay movimiento, calcular la nueva rotación
-        if (!changeCameraPerson.firtsPerson.activeInHierarchy&& gameManager.state == GameManager.State.InGame)
+        if (!changeCameraPerson.firtsPerson.activeInHierarchy && GameManager.Instance.state == GameManager.State.InGame)
         { 
             if (movement.magnitude > 0.1f)
             {
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         // Calcular el movimiento
         Vector3 movementWithSpeed = movement * speed * Time.deltaTime;
 
-        if (gameManager.state == GameManager.State.InGame)
+        if (GameManager.Instance.state == GameManager.State.InGame)
         {
             // Mover el personaje
             transform.Translate(movementWithSpeed, Space.World);
@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
         if (valueButton==1)
         {
             Debug.Log("pausa");
-            gameManager.ButtonPause();
+            GameManager.Instance.ButtonPause();
             
         }
     }

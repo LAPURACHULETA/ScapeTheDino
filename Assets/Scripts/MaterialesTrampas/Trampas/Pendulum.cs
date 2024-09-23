@@ -6,6 +6,7 @@ public class Pendulum : MonoBehaviour
     [SerializeField] private float groundPerceptRadious;
     [SerializeField] private int damageToEnemy;
     [SerializeField] private Transform groundPercept;
+    [SerializeField] private GameObject myTramp;
 
     Collider[] col_GroundPerceibed;
    
@@ -93,9 +94,9 @@ public class Pendulum : MonoBehaviour
     private void PendulumInLive()
     {
         timerToDestroy += Time.deltaTime;
-        if (timerToDestroy >= 10f)
+        if (timerToDestroy >= 5f)
         {
-            Destroy(gameObject);
+            Destroy(myTramp);
         }
     }
  

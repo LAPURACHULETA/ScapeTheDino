@@ -5,11 +5,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     [SerializeField] private GameObject pauseObj;
     [SerializeField] private GameObject gameOver;
     [SerializeField] private GameObject winner;
     CameraPlayer camera;
-  
+    
     public enum State
     {
         InGame,
@@ -19,7 +21,21 @@ public class GameManager : MonoBehaviour
         GameOver,
         Win
     }
-    
+
+    private void Awake()
+    {
+        // Implementación Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Para mantener la instancia al cargar nuevas escenas.
+        }
+        else
+        {
+            Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+        }
+    }
+
     public State state;
     private void Start()
     {

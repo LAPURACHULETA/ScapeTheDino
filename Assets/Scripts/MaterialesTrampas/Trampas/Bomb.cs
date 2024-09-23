@@ -7,6 +7,7 @@ public class Bomb : MonoBehaviour
     [SerializeField] private float groundPerceptRadious, explosionPerceptRadious, damageHeal;
     [SerializeField] private Transform groundPercept, explosionPercept;
     [SerializeField] private int damageToEnemy;
+    [SerializeField] private GameObject myTramp;
 
     Collider[] col_GroundPerceibed, col_ExplosionPerceibed;
     ShooterAgentStates agentStates;
@@ -92,7 +93,7 @@ public class Bomb : MonoBehaviour
                 }
             }
 
-            Destroy(gameObject);
+            Destroy(myTramp);
         }
        
     }

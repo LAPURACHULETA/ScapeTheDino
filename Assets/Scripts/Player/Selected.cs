@@ -15,86 +15,95 @@ public class Selected : MonoBehaviour
     [SerializeField] private GameObject puzzleKeypad;
 
     public string nameoftag;
+    public Collider collider;
     private float valueButton;
     private Rigidbody rb;
     GameManager manager;
-    ComboManagerTrampas comboManager;  
+   
     // Update is called once per frame
     private void Start()
     {
         rb = GetComponent<Rigidbody>();     
-        manager=FindObjectOfType<GameManager>();
-        comboManager = FindObjectOfType<ComboManagerTrampas>();
-    }
-    void Update()
-    {
-        DetectionOfObject();
+       
     }
     public void OnInteractive(InputValue context)
     {
         valueButton = context.Get<float>();
     }
-    void DetectionOfObject()
+    private void OnTriggerStay(Collider other)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distanceMaterial))
+        collider = other;
+        Debug.Log(collider); 
+        if (GameManager.Instance.state == GameManager.State.InGame)
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.black);
-            GetName(hit.collider.tag);
-            if (manager.state == GameManager.State.InGame)
+            Debug.Log(other);
+            switch (other.tag)
             {
-                if (hit.collider.tag == "Obstacle")
-                {
+                case "Obstacle":
                     if (valueButton == 1)
                     {
                         rb.AddForce(Vector3.up * jumpforce);
                     }
-                }
-                if (hit.collider.tag == "Torre")
-                {
+                    break;
+                case "Torre":
                     if (valueButton == 1)
                     {
-                        hit.collider.gameObject.GetComponent<Interactive>().RatateLaser();
+                        gameObject.GetComponent<Interactive>().RatateLaser();
                     }
-                }
-                if (hit.collider.tag == "DoorCombo")
-                {
-
+                    break;
+                case "DoorCombo":
                     if (valueButton == 1)
                     {
                         Debug.Log("combo");
-                        manager.changeState(GameManager.State.InPuzzle);
+                        GameManager.Instance.changeState(GameManager.State.InPuzzle);
                         puzzleCombo.SetActive(true);
                     }
-                }
-                if (hit.collider.tag == "DoorKeypad")
-                {
-
+                    break;
+                case "DoorKeypad":
                     if (valueButton == 1)
                     {
                         Debug.Log("keypad");
-                        manager.changeState(GameManager.State.InPuzzle);
+                        GameManager.Instance.changeState(GameManager.State.InPuzzle);
                         puzzleKeypad.SetActive(true);
                     }
-                }
-
-                if (hit.collider.tag == "Pendulum")
-                {
+                    break;
+                case "Pendulum":
                     if (valueButton == 1)
                     {
-                        manager.changeState(GameManager.State.InPuzzle);
-                        comboManager.ActivateRandomObject();
+                        GameManager.Instance.changeState(GameManager.State.InPuzzle);
+                        ComboManagerTrampas.Instance.ActivateRandomObject();
+ 
                     }
-                }
-            }
-            else { }
+                    break;
+                case "Barbs":
+                    if (valueButton == 1)
+                    {
+                        GameManager.Instance.changeState(GameManager.State.InPuzzle);
+                        ComboManagerTrampas.Instance.ActivateRandomObject();
+ 
+                    }
+                    break;
+                case "Bomb":
+                    if (valueButton == 1)
+                    {
+                        GameManager.Instance.changeState(GameManager.State.InPuzzle);
+                        ComboManagerTrampas.Instance.ActivateRandomObject();
+ 
+                    }
+                    break;
+                case "Molotov":
+                    if (valueButton == 1)
+                    {
+                        GameManager.Instance.changeState(GameManager.State.InPuzzle);
+                        ComboManagerTrampas.Instance.ActivateRandomObject();
+ 
+                    }
+                    break;
 
-        }
-        void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
+            }
         }
     }
+   
     string GetName(string name)
     {
         nameoftag = name;
