@@ -102,7 +102,7 @@ public class CheckComboTampas : MonoBehaviour
         {
             Debug.Log("Combo exitoso!");
             objCombo.SetActive(false);
-           checkedTrampActivated(selected.nameoftag);
+            checkedTrampActivated(selected.SetName());
             // combo exitoso
             //GameManager.Instance.changeState(GameManager.State.InGame);
             ResetCombo();
