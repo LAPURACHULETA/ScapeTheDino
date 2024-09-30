@@ -9,8 +9,8 @@ using UnityEngine.InputSystem;
 public class CheckComboTampas : MonoBehaviour
 {
     public static CheckComboTampas Instance { get; private set; }
-    [SerializeField] private List<InputActionReference> comboActions; // Lista de acciones de entrada para cada botón del combo
-    [SerializeField] private float comboTimeout; // Tiempo límite para realizar el combo en segundos
+    [SerializeField] private List<InputActionReference> comboActions; // Lista de acciones de entrada para cada botï¿½n del combo
+    [SerializeField] private float comboTimeout; // Tiempo lï¿½mite para realizar el combo en segundos
     [SerializeField] private GameObject objCombo;
     [SerializeField] private InputActionReference anyKeyAction;
 
@@ -23,15 +23,15 @@ public class CheckComboTampas : MonoBehaviour
 
     private void Awake()
     {
-        // Implementación Singleton
+        // Implementaciï¿½n Singleton
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Para mantener la instancia al cargar nuevas escenas.
+           
         }
         else
         {
-            Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+            //Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
         }
     }
     private void Start()
@@ -77,13 +77,13 @@ public class CheckComboTampas : MonoBehaviour
     }
     private void CheckAnyKey(InputAction.CallbackContext input)
     {
-        // Verificar si la acción es parte del combo
+        // Verificar si la acciï¿½n es parte del combo
         bool isValidAction = comboActions.Any(actionReference => actionReference.action.name == input.action.name);
 
         if (!isValidAction)
         {
-            Debug.Log("¡Tecla incorrecta!");
-            ResetCombo(); // Reiniciar el combo si se presionó una tecla incorrecta
+            Debug.Log("Tecla incorrecta!");
+            ResetCombo(); // Reiniciar el combo si se presionï¿½ una tecla incorrecta
         }
     }
     private void CheckCombo(InputAction.CallbackContext input)
@@ -96,13 +96,13 @@ public class CheckComboTampas : MonoBehaviour
         currentCombo.Add(input.action);
         if (currentCombo.Count > comboActions.Count)
         {
-            currentCombo.RemoveAt(0); // Mantener el tamaño del combo dentro de los límites
+            currentCombo.RemoveAt(0); // Mantener el tamaï¿½o del combo dentro de los lï¿½mites
         }
         if (CheckComboMatch())
         {
             Debug.Log("Combo exitoso!");
             objCombo.SetActive(false);
-            checkedTrampActivated(selected.collider);
+           checkedTrampActivated(selected.nameoftag);
             // combo exitoso
             //GameManager.Instance.changeState(GameManager.State.InGame);
             ResetCombo();
@@ -115,8 +115,7 @@ public class CheckComboTampas : MonoBehaviour
     }
     private void checkedTrampActivated(Collider other)
     {
-        
-        Debug.Log("trampa activada");
+        Debug.Log(other);
         switch (other.tag)
         {
             case "Pendulum":

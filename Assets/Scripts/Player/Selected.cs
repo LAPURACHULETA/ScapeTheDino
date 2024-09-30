@@ -14,12 +14,9 @@ public class Selected : MonoBehaviour
     [SerializeField] private GameObject puzzleCombo;
     [SerializeField] private GameObject puzzleKeypad;
 
-    public string nameoftag;
-    public Collider collider;
+    public Collider nameoftag;
     private float valueButton;
     private Rigidbody rb;
-    GameManager manager;
-   
     // Update is called once per frame
     private void Start()
     {
@@ -32,11 +29,10 @@ public class Selected : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        collider = other;
-        Debug.Log(collider); 
+        GetName(other);
         if (GameManager.Instance.state == GameManager.State.InGame)
         {
-            Debug.Log(other);
+           
             switch (other.tag)
             {
                 case "Obstacle":
@@ -104,9 +100,10 @@ public class Selected : MonoBehaviour
         }
     }
    
-    string GetName(string name)
+    public Collider GetName(Collider name)
     {
         nameoftag = name;
         return nameoftag;
     } 
+  
 }

@@ -1318,7 +1318,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: -0, y: -0.5922045, z: -0, w: 0.8057877}
-  m_LocalPosition: {x: 33.254566, y: 10.789315, z: 29.033321}
+  m_LocalPosition: {x: 24.504566, y: 10.789315, z: 29.07332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1440,8 +1440,7 @@ MonoBehaviour:
   camPlayer: {fileID: 0}
   puzzleCombo: {fileID: 0}
   puzzleKeypad: {fileID: 0}
-  nameoftag: 
-  collider: {fileID: 0}
+  nameoftag: {fileID: 0}
 --- !u!1 &353629999
 GameObject:
   m_ObjectHideFlags: 0
@@ -3720,8 +3719,7 @@ MonoBehaviour:
   camPlayer: {fileID: 0}
   puzzleCombo: {fileID: 0}
   puzzleKeypad: {fileID: 0}
-  nameoftag: 
-  collider: {fileID: 0}
+  nameoftag: {fileID: 0}
 --- !u!114 &747286445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6919,7 +6917,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195632951}
   m_LocalRotation: {x: -0, y: -0.5922045, z: -0, w: 0.8057877}
-  m_LocalPosition: {x: 17.2, y: 1.2, z: 25.34}
+  m_LocalPosition: {x: 8.45, y: 1.2, z: 25.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8799,7 +8797,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406958665}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 33.254566, y: 10.789315, z: 29.033321}
+  m_LocalPosition: {x: 24.504566, y: 10.789315, z: 29.07332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11444,8 +11442,7 @@ MonoBehaviour:
   camPlayer: {fileID: 330585545}
   puzzleCombo: {fileID: 1035657528}
   puzzleKeypad: {fileID: 1098342652}
-  nameoftag: 
-  collider: {fileID: 0}
+  nameoftag: {fileID: 0}
 --- !u!114 &1811785561
 MonoBehaviour:
   m_ObjectHideFlags: 0

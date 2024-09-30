@@ -28,11 +28,11 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Para mantener la instancia al cargar nuevas escenas.
+           
         }
         else
         {
-            Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+            ///Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
         }
     }
 
