@@ -72,7 +72,6 @@ public class GameManager : MonoBehaviour
             case State.InPuzzle:
 
                 break;
-
         }
     }
     public void ButtonPlay()
@@ -114,4 +113,5 @@ public class GameManager : MonoBehaviour
     {
         ButtonPause();
     }
+    
 }

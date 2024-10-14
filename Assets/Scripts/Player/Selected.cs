@@ -32,7 +32,6 @@ public class Selected : MonoBehaviour
         GetName(other);
         if (GameManager.Instance.state == GameManager.State.InGame)
         {
-           
             switch (other.tag)
             {
                 case "Obstacle":
@@ -42,13 +41,13 @@ public class Selected : MonoBehaviour
                     }
                     break;
                 case "Torre":
-                    if (valueButton == 1)
+                    if (valueButton == 1 && !SpawnManagerLevel.Instance.inBattle)
                     {
                         gameObject.GetComponent<Interactive>().RatateLaser();
                     }
                     break;
                 case "DoorCombo":
-                    if (valueButton == 1)
+                    if (valueButton == 1 && !SpawnManagerLevel.Instance.inBattle)
                     {
                         Debug.Log("combo");
                         GameManager.Instance.changeState(GameManager.State.InPuzzle);
@@ -56,7 +55,7 @@ public class Selected : MonoBehaviour
                     }
                     break;
                 case "DoorKeypad":
-                    if (valueButton == 1)
+                    if (valueButton == 1 && !SpawnManagerLevel.Instance.inBattle)
                     {
                         Debug.Log("keypad");
                         GameManager.Instance.changeState(GameManager.State.InPuzzle);
@@ -68,7 +67,7 @@ public class Selected : MonoBehaviour
                     {
                         GameManager.Instance.changeState(GameManager.State.InPuzzle);
                         ComboManagerTrampas.Instance.ActivateRandomObject();
- 
+
                     }
                     break;
                 case "Barbs":
@@ -76,7 +75,7 @@ public class Selected : MonoBehaviour
                     {
                         GameManager.Instance.changeState(GameManager.State.InPuzzle);
                         ComboManagerTrampas.Instance.ActivateRandomObject();
- 
+
                     }
                     break;
                 case "Bomb":
@@ -84,7 +83,7 @@ public class Selected : MonoBehaviour
                     {
                         GameManager.Instance.changeState(GameManager.State.InPuzzle);
                         ComboManagerTrampas.Instance.ActivateRandomObject();
- 
+
                     }
                     break;
                 case "Molotov":
@@ -92,12 +91,11 @@ public class Selected : MonoBehaviour
                     {
                         GameManager.Instance.changeState(GameManager.State.InPuzzle);
                         ComboManagerTrampas.Instance.ActivateRandomObject();
- 
+
                     }
                     break;
-
             }
-        }
+        } 
     }
    
     public Collider GetName(Collider name)
