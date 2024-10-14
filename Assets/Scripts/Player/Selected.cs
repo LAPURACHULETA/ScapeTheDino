@@ -29,6 +29,7 @@ public class Selected : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
+        Debug.Log(other);
         GetName(other);
         if (GameManager.Instance.state == GameManager.State.InGame)
         {
@@ -101,7 +102,13 @@ public class Selected : MonoBehaviour
     public Collider GetName(Collider name)
     {
         nameoftag = name;
+        Debug.Log(nameoftag);
         return nameoftag;
     } 
-  
+    public Collider SetName()
+    {
+        Debug.Log(nameoftag);
+        return nameoftag;
+        
+    }
 }
