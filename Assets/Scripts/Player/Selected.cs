@@ -29,9 +29,9 @@ public class Selected : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log(other);
+        ///Debug.Log(other);
         GetName(other);
-        if (GameManager.Instance.state == GameManager.State.InGame)
+        if(SpawnManagerLevel.Instance.SetInBattle())
         {
             switch (other.tag)
             {
@@ -42,13 +42,13 @@ public class Selected : MonoBehaviour
                     }
                     break;
                 case "Torre":
-                    if (valueButton == 1 && !SpawnManagerLevel.Instance.inBattle)
+                    if (valueButton == 1)
                     {
                         gameObject.GetComponent<Interactive>().RatateLaser();
                     }
                     break;
                 case "DoorCombo":
-                    if (valueButton == 1 && !SpawnManagerLevel.Instance.inBattle)
+                    if (valueButton == 1)
                     {
                         Debug.Log("combo");
                         GameManager.Instance.changeState(GameManager.State.InPuzzle);
@@ -56,13 +56,22 @@ public class Selected : MonoBehaviour
                     }
                     break;
                 case "DoorKeypad":
-                    if (valueButton == 1 && !SpawnManagerLevel.Instance.inBattle)
+                    if (valueButton == 1)
                     {
                         Debug.Log("keypad");
                         GameManager.Instance.changeState(GameManager.State.InPuzzle);
                         puzzleKeypad.SetActive(true);
                     }
                     break;
+            }
+        }
+       
+        if (GameManager.Instance.state == GameManager.State.InGame)
+        {
+
+            switch (other.tag)
+            {
+          
                 case "Pendulum":
                     if (valueButton == 1)
                     {
@@ -96,18 +105,19 @@ public class Selected : MonoBehaviour
                     }
                     break;
             }
-        } 
+        }
+
     }
    
     public Collider GetName(Collider name)
     {
         nameoftag = name;
-        Debug.Log(nameoftag);
+       // Debug.Log(nameoftag);
         return nameoftag;
     } 
     public Collider SetName()
     {
-        Debug.Log(nameoftag);
+        //Debug.Log(nameoftag);
         return nameoftag;
         
     }

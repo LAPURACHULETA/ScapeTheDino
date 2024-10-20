@@ -10,7 +10,19 @@ using UnityEngine.UIElements;
 public class SpawnManagerLevel : MonoBehaviour
 {
     public static SpawnManagerLevel Instance { get; private set; }
+    private void Awake()
+    {
+        // Implementación Singleton
+        if (Instance == null)
+        {
+            Instance = this;
 
+        }
+        else
+        {
+            ///Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+        }
+    }
     [Header("Prefabs Trampas")]
     [SerializeField] private GameObject[] trampas;
 
@@ -43,7 +55,6 @@ public class SpawnManagerLevel : MonoBehaviour
     Collider[] col_TrampasPerceibed_Nivel3;
 
 
-
     [Header("Prefabs Enemys")]
     [SerializeField] private GameObject[] enemysMeele;
     [SerializeField] private GameObject[] enemysCheft;
@@ -60,7 +71,7 @@ public class SpawnManagerLevel : MonoBehaviour
     [SerializeField] private GameObject[] spawnPointsEnemysLv3;
 
     [Header("Spawn Time contoller Oleadas")]
-    [SerializeField] private float spawningTime;
+    /*[SerializeField]*/ private float spawningTime;
     [SerializeField] private float waveNumber;
     [SerializeField] private float spawnTimer;
 
@@ -85,7 +96,7 @@ public class SpawnManagerLevel : MonoBehaviour
   
     void Start()
     {
-        GameManager.Instance.changeState(GameManager.State.InPuzzle);
+       
         basicAgent = GetComponent<BasicAgent>();
         agentStates = LevelStates.None;
         inLevel1 = false;
@@ -95,7 +106,7 @@ public class SpawnManagerLevel : MonoBehaviour
         inBattle = false;
 
     }
-
+   
     private void FixedUpdate()
     {
         col_LevelPerceibed_Nivel1 = Physics.OverlapSphere(LevelPercept[0].position, levelPreceptRadious);
@@ -124,14 +135,14 @@ public class SpawnManagerLevel : MonoBehaviour
                     inLevel1 = true;
                     Debug.Log("Spawn1");
                 }
-                //if (tmp.CompareTag(enemyTag))
-                //{
-                //    inBattle = true;
-                //}
-                //else
-                //{
-                //    inBattle = false;
-                //}
+                if (tmp.CompareTag(enemyTag))
+                {
+                    inBattle = true;
+                }
+                else
+                {
+                    inBattle = false;
+                }
             }
         }
    
@@ -177,6 +188,18 @@ public class SpawnManagerLevel : MonoBehaviour
             }
         }
     }
+    public bool GetInBattle(Collider name)
+    {
+        inBattle = name;
+        Debug.Log(inBattle);
+        return inBattle;
+    }
+    public bool SetInBattle()
+    {
+        Debug.Log(inBattle);
+        return inBattle;
+
+    }
     void decisionManager()
     {
         if (inLevel1)
@@ -221,6 +244,11 @@ public class SpawnManagerLevel : MonoBehaviour
     void SpawnLevel1Enemys()
     {
         spawningTime += Time.deltaTime;
+        if (numEnemys > 3)
+        {
+            spawningTime = 0;
+            return;
+        }
         //Debug.Log(spawningTime+"Level1");
         if (spawningTime >= spawnTimer && !inPause)
         {
@@ -237,6 +265,7 @@ public class SpawnManagerLevel : MonoBehaviour
         {
             inPause = true;
         }
+        
         if (spawningTime >= 10)
         {
             numEnemys = 0;
@@ -255,6 +284,8 @@ public class SpawnManagerLevel : MonoBehaviour
             // SPAWN VACIOS
             for (int attempt = 0; attempt < spawnPointsTrampasLv1.Length; ++attempt)
             {
+                
+
                 random = UnityEngine.Random.Range(0, spawnPointsTrampasLv1.Length);
 
                 // Comprobar si el punto de spawn está vacío 
@@ -266,10 +297,9 @@ public class SpawnManagerLevel : MonoBehaviour
                     pointFound = true;
                     break; 
                 }
-
                 if (!pointFound)
                 {
-                    Debug.Log("no hay");
+                    return;
                 }
             }
         }
