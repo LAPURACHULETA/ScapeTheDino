@@ -126,6 +126,7 @@ public class SpawnManagerLevel : MonoBehaviour
         inLevel1 = false;
         inLevel2 = false;
         inLevel3 = false;
+
         if (col_LevelPerceibed_Nivel1.Length > 0 /*col_LevelPerceibed_Nivel1[0] != null*/)
         {
             foreach (Collider tmp in col_LevelPerceibed_Nivel1)
@@ -133,14 +134,16 @@ public class SpawnManagerLevel : MonoBehaviour
                 if (tmp.CompareTag(playerTag))
                 {
                     inLevel1 = true;
-                    Debug.Log("Spawn1");
+                    //Debug.Log("Spawn1");
                 }
                 if (tmp.CompareTag(enemyTag))
                 {
+                    Debug.Log(enemyTag);
                     inBattle = true;
                 }
                 else
                 {
+                    //Debug.Log("false");
                     inBattle = false;
                 }
             }
@@ -156,14 +159,14 @@ public class SpawnManagerLevel : MonoBehaviour
                     Debug.Log("Spawn2");
                     
                 }
-                if (tmp.CompareTag(enemyTag))
-                {
-                    inBattle = true;
-                }
-                else
-                {
-                    inBattle = false;
-                }
+                //if (tmp.CompareTag(enemyTag))
+                //{
+                //    inBattle = true;
+                //}
+                //else
+                //{
+                //    inBattle = false;
+                //}
             }
         }
 
@@ -177,14 +180,14 @@ public class SpawnManagerLevel : MonoBehaviour
                     Debug.Log("Spawn3");
                    
                 }
-                if (tmp.CompareTag(enemyTag))
-                {
-                    inBattle = true;
-                }
-                else
-                {
-                    inBattle = false;
-                }
+                //if (tmp.CompareTag(enemyTag))
+                //{
+                //    inBattle = true;
+                //}
+                //else
+                //{
+                //    inBattle = false;
+                //}
             }
         }
     }
@@ -228,7 +231,7 @@ public class SpawnManagerLevel : MonoBehaviour
                 break;
             case LevelStates.Level_1:
                 SpawnLevel1Trampas();
-                SpawnLevel1Enemys();
+                //SpawnLevel1Enemys();
                 break;
             case LevelStates.Level_2:
                 //SpawnLevel2Enemys();

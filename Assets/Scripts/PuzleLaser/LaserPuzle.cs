@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LaserPuzle : MonoBehaviour
 {
+    public static LaserPuzle Instance { get; private set; }
+
     public GameObject poste;
     [SerializeField] private GameObject doorLaser;
     public Transform laserOrigin;
@@ -19,6 +21,16 @@ public class LaserPuzle : MonoBehaviour
 
     private void Awake()
     {
+        // Implementación Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+
+        }
+        else
+        {
+            ///Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+        }
         lineRenderer=GetComponent<LineRenderer>();
         isRotating=false;
     }
@@ -67,5 +79,17 @@ public class LaserPuzle : MonoBehaviour
     {
         targetRotationY = degrees;
         isRotating = true;
+    }
+    public bool GetCompletepuzzle(bool name)
+    {
+        puzzleComplete = name;
+        // Debug.Log(nameoftag);
+        return puzzleComplete;
+    }
+    public bool SetCompletepuzzle()
+    {
+        Debug.Log(puzzleComplete);
+        return puzzleComplete;
+
     }
 }

@@ -6,8 +6,9 @@ using UnityEngine.UIElements;
 
 public class Interactive : MonoBehaviour
 {
+    
     private LaserPuzle laser;
-    public string nameOfTrampa;
+
     private void Start()
     {
         laser=gameObject.GetComponent<LaserPuzle>();

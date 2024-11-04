@@ -5,6 +5,8 @@ using TMPro;
 
 public class CodigoPuzle : MonoBehaviour
 {
+    public static CodigoPuzle Instance { get; private set; }
+
     [SerializeField] private TMP_Text text;
     [SerializeField] private string code;
     [SerializeField] private GameObject keyPad;
@@ -13,7 +15,19 @@ public class CodigoPuzle : MonoBehaviour
 
     public bool puzzleComplete;
     public bool reset;
+    private void Awake()
+    {
+        // Implementación Singleton
+        if (Instance == null)
+        {
+            Instance = this;
 
+        }
+        else
+        {
+            ///Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+        }
+    }
     private void Start()
     {
        
@@ -52,5 +66,17 @@ public class CodigoPuzle : MonoBehaviour
         yield return new WaitForSeconds(timeResetCode);
         text.text = "";  
         reset = true;
+    }
+    public bool GetCompletePuzzles(bool name)
+    {
+        puzzleComplete = name;
+        // Debug.Log(nameoftag);
+        return puzzleComplete;
+    }
+    public bool SetCompletePuzzles()
+    {
+        Debug.Log(puzzleComplete);
+        return puzzleComplete;
+
     }
 }

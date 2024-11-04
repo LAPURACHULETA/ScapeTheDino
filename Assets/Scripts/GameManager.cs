@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
     }
     public void Winner()
     {
-        ButtonPause();
+        winner.SetActive(true);
     }
     
 }

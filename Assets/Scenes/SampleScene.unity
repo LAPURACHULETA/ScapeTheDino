@@ -967,10 +967,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 926506448}
   - {fileID: 1687143924}
+  - {fileID: 926506448}
   - {fileID: 774371071}
   - {fileID: 1899973818}
+  - {fileID: 838870847}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1188,7 +1189,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.666183, y: 10.789315, z: 16.57355}
+  m_LocalPosition: {x: 44.266182, y: 10.789315, z: 17.78355}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3178,7 +3179,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a784e246a2409d44a82c68eb351424ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameOfTrampa: 
 --- !u!1 &684012650
 GameObject:
   m_ObjectHideFlags: 0
@@ -4108,6 +4108,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &838870846
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 838870847}
+  - component: {fileID: 838870848}
+  m_Layer: 0
+  m_Name: PuzzlesManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &838870847
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838870846}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 243810639}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &838870848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838870846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24366217596c9a3439f2eaa2560ff7fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &886908697
 GameObject:
   m_ObjectHideFlags: 0
@@ -4476,7 +4520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a784e246a2409d44a82c68eb351424ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameOfTrampa: 
 --- !u!1 &892268508
 GameObject:
   m_ObjectHideFlags: 0
@@ -4740,7 +4783,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 243810639}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &926506449
 MonoBehaviour:
@@ -4754,7 +4797,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a784e246a2409d44a82c68eb351424ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameOfTrampa: 
 --- !u!1 &939667552
 GameObject:
   m_ObjectHideFlags: 0
@@ -5476,6 +5518,7 @@ MonoBehaviour:
   anyKeyAction: {fileID: -1149260397575846996, guid: 8166fece23da97742933f8f0a2053ffa,
     type: 3}
   imA: 
+  puzzleComplete: 0
 --- !u!1 &1037735632
 GameObject:
   m_ObjectHideFlags: 0
@@ -5720,7 +5763,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a784e246a2409d44a82c68eb351424ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameOfTrampa: 
 --- !u!1 &1043746486
 GameObject:
   m_ObjectHideFlags: 0
@@ -6981,7 +7023,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195632951}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.7, y: 1.2, z: 15.15}
+  m_LocalPosition: {x: 31.3, y: 1.2, z: 16.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7011,7 +7053,6 @@ MonoBehaviour:
   rotationSpeed: 0.2
   camera: {fileID: 330585545}
   followTransform: {fileID: 353629999}
-  changeValueCamera: 0
   speed: 0.11
 --- !u!114 &1195632960
 MonoBehaviour:
@@ -7732,7 +7773,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a784e246a2409d44a82c68eb351424ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameOfTrampa: 
 --- !u!1 &1291924437
 GameObject:
   m_ObjectHideFlags: 0
@@ -8861,7 +8901,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406958665}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.666183, y: 10.789315, z: 16.57355}
+  m_LocalPosition: {x: 44.266182, y: 10.789315, z: 17.78355}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9163,7 +9203,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a784e246a2409d44a82c68eb351424ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameOfTrampa: 
 --- !u!1 &1437054860
 GameObject:
   m_ObjectHideFlags: 0
@@ -10854,7 +10893,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 243810639}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1687143925
 MonoBehaviour:

@@ -22,7 +22,6 @@ public class CameraPlayer : MonoBehaviour
 
     [Header("Cambio de Vista")]
     [Space(10)]
-    public float changeValueCamera;
     public float speed;
     PlayerController player;
     Cinemachine.CinemachineImpulseSource source;
@@ -39,11 +38,7 @@ public class CameraPlayer : MonoBehaviour
             LookMouse();
         }
     }
-    public void OnChangeCamera(InputValue value)
-    {
-        changeValueCamera = value.Get<float>();
-        
-    }
+
     public void OnLook(InputValue value)
     {
         look = value.Get<Vector2>();
@@ -93,7 +88,7 @@ public class CameraPlayer : MonoBehaviour
         {
             nextPosition = transform.position;
          
-            if (changeValueCamera == 1)
+            if (GameManager.Instance.state == GameManager.State.InPuzzle)
             {
                 ///<summary>
                 ///Establecer la rotación del jugador basada en la transformación de la mirada

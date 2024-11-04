@@ -27,14 +27,14 @@ public class ChangeCameraPerson : MonoBehaviour
 
     private void Change()
     {
-        if (input.changeValueCamera == 1f && !firtsPerson.activeInHierarchy)
+        if (GameManager.Instance.state == GameManager.State.InPuzzle && !firtsPerson.activeInHierarchy)
         {
             thirdPerson.SetActive(false);
             firtsPerson.SetActive(true);
 
             StartCoroutine(ShowReticle());
         }
-        else if (input.changeValueCamera == 0f && !thirdPerson.activeInHierarchy)
+        else if (GameManager.Instance.state == GameManager.State.InGame && !thirdPerson.activeInHierarchy)
         {
             thirdPerson.SetActive(true);
             firtsPerson.SetActive(false);

@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class CheckComboPuzzle : MonoBehaviour
 {
+    public static CheckComboPuzzle Instance { get; private set; }
+
     [SerializeField] private List<InputActionReference> comboActions; // Lista de acciones de entrada para cada botón del combo
     [SerializeField] private float comboTimeout; // Tiempo límite para realizar el combo en segundos
     [SerializeField] private GameObject objCombo;
@@ -16,7 +18,21 @@ public class CheckComboPuzzle : MonoBehaviour
 
     private List<InputAction> currentCombo;
     private Coroutine comboTimeoutCoroutine;
-    private bool puzzleComplete;
+    public bool puzzleComplete;
+
+    private void Awake()
+    {
+        // Implementación Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+
+        }
+        else
+        {
+            ///Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+        }
+    }
     private void Start()
     {
         currentCombo = new List<InputAction>();
@@ -131,6 +147,18 @@ public class CheckComboPuzzle : MonoBehaviour
         Debug.Log("tiempo terminado!");
         ResetCombo();
        
+    }
+    public bool GetCompletepuzzle(bool name)
+    {
+        puzzleComplete = name;
+        // Debug.Log(nameoftag);
+        return puzzleComplete;
+    }
+    public bool SetCompletePuzzles()
+    {
+        Debug.Log(puzzleComplete);
+        return puzzleComplete;
+
     }
 }
 

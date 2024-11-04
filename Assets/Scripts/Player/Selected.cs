@@ -29,9 +29,9 @@ public class Selected : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        ///Debug.Log(other);
+        //Debug.Log(other);
         GetName(other);
-        if(SpawnManagerLevel.Instance.SetInBattle())
+        if(!SpawnManagerLevel.Instance.inBattle)
         {
             switch (other.tag)
             {
@@ -44,7 +44,7 @@ public class Selected : MonoBehaviour
                 case "Torre":
                     if (valueButton == 1)
                     {
-                        gameObject.GetComponent<Interactive>().RatateLaser();
+                        other.gameObject.GetComponent<Interactive>().RatateLaser();
                     }
                     break;
                 case "DoorCombo":
@@ -58,7 +58,7 @@ public class Selected : MonoBehaviour
                 case "DoorKeypad":
                     if (valueButton == 1)
                     {
-                        Debug.Log("keypad");
+                        ///Debug.Log("keypad");
                         GameManager.Instance.changeState(GameManager.State.InPuzzle);
                         puzzleKeypad.SetActive(true);
                     }
