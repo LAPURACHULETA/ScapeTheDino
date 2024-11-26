@@ -6,6 +6,7 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class IAEscupidor : MonoBehaviour
 {
+    [SerializeField] Animator animator;
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious, damageHeal;
     [SerializeField] private Transform eyesPercept, earsPercept;
     Rigidbody rb;
@@ -21,6 +22,7 @@ public class IAEscupidor : MonoBehaviour
     float timerBullet, timerEvade;
     bool evadir,inEyes,inEars;
     public string enemyTag;
+
     void Start()
     {
         basicAgent = GetComponent<BasicAgent>();
@@ -102,14 +104,20 @@ public class IAEscupidor : MonoBehaviour
         switch (agentStates)
         {
             case ShooterAgentStates.None:
+                animator.SetBool("isIdling", true);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isRunning", false);
                 break;
             case ShooterAgentStates.Shoot:
-                ShootTower();
+                animator.SetBool("isIdling", false);
+                animator.SetBool("isAttacking", true);
+                animator.SetBool("isRunning", false);
                 break;
             case ShooterAgentStates.Evade:
+                animator.SetBool("isIdling", false);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isRunning", true);
                 break;
-                
-       
         }
     }
     void movementManager()
@@ -120,6 +128,7 @@ public class IAEscupidor : MonoBehaviour
                 rb.velocity = Vector3.zero;
                 break;
             case ShooterAgentStates.Shoot:
+                ShootTower();
                 rb.velocity = Vector3.zero;
                 break;
             case ShooterAgentStates.Evade:
@@ -131,6 +140,7 @@ public class IAEscupidor : MonoBehaviour
     private void Evade()
     {
         rb.velocity = SreeringBehaviours.Evade(basicAgent, basicAgent.targetPlayer);
+        SreeringBehaviours.rotation2(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
     }
     private void ShootTower()
     {

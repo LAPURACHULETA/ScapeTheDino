@@ -18,7 +18,7 @@ public class LaserPuzle : MonoBehaviour
     public float targetRotationY;
     public bool puzzleComplete;
     LineRenderer lineRenderer;
-
+    List<GameObject> listTorres;
     private void Awake()
     {
         // Implementación Singleton
@@ -61,11 +61,12 @@ public class LaserPuzle : MonoBehaviour
             lineRenderer.SetPosition(1,hit.point);
             if(hit.collider.tag == "Torre")
             {
+                 
                 isTorre=true;
                 puzzleComplete = true;  
             }
         }
-        if (isTorre == true)
+        if (isTorre == true )
         {
             Destroy(doorLaser);
         }

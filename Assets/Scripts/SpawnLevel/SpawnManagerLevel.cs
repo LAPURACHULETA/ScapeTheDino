@@ -44,6 +44,7 @@ public class SpawnManagerLevel : MonoBehaviour
     [SerializeField] private float spawningTimeTrampas;
     [SerializeField] private float waveNumberTrampas;
     [SerializeField] private float spawnTimerTrampas;
+  
 
     [Header("Percepcion Trampas")]
     [SerializeField] private float trampasPreceptRadious;
@@ -54,10 +55,8 @@ public class SpawnManagerLevel : MonoBehaviour
     Collider[] col_TrampasPerceibed_Nivel2;
     Collider[] col_TrampasPerceibed_Nivel3;
 
-
     [Header("Prefabs Enemys")]
     [SerializeField] private GameObject[] enemysMeele;
-    [SerializeField] private GameObject[] enemysCheft;
 
     [SerializeField] private GameObject prf_T_Rex;
     [SerializeField] private GameObject prf_escupidor;
@@ -71,9 +70,12 @@ public class SpawnManagerLevel : MonoBehaviour
     [SerializeField] private GameObject[] spawnPointsEnemysLv3;
 
     [Header("Spawn Time contoller Oleadas")]
-    /*[SerializeField]*/ private float spawningTime;
-    [SerializeField] private float waveNumber;
+    [SerializeField] private float maxNumberOfEnemys;
     [SerializeField] private float spawnTimer;
+    [SerializeField] private float spawnTimerToRespawning;
+
+    [SerializeField] private float spawnTimerCounter; // Temporizador para spawn
+    [SerializeField] private float pauseTimerCounter; // Temporizador para pausa
 
     [Header("Percepcion Levels")]
     [SerializeField] private float levelPreceptRadious;
@@ -138,7 +140,7 @@ public class SpawnManagerLevel : MonoBehaviour
                 }
                 if (tmp.CompareTag(enemyTag))
                 {
-                    Debug.Log(enemyTag);
+                    //Debug.Log(enemyTag);
                     inBattle = true;
                 }
                 else
@@ -159,14 +161,14 @@ public class SpawnManagerLevel : MonoBehaviour
                     Debug.Log("Spawn2");
                     
                 }
-                //if (tmp.CompareTag(enemyTag))
-                //{
-                //    inBattle = true;
-                //}
-                //else
-                //{
-                //    inBattle = false;
-                //}
+                if (tmp.CompareTag(enemyTag))
+                {
+                    inBattle = true;
+                }
+                else
+                {
+                    inBattle = false;
+                }
             }
         }
 
@@ -180,14 +182,14 @@ public class SpawnManagerLevel : MonoBehaviour
                     Debug.Log("Spawn3");
                    
                 }
-                //if (tmp.CompareTag(enemyTag))
-                //{
-                //    inBattle = true;
-                //}
-                //else
-                //{
-                //    inBattle = false;
-                //}
+                if (tmp.CompareTag(enemyTag))
+                {
+                    inBattle = true;
+                }
+                else
+                {
+                    inBattle = false;
+                }
             }
         }
     }
@@ -227,60 +229,70 @@ public class SpawnManagerLevel : MonoBehaviour
     {
         switch (agentStates)
         {
-            case LevelStates.None:
-                break;
-            case LevelStates.Level_1:
-                SpawnLevel1Trampas();
-                //SpawnLevel1Enemys();
-                break;
-            case LevelStates.Level_2:
-                //SpawnLevel2Enemys();
-                //SpawnLevel2Trampas();
-                break;
-            case LevelStates.Level_3:
-                //SpawnLevel3Enemys();
-                //SpawnLevel3Trampas();
-                break;           
-                
+            //case LevelStates.None:
+            //    break;
+            //case LevelStates.Level_1:
+            //    SpawnLevel1Trampas();
+            //    SpawnLevel1Enemys();
+            //    break;
+            //case LevelStates.Level_2:
+            //    SpawnLevel2Enemys();
+            //    SpawnLevel2Trampas();
+            //    break;
+            //case LevelStates.Level_3:
+            //    SpawnLevel3Enemys();
+            //    SpawnLevel3Trampas();
+            //    break;
+
         }
     }
     void SpawnLevel1Enemys()
     {
-        spawningTime += Time.deltaTime;
-        if (numEnemys > 3)
+        if (inPause)
         {
-            spawningTime = 0;
+            pauseTimerCounter += Time.deltaTime;
+
+            if (pauseTimerCounter >= spawnTimerToRespawning)
+            {
+                numEnemys = 0;
+                pauseTimerCounter = 0; // Reinicia el temporizador de pausa
+                inPause = false;
+            }
+            return; 
+        }
+
+        spawnTimerCounter += Time.deltaTime;
+
+        if (numEnemys >= maxNumberOfEnemys)
+        {
+            Debug.Log("sedetiiene");
+            inPause = true;
+           
             return;
         }
-        //Debug.Log(spawningTime+"Level1");
-        if (spawningTime >= spawnTimer && !inPause)
-        {
-            for (int i = 0; i < waveNumber; ++i)
-            {
-                random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv1.Length ));
-            }
-            Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv1[random].transform.position+new Vector3(0,1,0), Quaternion.identity);
 
-            spawningTime = 0;
-            numEnemys ++;
-        }
-        if (numEnemys == 3)
+        if (spawnTimerCounter >= spawnTimer)
         {
-            inPause = true;
-        }
-        
-        if (spawningTime >= 10)
-        {
-            numEnemys = 0;
-            spawningTime = 0;
-            inPause = false;
+            Debug.Log("apareciendo");
+
+            int randomSpawnIndex = UnityEngine.Random.Range(0, spawnPointsEnemysLv1.Length);
+            int randomEnemyIndex = UnityEngine.Random.Range(0, enemysMeele.Length);
+
+            Instantiate(
+                enemysMeele[randomEnemyIndex],
+                spawnPointsEnemysLv1[randomSpawnIndex].transform.position + new Vector3(0, 1, 0),
+                Quaternion.identity
+            );
+
+            spawnTimerCounter = 0;
+            numEnemys++;
         }
     }
     void SpawnLevel1Trampas()
     {
-        spawningTime += Time.deltaTime;
+        spawningTimeTrampas += Time.deltaTime;
         //Debug.Log(spawningTime+"Level1");
-        if (spawningTime >= spawnTimer && !inPause)
+        if (spawningTimeTrampas >= spawnTimerTrampas && !inPause)
         {
             bool pointFound = false;
 
@@ -296,7 +308,9 @@ public class SpawnManagerLevel : MonoBehaviour
 
                 if (colliders.Length == 0) // Si el punto está vacío
                 {
-                    Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)], spawnPointsTrampasLv1[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+                    Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)], 
+                        spawnPointsTrampasLv1[random].transform.position + new Vector3(0, 1, 0),
+                        Quaternion.identity);
                     pointFound = true;
                     break; 
                 }
@@ -306,146 +320,176 @@ public class SpawnManagerLevel : MonoBehaviour
                 }
             }
         }
-        if (spawningTime >= 10)
+        if (spawningTimeTrampas >= 10)
         {
-            numEnemys = 0;
-            spawningTime = 0;
+            spawningTimeTrampas = 0;
             inPause = false;
         }
 
     }
     void SpawnLevel2Enemys()
     {
-        spawningTime += Time.deltaTime;
-        //Debug.Log(spawningTime + "Level2");
-        if (spawningTime >= spawnTimer && !inPause)
+        if (inPause)
         {
-            for (int i = 0; i < waveNumber; ++i)
+            pauseTimerCounter += Time.deltaTime;
+
+            if (pauseTimerCounter >= spawnTimerToRespawning)
             {
-                random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv2.Length));
-
+                numEnemys = 0;
+                pauseTimerCounter = 0; // Reinicia el temporizador de pausa
+                inPause = false;
             }
-            Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv2[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+            return;
+        }
 
-            spawningTime = 0;
-            numEnemys++;
-        }
-        if (numEnemys == 3)
+        spawnTimerCounter += Time.deltaTime;
+
+        if (numEnemys >= maxNumberOfEnemys)
         {
+            Debug.Log("sedetiiene");
             inPause = true;
+
+            return;
         }
-        if (spawningTime >= 10)
+
+        if (spawnTimerCounter >= spawnTimer)
         {
-            numEnemys = 0;
-            spawningTime = 0;
-            inPause = false;
+            Debug.Log("apareciendo");
+
+            int randomSpawnIndex = UnityEngine.Random.Range(0, spawnPointsEnemysLv1.Length);
+            int randomEnemyIndex = UnityEngine.Random.Range(0, enemysMeele.Length);
+
+            Instantiate(
+                enemysMeele[randomEnemyIndex],
+                spawnPointsEnemysLv1[randomSpawnIndex].transform.position + new Vector3(0, 1, 0),
+                Quaternion.identity
+            );
+
+            spawnTimerCounter = 0;
+            numEnemys++;
         }
 
     }
     void SpawnLevel2Trampas()
     {
-        spawningTime += Time.deltaTime;
+        spawningTimeTrampas += Time.deltaTime;
         //Debug.Log(spawningTime+"Level1");
-        if (spawningTime >= spawnTimer && !inPause)
+        if (spawningTimeTrampas >= spawnTimerTrampas && !inPause)
         {
             bool pointFound = false;
 
-            // Intentamos buscar un punto vacío
-            for (int attempt = 0; attempt < spawnPointsTrampasLv2.Length; ++attempt)
+            // SPAWN VACIOS
+            for (int attempt = 0; attempt < spawnPointsTrampasLv1.Length; ++attempt)
             {
-                // Usamos la versión correcta de Random.Range para índices enteros
-                random = UnityEngine.Random.Range(0, spawnPointsTrampasLv2.Length);
 
-                // Comprobar si el punto de spawn está vacío (sin objetos en un radio pequeño)
-                Collider[] colliders = Physics.OverlapSphere(spawnPointsTrampasLv2[random].transform.position, 1.0f);
 
-                if (colliders.Length == 0) // Si no hay colisionadores en el área, el punto está vacío
+                random = UnityEngine.Random.Range(0, spawnPointsTrampasLv1.Length);
+
+                // Comprobar si el punto de spawn está vacío 
+                Collider[] colliders = Physics.OverlapSphere(spawnPointsTrampasLv1[random].transform.position, 1.0f);
+
+                if (colliders.Length == 0) // Si el punto está vacío
                 {
-                    // Instanciamos el objeto en el punto vacío
-                    Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)], spawnPointsTrampasLv2[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+                    Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)],
+                        spawnPointsTrampasLv1[random].transform.position + new Vector3(0, 1, 0),
+                        Quaternion.identity);
                     pointFound = true;
-                    break; // Salimos del bucle si encontramos un punto vacío
+                    break;
                 }
-
                 if (!pointFound)
                 {
-                    Debug.Log("no hay");
+                    return;
                 }
             }
         }
-        if (spawningTime >= 10)
+        if (spawningTimeTrampas >= 10)
         {
-            numEnemys = 0;
-            spawningTime = 0;
+            spawningTimeTrampas = 0;
             inPause = false;
         }
     }
     void SpawnLevel3Enemys()
     {
-        spawningTime += Time.deltaTime;
-        //Debug.Log(spawningTime + "Level3");
-        if (spawningTime >= spawnTimer && !inPause)
+        if (inPause)
         {
-            for (int i = 0; i < waveNumber; ++i)
+            pauseTimerCounter += Time.deltaTime;
+
+            if (pauseTimerCounter >= spawnTimerToRespawning)
             {
-                random = Mathf.RoundToInt(UnityEngine.Random.Range(0f, spawnPointsEnemysLv3.Length));
-
+                numEnemys = 0;
+                pauseTimerCounter = 0; // Reinicia el temporizador de pausa
+                inPause = false;
             }
-            Instantiate(enemysMeele[UnityEngine.Random.Range(0, enemysMeele.Length)], spawnPointsEnemysLv3[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+            return;
+        }
 
-            spawningTime = 0;
-            numEnemys++;
-        }
-        if (numEnemys == 3)
+        spawnTimerCounter += Time.deltaTime;
+
+        if (numEnemys >= maxNumberOfEnemys)
         {
+            Debug.Log("sedetiiene");
             inPause = true;
+
+            return;
         }
-        if (spawningTime >= 10)
+
+        if (spawnTimerCounter >= spawnTimer)
         {
-            numEnemys = 0;
-            spawningTime = 0;
-            inPause = false;
+            Debug.Log("apareciendo");
+
+            int randomSpawnIndex = UnityEngine.Random.Range(0, spawnPointsEnemysLv1.Length);
+            int randomEnemyIndex = UnityEngine.Random.Range(0, enemysMeele.Length);
+
+            Instantiate(
+                enemysMeele[randomEnemyIndex],
+                spawnPointsEnemysLv1[randomSpawnIndex].transform.position + new Vector3(0, 1, 0),
+                Quaternion.identity
+            );
+
+            spawnTimerCounter = 0;
+            numEnemys++;
         }
     }
     void SpawnLevel3Trampas()
     {
-        spawningTime += Time.deltaTime;
+        spawningTimeTrampas += Time.deltaTime;
         //Debug.Log(spawningTime+"Level1");
-        if (spawningTime >= spawnTimer && !inPause)
+        if (spawningTimeTrampas >= spawnTimerTrampas && !inPause)
         {
             bool pointFound = false;
 
-            // Intentamos buscar un punto vacío
-            for (int attempt = 0; attempt < spawnPointsTrampasLv3.Length; ++attempt)
+            // SPAWN VACIOS
+            for (int attempt = 0; attempt < spawnPointsTrampasLv1.Length; ++attempt)
             {
-                // Usamos la versión correcta de Random.Range para índices enteros
-                random = UnityEngine.Random.Range(0, spawnPointsTrampasLv3.Length);
 
-                // Comprobar si el punto de spawn está vacío (sin objetos en un radio pequeño)
-                Collider[] colliders = Physics.OverlapSphere(spawnPointsTrampasLv3[random].transform.position, 1.0f);
 
-                if (colliders.Length == 0) // Si no hay colisionadores en el área, el punto está vacío
+                random = UnityEngine.Random.Range(0, spawnPointsTrampasLv1.Length);
+
+                // Comprobar si el punto de spawn está vacío 
+                Collider[] colliders = Physics.OverlapSphere(spawnPointsTrampasLv1[random].transform.position, 1.0f);
+
+                if (colliders.Length == 0) // Si el punto está vacío
                 {
-                    // Instanciamos el objeto en el punto vacío
-                    Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)], spawnPointsTrampasLv3[random].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+                    Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)],
+                        spawnPointsTrampasLv1[random].transform.position + new Vector3(0, 1, 0),
+                        Quaternion.identity);
                     pointFound = true;
-                    break; // Salimos del bucle si encontramos un punto vacío
+                    break;
                 }
-
                 if (!pointFound)
                 {
-                    Debug.Log("no hay");
+                    return;
                 }
             }
         }
-        if (spawningTime >= 10)
+        if (spawningTimeTrampas >= 10)
         {
-            numEnemys = 0;
-            spawningTime = 0;
+            spawningTimeTrampas = 0;
             inPause = false;
         }
+
     }
-    
+
     private enum LevelStates
     {
         None,

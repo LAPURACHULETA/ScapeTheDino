@@ -65,7 +65,10 @@ public class Selected : MonoBehaviour
                     break;
             }
         }
-       
+        else
+        {
+                
+        }
         if (GameManager.Instance.state == GameManager.State.InGame)
         {
 
@@ -106,7 +109,10 @@ public class Selected : MonoBehaviour
                     break;
             }
         }
+        else
+        {
 
+        }
     }
    
     public Collider GetName(Collider name)

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class IAMeele : MonoBehaviour
 {
+    [SerializeField] Animator animator;
+    [SerializeField] AgentStates agentStates;
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
     [SerializeField] private int damageToPlayer;
     [SerializeField] private float slowingRadious, thershold;
@@ -16,17 +18,19 @@ public class IAMeele : MonoBehaviour
     BasicAgent basicAgent;
     //Boid boid;
 
-    AgentStates agentStates;
+    
     [SerializeField]
 
     private float timerHit;
     public string enemyTag;
+    private bool inEars, inEyes;
     // Start is called before the first frame update
     void Start()
     {
         basicAgent = GetComponent<BasicAgent>();
         rb = GetComponent<Rigidbody>();
         agentStates = AgentStates.None;
+        animator = GetComponent<Animator>();
     }
     // Update is called once per frame
     private void FixedUpdate()
@@ -44,7 +48,8 @@ public class IAMeele : MonoBehaviour
             return;
         }
         basicAgent.targetPlayer = null;
-        basicAgent.targetWall = null;
+        inEars = false;
+        inEyes = false;
 
         if (col_eyesPerceibed != null)
         {
@@ -53,8 +58,8 @@ public class IAMeele : MonoBehaviour
                 if (tmp.CompareTag(enemyTag))
                 {
                     basicAgent.targetPlayer = tmp.transform;
+                    inEyes = true; 
                 }
-             
             }
         }
         if (col_earspPerceibed != null)
@@ -64,6 +69,7 @@ public class IAMeele : MonoBehaviour
                 if (tmp.CompareTag(enemyTag))
                 {
                     basicAgent.targetPlayer = tmp.transform;
+                    inEars = true;  
                 }
                 
             }
@@ -72,12 +78,21 @@ public class IAMeele : MonoBehaviour
    
     void DecisionManager()
     {
+       
         if (basicAgent.targetPlayer != null)
         {
             if (basicAgent.targetPlayer.CompareTag(enemyTag))
             {
-                agentStates = AgentStates.Attack;
+                if(inEars) 
+                {
+                    agentStates = AgentStates.Perseguir;
+                }
+                if(inEyes)
+                {
+                    agentStates = AgentStates.Attack;
+                }
             }
+            
         }
         else
         {
@@ -92,13 +107,22 @@ public class IAMeele : MonoBehaviour
     {
         switch (agentStates)
         {
-            case AgentStates.None:
+            case AgentStates.None: 
+                animator.SetBool("isIdling", true);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isRunning", false);
                 break;
             case AgentStates.Attack:
+                animator.SetBool("isIdling", false);
+                animator.SetBool("isAttacking", true);
+                animator.SetBool("isRunning", false);
                 break;
-            case AgentStates.Evade:
+            case AgentStates.Perseguir:
+                animator.SetBool("isIdling", false);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isRunning", true);
                 break;
-        
+
         }
     }
     void MovementManager()
@@ -111,11 +135,13 @@ public class IAMeele : MonoBehaviour
             case AgentStates.Attack:
                 Attack();
                 break;
+            case AgentStates.Perseguir:
+                Perseguir();
+                break;
            
         }
     }
-
-    private void Attack()
+    private void Perseguir()
     {
         if (!basicAgent)
         {
@@ -129,37 +155,28 @@ public class IAMeele : MonoBehaviour
         {
             rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
         }
+        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
 
-        foreach (Collider tmp in col_eyesPerceibed)
+    }
+    private void Attack()
+    {      
+        timerHit += Time.deltaTime;
+        if (timerHit >= timerToHit)
         {
-            if (tmp.CompareTag(enemyTag))
+                 
+            if (basicAgent.targetPlayer.GetComponent<HealthPlayer>() is var life && life != null)
             {
-                timerHit += Time.deltaTime;
-                if (timerHit >= timerToHit)
-                {
-                    if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
-                    {
-                        life.DamagePlayer(damageToPlayer);
-                    }
-                    //if (tmp.GetComponent<HealthEnemy>() is var healthEnemy && healthEnemy != null)
-                    //{
-                    //    healthEnemy.TakeDamageEnemy(damageHeal);
-                    //}
-
-                    Debug.Log("Le pego");
-                    timerHit = 0;
-                }
+                life.DamagePlayer(damageToPlayer);
             }
+            //if (tmp.GetComponent<HealthEnemy>() is var healthEnemy && healthEnemy != null)
+            //{
+            //    healthEnemy.TakeDamageEnemy(damageHeal);
+            //}
+                    
+            Debug.Log("Le pego");
+            timerHit = 0;
+        }
 
-        }
-        foreach (Collider tmp in col_earspPerceibed)
-        {
-            if (tmp.CompareTag(enemyTag))
-            {
-                rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
-                //SreeringBehaviours.lookAt(transform, rb.velocity);
-            }
-        }
     }
 
    
@@ -167,8 +184,8 @@ public class IAMeele : MonoBehaviour
     {
         None,
         Attack,
-        Evade,
-        LeaderFollow,
+        Perseguir,
+ 
 
     }
     private void OnDrawGizmos()

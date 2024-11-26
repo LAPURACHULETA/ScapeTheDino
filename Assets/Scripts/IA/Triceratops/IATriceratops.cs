@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class IATriceratops : MonoBehaviour
 {
+    [SerializeField] Animator animator;
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
     [SerializeField] private int damageToPlayer;
     [SerializeField] private float slowingRadious, thershold;
@@ -21,6 +22,7 @@ public class IATriceratops : MonoBehaviour
 
     private float timerToSee;
     public string enemyTag;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -87,9 +89,16 @@ public class IATriceratops : MonoBehaviour
         switch (agentStates)
         {
             case AgentStates.None:
+                animator.SetBool("isIdling", true);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isRunning", false);
                 break;
             case AgentStates.Attack:
+                animator.SetBool("isIdling", false);
+                animator.SetBool("isAttacking", true);
+                animator.SetBool("isRunning", false);
                 break;
+            
         }
     }
     void movementManager()
@@ -105,10 +114,9 @@ public class IATriceratops : MonoBehaviour
         }
     }
 
-
     private void Attack()
     {
-        Debug.Log(timerToSee);
+        ///Debug.Log(timerToSee);
         foreach (Collider tmp in col_earspPerceibed)
         {
             if (tmp.CompareTag(enemyTag))
@@ -117,15 +125,13 @@ public class IATriceratops : MonoBehaviour
                 
                 if (timerToSee <=4f)
                 {
-                    rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.getTarget().GetComponent<BasicAgent>());
-                    //SreeringBehaviours.lookAt(transform, rb.velocity);
                     SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
                 }
-                else if(timerToSee <= 10f)
+                else if(timerToSee <= 5f)
                 {
                     rb.velocity = transform.forward*basicAgent.m_speed;
                 }
-                else if (timerToSee <= 20)
+                else if (timerToSee <= 6)
                 {
                     timerToSee = 0;
                 }
@@ -147,12 +153,7 @@ public class IATriceratops : MonoBehaviour
         {
             rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
         }
-        if (Vector3.Distance(transform.position, basicAgent.targetWall.position) <= slowingRadious)
-        {
-            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
-
-        }
-       
+     
     }
  
     private enum AgentStates
