@@ -158,7 +158,7 @@ public class SpawnManagerLevel : MonoBehaviour
                 if (tmp.CompareTag(playerTag))
                 {
                     inLevel2 = true;
-                    Debug.Log("Spawn2");
+                    ////Debug.Log("Spawn2");
                     
                 }
                 if (tmp.CompareTag(enemyTag))
