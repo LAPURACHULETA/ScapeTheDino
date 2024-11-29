@@ -8,16 +8,18 @@ public class ComboManagerTrampas : MonoBehaviour
 {
     public static ComboManagerTrampas Instance { get; private set; }
     [SerializeField] private List<GameObject> combos;
-    [SerializeField] private GameObject pendulum;
-    [SerializeField] private GameObject molotov;
-    [SerializeField] private GameObject bomb;
-    [SerializeField] private GameObject barbs;
+  
+    //[SerializeField] private GameObject pendulum;
+    //[SerializeField] private GameObject molotov;
+    //[SerializeField] private GameObject bomb;
+    //[SerializeField] private GameObject barbs;
 
     Interactive interactive;
     Selected selected;
 
     private void Awake()
     {
+        
         // Implementación Singleton
         if (Instance == null)
         {
@@ -79,23 +81,36 @@ public class ComboManagerTrampas : MonoBehaviour
                 break;
 
         }
-
     }
+    
     void Pendulum()
     {
-        pendulum.SetActive(true);
+        var trampa = Selected.Instance.GetTrampa();
+        Transform transTrampa = trampa.transform;
+        //Debug.Log(transTrampa.gameObject.name);
+        //for (int i = 0; i < transTrampa.childCount; i++)
+        //{
+        //    Debug.Log(transTrampa.GetChild(i).name); 
+        //}
+        var obj = transTrampa.GetChild(3);
+        //obj.gameObject.SetActive(true);
+        //Selected.Instance.GetTrampa().gameObject.SetActive(true);
     }
     void Molotov()
     {
-        molotov.SetActive(true);
+       // molotov.SetActive(true);
+        Selected.Instance.GetTrampa().SetActive(true);
     }
     void Bomb()
     {
-        bomb.SetActive(true);
+        //bomb.SetActive(true);
+
+        Selected.Instance.GetTrampa().SetActive(true);
     }
     void Barbs()
     {
-        barbs.SetActive(true);
+        ///barbs.SetActive(true);
+        Selected.Instance.GetTrampa().SetActive(true);
     }
    
 }

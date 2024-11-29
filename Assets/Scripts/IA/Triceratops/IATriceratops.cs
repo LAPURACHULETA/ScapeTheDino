@@ -7,9 +7,6 @@ public class IATriceratops : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
     [SerializeField] private int damageToPlayer;
-    [SerializeField] private float slowingRadious, thershold;
-
-    [SerializeField] private float timeToSeek, timeToStunned;
 
     [SerializeField] private Transform eyesPercept, earsPercept;
 
@@ -18,9 +15,7 @@ public class IATriceratops : MonoBehaviour
     BasicAgent basicAgent;
 
     AgentStates agentStates;
-    [SerializeField]
-
-    private float timerToSee;
+    [SerializeField] private float timerToSee;
     public string enemyTag;
 
     // Start is called before the first frame update
@@ -149,10 +144,10 @@ public class IATriceratops : MonoBehaviour
             }
         }
 
-        if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
-        {
-            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
-        }
+        //if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
+        //{
+        //    rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
+        //}
      
     }
  

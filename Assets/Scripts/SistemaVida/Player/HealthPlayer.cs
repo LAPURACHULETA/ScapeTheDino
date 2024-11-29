@@ -7,8 +7,9 @@ using UnityEngine.UI;
 
 public class HealthPlayer : MonoBehaviour
 {
-    [Header("Vida de Jugador")]
-    [Space(10)]
+    //[Header("Vida de Jugador")]
+
+    //[Space(10)]
     [SerializeField]private Image imagenSangre; 
     BasicAgent basicAgent;
     private float r;

@@ -4801,7 +4801,7 @@ GameObject:
   - component: {fileID: 432524557760724320}
   m_Layer: 0
   m_Name: Box001
-  m_TagString: Untagged
+  m_TagString: Molotov
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4885,7 +4885,7 @@ GameObject:
   - component: {fileID: 8748835840612083287}
   m_Layer: 0
   m_Name: Molotov
-  m_TagString: Untagged
+  m_TagString: Molotov
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

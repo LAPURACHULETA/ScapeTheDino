@@ -85,7 +85,8 @@ public class SpawnManagerLevel : MonoBehaviour
     Collider[] col_LevelPerceibed_Nivel1;
     Collider[] col_LevelPerceibed_Nivel2;
     Collider[] col_LevelPerceibed_Nivel3;
-   
+    Collider[] colliders_Trampas;
+    //List<GameObject> objetosDetectados = new List<GameObject>();
     BasicAgent basicAgent;
 
     LevelStates agentStates;
@@ -229,12 +230,12 @@ public class SpawnManagerLevel : MonoBehaviour
     {
         switch (agentStates)
         {
-            //case LevelStates.None:
-            //    break;
-            //case LevelStates.Level_1:
-            //    SpawnLevel1Trampas();
-            //    SpawnLevel1Enemys();
-            //    break;
+            case LevelStates.None:
+                break;
+            case LevelStates.Level_1:
+                SpawnLevel1Trampas();
+                //SpawnLevel1Enemys();
+                break;
             //case LevelStates.Level_2:
             //    SpawnLevel2Enemys();
             //    SpawnLevel2Trampas();
@@ -299,20 +300,18 @@ public class SpawnManagerLevel : MonoBehaviour
             // SPAWN VACIOS
             for (int attempt = 0; attempt < spawnPointsTrampasLv1.Length; ++attempt)
             {
-                
-
                 random = UnityEngine.Random.Range(0, spawnPointsTrampasLv1.Length);
 
                 // Comprobar si el punto de spawn está vacío 
-                Collider[] colliders = Physics.OverlapSphere(spawnPointsTrampasLv1[random].transform.position, 1.0f);
+                colliders_Trampas = Physics.OverlapSphere(spawnPointsTrampasLv1[random].transform.position, 1.0f);
 
-                if (colliders.Length == 0) // Si el punto está vacío
+                if (colliders_Trampas.Length == 0) // Si el punto está vacío
                 {
-                    Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)], 
-                        spawnPointsTrampasLv1[random].transform.position + new Vector3(0, 1, 0),
-                        Quaternion.identity);
+                    Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)],
+                         spawnPointsTrampasLv1[random].transform.position + new Vector3(0, 1, 0),
+                         Quaternion.identity);
                     pointFound = true;
-                    break; 
+                    break;
                 }
                 if (!pointFound)
                 {
@@ -325,8 +324,8 @@ public class SpawnManagerLevel : MonoBehaviour
             spawningTimeTrampas = 0;
             inPause = false;
         }
-
     }
+
     void SpawnLevel2Enemys()
     {
         if (inPause)
@@ -386,11 +385,11 @@ public class SpawnManagerLevel : MonoBehaviour
                 random = UnityEngine.Random.Range(0, spawnPointsTrampasLv1.Length);
 
                 // Comprobar si el punto de spawn está vacío 
-                Collider[] colliders = Physics.OverlapSphere(spawnPointsTrampasLv1[random].transform.position, 1.0f);
+                colliders_Trampas = Physics.OverlapSphere(spawnPointsTrampasLv1[random].transform.position, 1.0f);
 
-                if (colliders.Length == 0) // Si el punto está vacío
+                if (colliders_Trampas.Length == 0) // Si el punto está vacío
                 {
-                    Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)],
+                   Instantiate(trampas[UnityEngine.Random.Range(0, trampas.Length)],
                         spawnPointsTrampasLv1[random].transform.position + new Vector3(0, 1, 0),
                         Quaternion.identity);
                     pointFound = true;
@@ -408,6 +407,17 @@ public class SpawnManagerLevel : MonoBehaviour
             inPause = false;
         }
     }
+    //public List<GameObject> GetListTorres(List<GameObject> name)
+    //{
+    //    objetosDetectados = name;
+    //    return objetosDetectados;
+    //}
+
+    //public List<GameObject> SetListTorres()
+    //{
+    //    //Debug.Log(listTorres);
+    //    return objetosDetectados;
+    //}
     void SpawnLevel3Enemys()
     {
         if (inPause)

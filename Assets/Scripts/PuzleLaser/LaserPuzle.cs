@@ -54,13 +54,13 @@ public class LaserPuzle : MonoBehaviour
         puzzleComplete = CheckPuzzleComplete();
 
         // Depuración del estado del puzzle
-        Debug.Log($"Puzzle completo: {puzzleComplete}");
+        ///.Log($"Puzzle completo: {puzzleComplete}");
 
         // Destruir la puerta si el puzzle está completo
         if (puzzleComplete)
         {
             Destroy(ListOfTowers.Instance.doorLaser);
-            Debug.Log("¡Puzzle completado! Puerta destruida.");
+           // Debug.Log("¡Puzzle completado! Puerta destruida.");
         }
     }
     private void Laser()
@@ -77,7 +77,7 @@ public class LaserPuzle : MonoBehaviour
             lineRenderer.SetPosition(1, hit.point);
 
             // Depurar detección de objetos
-            Debug.Log($"Rayo impactó con: {hit.collider.gameObject.name}");
+            //Debug.Log($"Rayo impactó con: {hit.collider.gameObject.name}");
 
             // Verificar si el rayo toca una torre
             if (gameObject.CompareTag("Torre")/*&& hit.point == rayEndPoint*/)
@@ -90,16 +90,16 @@ public class LaserPuzle : MonoBehaviour
                 {
                     connectedTorres.Add(torre);
                         
-                    Debug.Log("torres añadidas  "+connectedTorres);
-                    Debug.Log(ListOfTowers.Instance.SetListTorres().Count);
-                    Debug.Log($"Torre añadida: {torre.name}");
+                    //Debug.Log("torres añadidas  "+connectedTorres);
+                    //Debug.Log(ListOfTowers.Instance.SetListTorres().Count);
+                    //Debug.Log($"Torre añadida: {torre.name}");
                 }
             }
         }
         else
         {
             lineRenderer.SetPosition(1, rayOrigin + (transform.forward * range));
-            Debug.Log("El rayo no impactó con nada.");
+            //Debug.Log("El rayo no impactó con nada.");
         }
         
        
@@ -133,7 +133,7 @@ public class LaserPuzle : MonoBehaviour
         {
             if (!connectedTorres.Contains(torre))
             {
-                Debug.Log($"Torre no conectada: {torre.name}");
+                //Debug.Log($"Torre no conectada: {torre.name}");
                 return false;
             }
             else

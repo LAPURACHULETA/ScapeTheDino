@@ -102,7 +102,8 @@ public class CheckComboTampas : MonoBehaviour
         {
             Debug.Log("Combo exitoso!");
             objCombo.SetActive(false);
-            checkedTrampActivated(selected.SetName());
+            checkedTrampActivated(selected.GetTrampa());
+
             // combo exitoso
             //GameManager.Instance.changeState(GameManager.State.InGame);
             ResetCombo();
@@ -113,9 +114,10 @@ public class CheckComboTampas : MonoBehaviour
             anyKeyAction.action.Enable();
         }
     }
-    private void checkedTrampActivated(Collider other)
+    
+    private void checkedTrampActivated(GameObject other)
     {
-        Debug.Log(other);
+        
         switch (other.tag)
         {
             case "Pendulum":
@@ -158,6 +160,8 @@ public class CheckComboTampas : MonoBehaviour
     private void ResetCombo()
     {
         GameManager.Instance.changeState(GameManager.State.InGame);
+        ComboManagerTrampas.Instance.changeState(ComboManagerTrampas.State.None);
+
         currentCombo.Clear();
         if (comboTimeoutCoroutine != null)
         {

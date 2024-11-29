@@ -69,7 +69,7 @@ public class BasicAgent : MonoBehaviour
     public void TakeDamage(float damage)
     {
         m_vidaActual -= damage;
-      
+        Debug.Log(m_vidaActual);
     }
  
 }

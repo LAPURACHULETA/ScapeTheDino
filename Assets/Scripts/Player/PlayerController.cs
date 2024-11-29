@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]Animator animator;
     [Header("Moving Player")]
     [Space(10)] 
     [SerializeField] protected float timeCanRunPlayer, recoveryTime,speed;
@@ -19,7 +20,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
         changeCameraPerson=FindObjectOfType<ChangeCameraPerson>();
         agent = GetComponent<BasicAgent>();
         rb = GetComponent<Rigidbody>();
@@ -57,32 +57,33 @@ public class PlayerController : MonoBehaviour
         float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
         float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
-        // Crear un vector de movimiento basado en la entrada
-        Vector3 movement = new Vector3(horizontal, 0, vertical).normalized; // Normalizar para evitar movimiento más rápido en diagonales
+        Vector3 movement = new Vector3(horizontal, 0, vertical).normalized;
+       
+        // Controlar animaciones
+        if (movement.magnitude > 0.01f) // Activar más rápido la animación
+        {
+            animator.SetBool("Run", true);
+            animator.SetBool("Drop", false);
+        }
+        if (movement.magnitude == 0f)
+        {
+            animator.SetBool("Run", false);
 
-        // Si hay movimiento, calcular la nueva rotación
+        }
         if (!changeCameraPerson.firtsPerson.activeInHierarchy && GameManager.Instance.state == GameManager.State.InGame)
-        { 
-            if (movement.magnitude > 0.1f)
+        {
+            if (movement.magnitude > 0.01f) 
             {
-                // Calcular la rotación deseada
                 Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * speed);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f); 
             }
         }
 
-        // Calcular el movimiento
-        Vector3 movementWithSpeed = movement * speed * Time.deltaTime;
-
         if (GameManager.Instance.state == GameManager.State.InGame)
         {
-            // Mover el personaje
-            transform.Translate(movementWithSpeed, Space.World);
-            rb.AddForce(movementWithSpeed, ForceMode.VelocityChange);
+            transform.Translate(movement * speed * Time.deltaTime, Space.World);
         }
-        
     }
-
     public void OnRun(InputValue context)
     {
         runValue = context.Get<float>();
