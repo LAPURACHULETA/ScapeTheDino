@@ -36,10 +36,11 @@ public class HealthPlayer : MonoBehaviour
         MyHelath();
     }
 
-    public void DamagePlayer(int damage)
+    public void DamagePlayer(float damage)
     {
         basicAgent.TakeDamage(damage);
         a += 1f;
+        MyHelath();
     }
     private void MyHelath()
     {

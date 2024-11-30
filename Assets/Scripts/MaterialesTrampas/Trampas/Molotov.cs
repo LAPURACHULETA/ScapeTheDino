@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEngine;
 
 public class Molotov : MonoBehaviour
@@ -11,24 +12,23 @@ public class Molotov : MonoBehaviour
     [SerializeField] private GameObject myTramp;
 
     Rigidbody rb;
-    Collider[] col_GroundPerceibed, col_ExplosionPerceibed;
+    Collider[] col_GroundPerceibed;
 
     ShooterAgentStates agentStates;
     float timerMolotov;
-    bool inGround, inExplosion;
+    bool inGround;
     public string enemyTag, groundTag;
     void Start()
     {
         
         rb = GetComponent<Rigidbody>();
         inGround = false;
-        inExplosion = false;
+        
     }
 
     private void FixedUpdate()
     {
         col_GroundPerceibed = Physics.OverlapSphere(groundPercept.position, groundPerceptRadious);
-        col_ExplosionPerceibed = Physics.OverlapSphere(explosionPercept.position, explosionPerceptRadious);
 
         perceptionManager();
         decisionManager_EnemyTower();
@@ -41,7 +41,7 @@ public class Molotov : MonoBehaviour
     {
      
         inGround = false;
-        inExplosion = false;
+       
 
         if (col_GroundPerceibed != null)
         {
@@ -55,29 +55,15 @@ public class Molotov : MonoBehaviour
             }
         }
 
-        if (col_ExplosionPerceibed != null)
-        {
-            foreach (Collider tmp in col_ExplosionPerceibed)
-            {
-                if (tmp.CompareTag(enemyTag))
-                {
-                    Debug.Log(tmp.tag);
-                    inExplosion = true;
-                }
-            }
-        }
     }
     void decisionManager_EnemyTower()
     {
 
-        if (inExplosion)
-        {
-            agentStates = ShooterAgentStates.InExplosion;
-        }
         if (inGround)
         {
             agentStates = ShooterAgentStates.InGround;
         }
+        
         else
         {
             agentStates = ShooterAgentStates.None;
@@ -95,9 +81,6 @@ public class Molotov : MonoBehaviour
             case ShooterAgentStates.InGround:
                 Ground();
                 break;
-            case ShooterAgentStates.InExplosion:
-           
-                break;
         }
     }
 
@@ -105,6 +88,8 @@ public class Molotov : MonoBehaviour
     {
         if (inGround)
         {
+            timerMolotov += Time.deltaTime;
+            //Debug.Log(timerMolotov);
             foreach (Collider tmp in col_GroundPerceibed)
             {
                 if (tmp.CompareTag(enemyTag))
@@ -115,11 +100,10 @@ public class Molotov : MonoBehaviour
                     }
                 }
             }
-        }
-        timerMolotov += Time.deltaTime;
-        if (timerMolotov >= 2f)
-        {
-            Destroy(myTramp);
+            if (timerMolotov >= 2f)
+            {
+                Destroy(myTramp);
+            }
         }
     }
 

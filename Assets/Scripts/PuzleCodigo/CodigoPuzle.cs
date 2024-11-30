@@ -57,7 +57,9 @@ public class CodigoPuzle : MonoBehaviour
         if(text.text != code)
         {
             text.text = "Error";
-            reset = false;   
+            reset = false;
+            GameManager.Instance.changeState(GameManager.State.InGame);
+            keyPad.gameObject.SetActive(false);
         }
        
     }
@@ -67,16 +69,16 @@ public class CodigoPuzle : MonoBehaviour
         text.text = "";  
         reset = true;
     }
-    public bool GetCompletePuzzles(bool name)
-    {
-        puzzleComplete = name;
-        // Debug.Log(nameoftag);
-        return puzzleComplete;
-    }
-    public bool SetCompletePuzzles()
-    {
-        Debug.Log(puzzleComplete);
-        return puzzleComplete;
+    //public bool GetCompletePuzzles(bool name)
+    //{
+    //    puzzleComplete = name;
+    //    // Debug.Log(nameoftag);
+    //    return puzzleComplete;
+    //}
+    //public bool SetCompletePuzzles()
+    //{
+    //    Debug.Log(puzzleComplete);
+    //    return puzzleComplete;
 
-    }
+    //}
 }

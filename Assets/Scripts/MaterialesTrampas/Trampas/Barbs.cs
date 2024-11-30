@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Barbs : MonoBehaviour
 {
-    [SerializeField] private float groundPerceptRadious, barbsPerceptRadious, damageHeal;
+    [SerializeField] private float groundPerceptRadious, barbsPerceptRadious;
     [SerializeField] private Transform groundPercept, barbsPercept;
     [SerializeField] private int damageToEnemy;
     [SerializeField] private GameObject myTramp;

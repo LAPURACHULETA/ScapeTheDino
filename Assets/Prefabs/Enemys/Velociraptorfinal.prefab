@@ -1541,7 +1541,7 @@ GameObject:
   - component: {fileID: 542033152315046984}
   m_Layer: 0
   m_Name: Velociraptorfinal
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1553,7 +1553,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 545795550675682647}
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 4.33, y: 0.029999971, z: -20.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1564,7 +1564,7 @@ Transform:
   - {fileID: 8617086066349115716}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!95 &488090038261029197
 Animator:
   serializedVersion: 5
@@ -1599,15 +1599,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 488090038261029197}
   agentStates: 0
-  eyesPerceptRadious: 2.09
+  eyesPerceptRadious: 2.05
   earsPerceptRadious: 7.05
-  damageToPlayer: 0
-  slowingRadious: 2.55
-  thershold: 1.52
-  timerToHit: 0
+  damageToPlayer: 100
+  slowingRadious: 1.51
+  thershold: 1.28
+  timerToHit: 3
   eyesPercept: {fileID: 8617086066327424223}
   earsPercept: {fileID: 8617086066349115716}
-  timerHit: 2
+  timerHit: 0
   enemyTag: Player
 --- !u!114 &4922632617611394261
 MonoBehaviour:

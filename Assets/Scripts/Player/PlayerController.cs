@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
     [SerializeField]Animator animator;
     [Header("Moving Player")]
     [Space(10)] 
@@ -10,13 +12,24 @@ public class PlayerController : MonoBehaviour
     protected bool canRunPlayer;
     private float maxSpeed;
     BasicAgent agent;
-   
+    public Vector3 movement;
     ChangeCameraPerson changeCameraPerson;
     private Rigidbody rb;
     private PlayerInput playerInput;
     private float runValue;
     private float valueButton;
+    private void Awake()
+    {
+        // Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
 
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -57,32 +70,43 @@ public class PlayerController : MonoBehaviour
         float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
         float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
-        Vector3 movement = new Vector3(horizontal, 0, vertical).normalized;
-       
+        var movement2 = new Vector3(horizontal, 0, vertical).normalized;
+        GetMove(movement2); 
+        if (GameManager.Instance.state == GameManager.State.InGame)
+        {
+            transform.Translate(movement2 * speed * Time.deltaTime, Space.World);
+        }
         // Controlar animaciones
-        if (movement.magnitude > 0.01f) // Activar más rápido la animación
+        if (movement2.magnitude > 0.01f) 
         {
             animator.SetBool("Run", true);
             animator.SetBool("Drop", false);
         }
-        if (movement.magnitude == 0f)
+        if (movement2.magnitude == 0f)
         {
             animator.SetBool("Run", false);
 
         }
         if (!changeCameraPerson.firtsPerson.activeInHierarchy && GameManager.Instance.state == GameManager.State.InGame)
         {
-            if (movement.magnitude > 0.01f) 
+            if (movement2.magnitude > 0.01f) 
             {
-                Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
+                var targetRotation = Quaternion.LookRotation(movement, Vector3.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f); 
             }
         }
 
-        if (GameManager.Instance.state == GameManager.State.InGame)
-        {
-            transform.Translate(movement * speed * Time.deltaTime, Space.World);
-        }
+    }
+    public Vector3 GetMove(Vector3 name)
+    {
+        movement = name;
+        return movement;
+    }
+
+    public Vector3 SetMove()
+    {
+        //Debug.Log(listTorres);
+        return movement;
     }
     public void OnRun(InputValue context)
     {
@@ -99,10 +123,12 @@ public class PlayerController : MonoBehaviour
     public void OnPause(InputValue context)
     {
         valueButton = context.Get<float>();
-        if (valueButton==1)
+        Debug.Log(valueButton);
+        if (valueButton>0)
         {
             Debug.Log("pausa");
-            GameManager.Instance.ButtonPause();
+
+            GameManager.Instance.changeState(GameManager.State.Pause);
             
         }
     }

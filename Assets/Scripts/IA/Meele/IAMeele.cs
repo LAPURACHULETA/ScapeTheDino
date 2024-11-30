@@ -147,24 +147,25 @@ public class IAMeele : MonoBehaviour
         {
             return;
         }
-        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
         //rb.velocity = SreeringBehaviours.seek(basicAgent, basicAgent.target.position);
         //SreeringBehaviours.lookAt(transform, rb.velocity);
-        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
-        if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
-        {
-            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
-        }
-        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
+        //if (Vector3.Distance(transform.position, basicAgent.targetPlayer.parent.position) <= slowingRadious)
+        //{
+        //    rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.parent.position, slowingRadious, thershold);
+        //}
+        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
 
     }
     private void Attack()
     {      
         timerHit += Time.deltaTime;
+        Debug.Log(timerHit+"   "+timerToHit);
         if (timerHit >= timerToHit)
         {
                  
-            if (basicAgent.targetPlayer.GetComponent<HealthPlayer>() is var life && life != null)
+            if (basicAgent.targetPlayer.parent.GetComponent<HealthPlayer>() is var life && life != null)
             {
                 life.DamagePlayer(damageToPlayer);
             }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
-    [SerializeField] private float groundPerceptRadious, explosionPerceptRadious, damageHeal;
+    [SerializeField] private float groundPerceptRadious, explosionPerceptRadious;
     [SerializeField] private Transform groundPercept, explosionPercept;
     [SerializeField] private int damageToEnemy;
     [SerializeField] private GameObject myTramp;

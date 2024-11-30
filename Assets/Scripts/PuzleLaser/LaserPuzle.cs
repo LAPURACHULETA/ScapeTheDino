@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
@@ -11,139 +12,103 @@ public class LaserPuzle : MonoBehaviour
     public static LaserPuzle Instance;
 
     [Header("Laser Settings")]
-    public GameObject torre; 
-    public Transform laserOrigin; 
-    public float range = 50f; 
+    public Transform laserOrigin; // Origen del láser
+    public float range = 50f; // Rango del láser
     public LineRenderer lineRenderer;
 
     [Header("Rotation Settings")]
-    public float rotationSpeed = 10f; 
-    public float targetRotationY;
-    public bool isRotating;
+    public float rotationSpeed = 10f; // Velocidad de rotación
+    public float targetRotationY; // Ángulo objetivo
+    public bool isRotating; // Si está rotando actualmente
 
     [Header("Puzzle Settings")]
-    public bool puzzleComplete; 
-    private bool offLaser;
-  
-    private List<GameObject> connectedTorres =new List<GameObject>(); 
+    public bool puzzleComplete; // Si el puzzle está completo
+    private List<GameObject> connectedTorres = new List<GameObject>(); // Torres conectadas
 
     private void Awake()
     {
-        // Singleton
         if (Instance == null)
         {
             Instance = this;
         }
-        else
-        {
-           
-        }
 
         lineRenderer = GetComponent<LineRenderer>();
         isRotating = false;
-        offLaser = false;
     }
 
     private void FixedUpdate()
     {
-        // Verificar rotación
+        // Manejar la rotación
         RotationTower();
-        Laser();
-        RemoveDisconnectedTowers();
-        // Comprobar si todas las torres están conectadas
-        puzzleComplete = CheckPuzzleComplete();
 
-        // Depuración del estado del puzzle
-        ///.Log($"Puzzle completo: {puzzleComplete}");
+        // Actualizar las conexiones del láser
+        UpdateLaserConnections();
 
-        // Destruir la puerta si el puzzle está completo
+        // Verificar si todas las torres están conectadas
+        puzzleComplete = CheckAllTowersConnected();
+
         if (puzzleComplete)
         {
             Destroy(ListOfTowers.Instance.doorLaser);
-           // Debug.Log("¡Puzzle completado! Puerta destruida.");
         }
     }
-    private void Laser()
+
+    /// <summary>
+    /// Actualiza las conexiones del láser y verifica las torres conectadas.
+    /// </summary>
+    private void UpdateLaserConnections()
     {
-        
-        // Dibujar línea inicial
-        lineRenderer.SetPosition(0, gameObject.transform.position);
-        Vector3 rayOrigin = transform.position;
+        // Restablecer la lista de torres conectadas
+        connectedTorres.Clear();
+
+        lineRenderer.SetPosition(0, laserOrigin.position);
+        Vector3 rayOrigin = laserOrigin.position;
 
         RaycastHit hit;
-        // Emitir rayo
-        if (Physics.Raycast(rayOrigin,transform.forward, out hit, range))
+
+        // Emitir el rayo
+        if (Physics.Raycast(rayOrigin, transform.forward, out hit, range))
         {
             lineRenderer.SetPosition(1, hit.point);
 
-            // Depurar detección de objetos
-            //Debug.Log($"Rayo impactó con: {hit.collider.gameObject.name}");
-
-            // Verificar si el rayo toca una torre
-            if (gameObject.CompareTag("Torre")/*&& hit.point == rayEndPoint*/)
+            // Si impacta una torre, añadirla a la lista
+            if (hit.collider.CompareTag("Torre"))
             {
-                    
                 GameObject torre = hit.collider.gameObject;
 
-                // Agregar a la lista si no existe ya
                 if (!connectedTorres.Contains(torre))
                 {
                     connectedTorres.Add(torre);
-                        
-                    //Debug.Log("torres añadidas  "+connectedTorres);
-                    //Debug.Log(ListOfTowers.Instance.SetListTorres().Count);
-                    //Debug.Log($"Torre añadida: {torre.name}");
                 }
             }
         }
         else
         {
             lineRenderer.SetPosition(1, rayOrigin + (transform.forward * range));
-            //Debug.Log("El rayo no impactó con nada.");
         }
-        
-       
     }
-    private void RemoveDisconnectedTowers()
+
+    /// <summary>
+    /// Verifica si todas las torres están conectadas.
+    /// </summary>
+    private bool CheckAllTowersConnected()
     {
-        List<GameObject> currentlyConnected = new List<GameObject>();
+        List<GameObject> allTorres = ListOfTowers.Instance.SetListTorres();
 
-        Vector3 rayOrigin = torre.transform.position;
-        RaycastHit hit;
-
-        foreach (GameObject torre in connectedTorres)
-        {
-            Vector3 direction = torre.transform.position - rayOrigin;
-
-            if (Physics.Raycast(rayOrigin, direction.normalized, out hit, range))
-            {
-                if (hit.collider.gameObject == torre)
-                {
-                    currentlyConnected.Add(torre);
-                }
-            }
-        }
-
-        // Actualizar la lista
-        connectedTorres = currentlyConnected;
-    }
-    private bool CheckPuzzleComplete()
-    {
-        foreach (GameObject torre in ListOfTowers.Instance.SetListTorres())
+        // Verifica que cada torre esté conectada
+        foreach (GameObject torre in allTorres)
         {
             if (!connectedTorres.Contains(torre))
             {
-                //Debug.Log($"Torre no conectada: {torre.name}");
-                return false;
-            }
-            else
-            {
-                return true;
+                return false; // Una torre no está conectada
             }
         }
-        return true;
+        return true; // Todas las torres están conectadas
     }
 
+    /// <summary>
+    /// Maneja la rotación del objeto hacia un ángulo objetivo.
+    /// </summary>
     private void RotationTower()
     {
         if (isRotating)
@@ -156,28 +121,17 @@ public class LaserPuzle : MonoBehaviour
                 transform.eulerAngles = new Vector3(transform.eulerAngles.x, targetRotationY, transform.eulerAngles.z);
                 isRotating = false;
 
-                // Configurar el siguiente ángulo objetivo
                 targetRotationY = Mathf.Round((targetRotationY + 90f) % 360f);
             }
         }
     }
 
-
+    /// <summary>
+    /// Inicia una rotación hacia el ángulo especificado.
+    /// </summary>
     public void RotateTo(float degrees)
     {
         targetRotationY = degrees;
         isRotating = true;
-    }
-
-    public bool GetCompletepuzzle(bool name)
-    {
-        puzzleComplete = name;
-        return puzzleComplete;
-    }
-
-    public bool SetCompletepuzzle()
-    {
-        Debug.Log(puzzleComplete);
-        return puzzleComplete;
     }
 }

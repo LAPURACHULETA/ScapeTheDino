@@ -120,7 +120,7 @@ public class IATriceratops : MonoBehaviour
                 
                 if (timerToSee <=4f)
                 {
-                    SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+                    SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
                 }
                 else if(timerToSee <= 5f)
                 {
@@ -137,7 +137,7 @@ public class IATriceratops : MonoBehaviour
         {
             if (tmp.CompareTag(enemyTag))
             {
-                if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
+                if (tmp.transform.parent.GetComponent<HealthPlayer>() is var life && life != null)
                 {
                     life.DamagePlayer(damageToPlayer);
                 }

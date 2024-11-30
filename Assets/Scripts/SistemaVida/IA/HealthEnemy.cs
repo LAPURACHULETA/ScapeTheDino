@@ -23,11 +23,12 @@ public class HealthEnemy : MonoBehaviour
     public void DamageEnemy(int damge)
     {
         basicAgent.TakeDamage(damge);
-        Destroy(this.gameObject);
+        MyHelath();
+        
     }
     private void MyHelath()
     {
-        if (basicAgent.m_vida <= 0)
+        if (basicAgent.m_vidaActual <= 0)
         {
             basicAgent.Die(this.gameObject);
         }

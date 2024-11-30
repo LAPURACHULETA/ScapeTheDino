@@ -27,6 +27,7 @@ public class IAEscupidor : MonoBehaviour
     {
         basicAgent = GetComponent<BasicAgent>();
         rb = GetComponent<Rigidbody>();
+        //Debug.Log(rb+"  "+gameObject.name);
         agentStates = ShooterAgentStates.None;
         inEyes = false;
         inEars = false;
@@ -139,12 +140,12 @@ public class IAEscupidor : MonoBehaviour
     }
     private void Evade()
     {
-        rb.velocity = SreeringBehaviours.Evade(basicAgent, basicAgent.targetPlayer);
-        SreeringBehaviours.rotation2(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+        rb.velocity = SreeringBehaviours.Evade(basicAgent, basicAgent.targetPlayer.parent);
+        SreeringBehaviours.rotation2(transform, 5, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
     }
     private void ShootTower()
     {
-        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
         timerBullet += Time.deltaTime;
         if (timerBullet >= 2f)
         {

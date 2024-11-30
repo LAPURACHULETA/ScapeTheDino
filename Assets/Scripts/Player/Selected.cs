@@ -47,7 +47,7 @@ public class Selected : MonoBehaviour
     {
         //Debug.Log(other);
         GetName(other);
-        if(!SpawnManagerLevel.Instance.inBattle)
+        if(SpawnManagerLevel.Instance.SetinBlattle()==false)
         {
             switch (other.tag)
             {

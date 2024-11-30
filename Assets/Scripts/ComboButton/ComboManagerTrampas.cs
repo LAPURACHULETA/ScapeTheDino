@@ -87,30 +87,34 @@ public class ComboManagerTrampas : MonoBehaviour
     {
         var trampa = Selected.Instance.GetTrampa();
         Transform transTrampa = trampa.transform;
-        //Debug.Log(transTrampa.gameObject.name);
-        //for (int i = 0; i < transTrampa.childCount; i++)
-        //{
-        //    Debug.Log(transTrampa.GetChild(i).name); 
-        //}
+
         var obj = transTrampa.GetChild(3);
-        //obj.gameObject.SetActive(true);
-        //Selected.Instance.GetTrampa().gameObject.SetActive(true);
+        obj.gameObject.SetActive(true);
+
     }
     void Molotov()
     {
-       // molotov.SetActive(true);
-        Selected.Instance.GetTrampa().SetActive(true);
+        var trampa = Selected.Instance.GetTrampa();
+        Transform transTrampa = trampa.transform;
+
+        var obj = transTrampa.GetChild(3);
+        obj.gameObject.SetActive(true);
     }
     void Bomb()
     {
-        //bomb.SetActive(true);
+        var trampa = Selected.Instance.GetTrampa();
+        Transform transTrampa = trampa.transform;
 
-        Selected.Instance.GetTrampa().SetActive(true);
+        var obj = transTrampa.GetChild(3);
+        obj.gameObject.SetActive(true);
     }
     void Barbs()
     {
-        ///barbs.SetActive(true);
-        Selected.Instance.GetTrampa().SetActive(true);
+        var trampa = Selected.Instance.GetTrampa();
+        Transform transTrampa = trampa.transform;
+
+        var obj = transTrampa.GetChild(2);
+        obj.gameObject.SetActive(true);
     }
    
 }

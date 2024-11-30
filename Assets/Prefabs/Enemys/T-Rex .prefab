@@ -2453,7 +2453,7 @@ GameObject:
   - component: {fileID: 5378118028899570281}
   m_Layer: 0
   m_Name: 'T-Rex '
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

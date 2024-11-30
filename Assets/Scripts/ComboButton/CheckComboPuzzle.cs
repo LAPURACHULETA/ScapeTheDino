@@ -148,17 +148,17 @@ public class CheckComboPuzzle : MonoBehaviour
         ResetCombo();
        
     }
-    public bool GetCompletepuzzle(bool name)
-    {
-        puzzleComplete = name;
-        // Debug.Log(nameoftag);
-        return puzzleComplete;
-    }
-    public bool SetCompletePuzzles()
-    {
-        Debug.Log(puzzleComplete);
-        return puzzleComplete;
+    //public bool GetCompletepuzzle(bool name)
+    //{
+    //    puzzleComplete = name;
+    //    // Debug.Log(nameoftag);
+    //    return puzzleComplete;
+    //}
+    //public bool SetCompletePuzzles()
+    //{
+    //    Debug.Log(puzzleComplete);
+    //    return puzzleComplete;
 
-    }
+    //}
 }
 

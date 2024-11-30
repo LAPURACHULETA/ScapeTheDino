@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
@@ -48,7 +49,10 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
+        if(state == State.Pause&&newState != State.InGame)
+        {
+            return;
+        }
         state = newState;
 
         switch (state)
@@ -87,7 +91,6 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0;
         pauseObj.SetActive(true);
-        changeState(GameManager.State.InPuzzle);
     }
     public void ButtonGoToMenu()
     {
@@ -107,7 +110,8 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         gameOver.SetActive(true);
-        ButtonPause();
+        Time.timeScale = 0;
+        
     }
     public void Winner()
     {

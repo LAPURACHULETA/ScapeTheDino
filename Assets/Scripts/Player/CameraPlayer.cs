@@ -93,7 +93,7 @@ public class CameraPlayer : MonoBehaviour
                 ///<summary>
                 ///Establecer la rotación del jugador basada en la transformación de la mirada
                 ///</summary>
-                transform.rotation = Quaternion.Euler(0, followTransform.transform.rotation.eulerAngles.y, 0);
+                transform.rotation = Quaternion.Euler(0, angles.y, 0);
                 ///<summary>
                 ///Restablecer la rotación en el eje Y de la transformación de la mirada
                 ///</summary>

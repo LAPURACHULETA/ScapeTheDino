@@ -146,15 +146,15 @@ public class IAT_Rex : MonoBehaviour
         {
             return;
         }
-        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
         //rb.velocity = SreeringBehaviours.seek(basicAgent, basicAgent.target.position);
         //SreeringBehaviours.lookAt(transform, rb.velocity);
-        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
-        if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
+        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
+        if (Vector3.Distance(transform.position, basicAgent.targetPlayer.parent.position) <= slowingRadious)
         {
-            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
+            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.parent.position, slowingRadious, thershold);
         }
-        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+        rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
 
     }
     private void Attack()
@@ -167,17 +167,17 @@ public class IAT_Rex : MonoBehaviour
                 timerHit += Time.deltaTime;
                 if (timerHit >= timeToExplod)
                 {
-                    if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
+                    if (tmp.transform.parent.GetComponent<HealthPlayer>() is var life && life != null)
                     {
                         life.DamagePlayer(damageToPlayer);
                     }
-                    Debug.Log("Persige");
+                    ///Debug.Log("Persige");
                     timerHit = 0;
                     Destroy(gameObject);
                 }
             }
             // Mensaje de depuracion para verificar la explosion
-            Debug.Log("Explosion realizada");
+            ///Debug.Log("Explosion realizada");
         }
       
     }
