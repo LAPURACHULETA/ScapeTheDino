@@ -6,7 +6,7 @@ public class ListOfTowers : MonoBehaviour
 {
     public static ListOfTowers Instance;
 
-    public List<GameObject> listTorres;
+    public List<GameObject> listTorres = new List<GameObject>();
     public GameObject doorLaser; // Puerta a destruir
     private void Awake()
     {

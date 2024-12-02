@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class IATriceratops : MonoBehaviour
@@ -15,9 +16,9 @@ public class IATriceratops : MonoBehaviour
     BasicAgent basicAgent;
 
     AgentStates agentStates;
-    [SerializeField] private float timerToSee;
-    public string enemyTag;
-
+    private float timerToSee,timerToStun;
+    public string enemyTag,wall;
+    bool inWall;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +38,7 @@ public class IATriceratops : MonoBehaviour
     public void PerceptionManager()
     {
         basicAgent.targetPlayer = null;
-
+        inWall = false;
         if (col_eyesPerceibed != null)
         {
             foreach (Collider tmp in col_eyesPerceibed)
@@ -46,25 +47,42 @@ public class IATriceratops : MonoBehaviour
                 {
                     basicAgent.targetPlayer = tmp.transform;
                 }
-
+                if (tmp.CompareTag(wall))
+                {
+                    inWall = true;
+                }
             }
         }
         if (col_earspPerceibed != null)
         {
             foreach (Collider tmp in col_earspPerceibed)
             {
+                ////Debug.Log(tmp.name);
                 if (tmp.CompareTag(enemyTag))
                 {
                     basicAgent.targetPlayer = tmp.transform;
                 }
-
+                
             }
         }
     }
 
     void DecisionManager()
     {
-        if (basicAgent.targetPlayer != null)
+        if (inWall)
+        {
+            rb.velocity = Vector3.zero;
+            timerToStun += Time.deltaTime;
+            Debug.Log(timerToSee); 
+            if (timerToStun >= 3f)
+            {
+                timerToSee = 0;
+                timerToStun = 0;
+                inWall = false;
+            }
+            
+        }
+        if (basicAgent.targetPlayer != null&&!inWall)
         {
             if (basicAgent.targetPlayer.CompareTag(enemyTag))
             {
