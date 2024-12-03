@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 [RequireComponent(typeof(PlayerInput))]
 public class Selected : MonoBehaviour
@@ -45,9 +46,9 @@ public class Selected : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        //Debug.Log(other);
+        Debug.Log("Seleccted  "+SpawnManagerLevel.Instance.SetinBlattle());
         GetName(other);
-        if(SpawnManagerLevel.Instance.SetinBlattle()==false)
+        if(SpawnManagerLevel.Instance.SetinBlattle()==false && GameManager.Instance.state == GameManager.State.InGame)
         {
             switch (other.tag)
             {

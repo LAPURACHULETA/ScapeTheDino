@@ -12,12 +12,12 @@ public class PuzzlesManager : MonoBehaviour
 
     void CheckCompleteCombos()
     {
-        if (/*CodigoPuzle.Instance != null &&
-            CheckComboPuzzle.Instance != null&&*/
+        if (CodigoPuzle.Instance != null &&
+            CheckComboPuzzle.Instance != null && 
             LaserPuzle.Instance != null && GameManager.Instance != null)
         {
-            if (/*CodigoPuzle.Instance.puzzleComplete == true &&
-                CheckComboPuzzle.Instance.puzzleComplete == true &&*/
+            if (CodigoPuzle.Instance.puzzleComplete == true &&
+                CheckComboPuzzle.Instance.puzzleComplete == true &&
                 LaserPuzle.Instance.puzzleComplete == true)
             {
                 GameManager.Instance.changeState(GameManager.State.Win);

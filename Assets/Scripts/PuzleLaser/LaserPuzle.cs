@@ -24,7 +24,7 @@ public class LaserPuzle : MonoBehaviour
 
     [Header("Puzzle Settings")]
     public bool puzzleComplete; 
-    private List<GameObject> connectedTorres = new List<GameObject>(); 
+    //private List<GameObject> connectedTorres = new List<GameObject>(); 
     
     bool connected;
 
@@ -42,15 +42,16 @@ public class LaserPuzle : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-        // Manejar la rotación
         RotationTower();
-
         // Actualizar las conexiones del láser
         UpdateLaserConnections(); 
 
+        puzzleComplete=ListOfTowers.Instance.CheckAllTowersConnected();
 
-        puzzleComplete=CheckAllTowersConnected();
+        if (puzzleComplete)
+        {
+            Destroy(ListOfTowers.Instance.doorLaser);
+        }
     }
 
     /// <summary>
@@ -75,44 +76,28 @@ public class LaserPuzle : MonoBehaviour
                 {
                     GameObject torre = hit.collider.gameObject;
 
-                    if (!connectedTorres.Contains(torre))
+                    if (!ListOfTowers.Instance.listTorresConnect.Contains(torre))
                     {
-                        connectedTorres.Add(torre);
-                        Debug.Log($"Torre conectada: {torre.name}");
+                        ListOfTowers.Instance.listTorresConnect.Add(torre);
+                        connected=true;
+                        //isRotating = false;
+                        //Debug.Log($"Torre conectada: {torre.name}");
                     }
                 }
             }
             else
             {
                 lineRenderer.SetPosition(1, rayOrigin + (transform.forward * range));
+                //isRotating = false;
             }
 
         }
-    }
-
-    /// <summary>
-    /// Verifica si todas las torres están conectadas.
-    /// </summary>
-    private bool CheckAllTowersConnected()
-    {
-
-        List<GameObject> allTorres = ListOfTowers.Instance.SetListTorres();
-
-        foreach (GameObject torre in allTorres)
-        {
-            if (!connectedTorres.Contains(torre))
-            {
-                Debug.Log($"Torre no conectada: {torre.name}");
-                return false; // Una torre no está conectada
-            }
-        }
-        return true;
     }
 
     /// <summary>
     /// Maneja la rotación del objeto hacia un ángulo objetivo.
     /// </summary>
-    private void RotationTower()
+    public void RotationTower()
     {
         if (isRotating)
         {
@@ -122,14 +107,10 @@ public class LaserPuzle : MonoBehaviour
             if (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.y, targetRotationY)) < 0.1f)
             {
                 transform.eulerAngles = new Vector3(transform.eulerAngles.x, targetRotationY, transform.eulerAngles.z);
-                isRotating = false;
+
                 targetRotationY = Mathf.Round((targetRotationY + 90f) % 360f);
             }
-            isRotating = false;
-        }
-        if(!isRotating)
-        {
-            UpdateLaserConnections();
+           
         }
     }
 
