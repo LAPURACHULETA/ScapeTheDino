@@ -16,8 +16,10 @@ public class PlayerController : MonoBehaviour
     ChangeCameraPerson changeCameraPerson;
     private Rigidbody rb;
     private PlayerInput playerInput;
-    private float runValue;
+    //private float runValue;
     private float valueButton;
+    public float horizontal;
+    public float vertical;
     private void Awake()
     {
         // Singleton
@@ -67,8 +69,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Movimiento()
     {
-        float horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
-        float vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
+         horizontal = playerInput.actions["Move"].ReadValue<Vector2>().x;
+         vertical = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
         var movement2 = new Vector3(horizontal, 0, vertical).normalized;
         GetMove(movement2); 
@@ -108,17 +110,17 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(listTorres);
         return movement;
     }
-    public void OnRun(InputValue context)
-    {
-        runValue = context.Get<float>();
-        if (runValue == 1 && !canRunPlayer)
-        {
-            agent.m_speed += 5;
-            Invoke("StopToRun", 2f);
-            canRunPlayer = true;
-            runValue = 0;
-        }
-    }
+    //public void OnRun(InputValue context)
+    //{
+    //    runValue = context.Get<float>();
+    //    if (runValue == 1 && !canRunPlayer)
+    //    {
+    //        agent.m_speed += 5;
+    //        Invoke("StopToRun", 2f);
+    //        canRunPlayer = true;
+    //        runValue = 0;
+    //    }
+    //}
 
     public void OnPause(InputValue context)
     {
@@ -133,8 +135,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void StopToRun()
-    {
-        agent.m_speed = maxSpeed;
-    }
+    //private void StopToRun()
+    //{
+    //    agent.m_speed = maxSpeed;
+    ////}
 }

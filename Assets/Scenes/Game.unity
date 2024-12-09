@@ -12635,6 +12635,8 @@ MonoBehaviour:
   recoveryTime: 1
   speed: 5
   movement: {x: 0, y: 0, z: 0}
+  horizontal: 0
+  vertical: 0
 --- !u!54 &1195632953
 Rigidbody:
   m_ObjectHideFlags: 0

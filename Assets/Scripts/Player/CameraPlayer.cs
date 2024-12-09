@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 using UnityEngine.Windows;
-
+using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class CameraPlayer : MonoBehaviour
 {
@@ -19,7 +19,7 @@ public class CameraPlayer : MonoBehaviour
     [SerializeField] private float rotationSpeed;
     [SerializeField] private Camera camera;
     [SerializeField] private GameObject followTransform;
-
+    private PlayerInput playerInput;
     [Header("Cambio de Vista")]
     [Space(10)]
     public float speed;
@@ -29,7 +29,9 @@ public class CameraPlayer : MonoBehaviour
     private void Start()
     {
         player = GetComponent<PlayerController>();
-        gameManager=FindObjectOfType<GameManager>();    
+        gameManager=FindObjectOfType<GameManager>();
+
+        playerInput = GetComponent<PlayerInput>();
     }
     void Update()
     {
@@ -65,18 +67,23 @@ public class CameraPlayer : MonoBehaviour
         var angles = followTransform.transform.localEulerAngles;
         angles.z = 0;
         var angle = followTransform.transform.localEulerAngles.x;
-
+        Debug.Log(angle);
+        Debug.Log(angles);
         /// <summary>
         /// anclamos la camara al objetivo para que este bloqueada en una rotacion vertical
         /// </summary>
         if (angle > 180 && angle < 340)
         {
+            PlayerController.Instance.horizontal -= playerInput.actions["Move"].ReadValue<Vector2>().y;
+            PlayerController.Instance.vertical -= playerInput.actions["Move"].ReadValue<Vector2>().x;
             angles.x = 340;
         }
         else if (angle < 180 && angle > 40)
         {
             angles.x = 40;
         }
+
+
         followTransform.transform.localEulerAngles = angles;
 
         nextRotation = Quaternion.Lerp(followTransform.transform.rotation, nextRotation, Time.deltaTime * rotationLerp);

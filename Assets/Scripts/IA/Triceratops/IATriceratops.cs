@@ -51,6 +51,7 @@ public class IATriceratops : MonoBehaviour
                 {
                     inWall = true;
                 }
+                else { }
                 
             }
         }
