@@ -1680,8 +1680,8 @@ MonoBehaviour:
   damageToPlayer: 50
   eyesPercept: {fileID: 4852187556863826433}
   earsPercept: {fileID: 4852187555616093938}
-  timerToSee: 1
   enemyTag: Player
+  wall: 
 --- !u!114 &7140331578138341062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1727,8 +1727,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 4.2130084, z: 1}
-  m_Center: {x: 0, y: 1.6065042, z: 0}
+  m_Size: {x: 2.2526722, y: 3.7097983, z: 3.815836}
+  m_Center: {x: 0.0053532124, y: 1.8581092, z: 0.10171223}
 --- !u!54 &7140331578138341080
 Rigidbody:
   m_ObjectHideFlags: 0
