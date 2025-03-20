@@ -1,14 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class IATriceratops : MonoBehaviour
 {
+    [SerializeField] Animator animator;
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious;
-
-    [SerializeField] private float slowingRadious, thershold;
-
-    [SerializeField] private float timeToSeek, timeToStunned;
+    [SerializeField] private int damageToPlayer;
 
     [SerializeField] private Transform eyesPercept, earsPercept;
 
@@ -17,10 +16,9 @@ public class IATriceratops : MonoBehaviour
     BasicAgent basicAgent;
 
     AgentStates agentStates;
-    [SerializeField]
-
-    private float timerToSee;
-    public string enemyTag;
+    private float timerToSee,timerToStun;
+    public string enemyTag,wall;
+    bool inWall;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +38,7 @@ public class IATriceratops : MonoBehaviour
     public void PerceptionManager()
     {
         basicAgent.targetPlayer = null;
-
+        inWall = false;
         if (col_eyesPerceibed != null)
         {
             foreach (Collider tmp in col_eyesPerceibed)
@@ -49,32 +47,54 @@ public class IATriceratops : MonoBehaviour
                 {
                     basicAgent.targetPlayer = tmp.transform;
                 }
-
+                if (tmp.CompareTag(wall))
+                {
+                    inWall = true;
+                }
+                else { }
+                
             }
         }
         if (col_earspPerceibed != null)
         {
             foreach (Collider tmp in col_earspPerceibed)
             {
+                ////Debug.Log(tmp.name);
                 if (tmp.CompareTag(enemyTag))
                 {
                     basicAgent.targetPlayer = tmp.transform;
                 }
-
+                
             }
         }
     }
 
     void DecisionManager()
     {
-        if (basicAgent.targetPlayer != null)
+        if (inWall)
+        {
+            rb.velocity = Vector3.zero;
+            timerToStun += Time.deltaTime;
+            Debug.Log(timerToSee); 
+            if (timerToStun >= 3f)
+            {
+                timerToSee = 0;
+                timerToStun = 0;
+                inWall = false;
+            }
+            
+        }
+        if (basicAgent.targetPlayer != null&&!inWall)
         {
             if (basicAgent.targetPlayer.CompareTag(enemyTag))
             {
                 agentStates = AgentStates.Attack;
             }
         }
-        
+        else
+        {
+            agentStates = AgentStates.None;
+        }
         actionManager();
         movementManager();
     }
@@ -84,9 +104,16 @@ public class IATriceratops : MonoBehaviour
         switch (agentStates)
         {
             case AgentStates.None:
+                animator.SetBool("isIdling", true);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isRunning", false);
                 break;
             case AgentStates.Attack:
+                animator.SetBool("isIdling", false);
+                animator.SetBool("isAttacking", true);
+                animator.SetBool("isRunning", false);
                 break;
+            
         }
     }
     void movementManager()
@@ -102,10 +129,9 @@ public class IATriceratops : MonoBehaviour
         }
     }
 
-
     private void Attack()
     {
-        Debug.Log(timerToSee);
+        ///Debug.Log(timerToSee);
         foreach (Collider tmp in col_earspPerceibed)
         {
             if (tmp.CompareTag(enemyTag))
@@ -114,15 +140,13 @@ public class IATriceratops : MonoBehaviour
                 
                 if (timerToSee <=4f)
                 {
-                    rb.velocity = SreeringBehaviours.Pursuit(basicAgent, basicAgent.getTarget().GetComponent<BasicAgent>());
-                    //SreeringBehaviours.lookAt(transform, rb.velocity);
-                    SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+                    SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
                 }
-                else if(timerToSee <= 10f)
+                else if(timerToSee <= 5f)
                 {
                     rb.velocity = transform.forward*basicAgent.m_speed;
                 }
-                else if (timerToSee <= 20)
+                else if (timerToSee <= 6)
                 {
                     timerToSee = 0;
                 }
@@ -133,23 +157,18 @@ public class IATriceratops : MonoBehaviour
         {
             if (tmp.CompareTag(enemyTag))
             {
-                if (tmp.GetComponent<HealthPlayer>() is var life && life != null)
+                if (tmp.transform.parent.GetComponent<HealthPlayer>() is var life && life != null)
                 {
-                    life.DamagePlayer();
+                    life.DamagePlayer(damageToPlayer);
                 }
             }
         }
 
-        if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
-        {
-            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
-        }
-        if (Vector3.Distance(transform.position, basicAgent.targetWall.position) <= slowingRadious)
-        {
-            rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
-
-        }
-       
+        //if (Vector3.Distance(transform.position, basicAgent.targetPlayer.position) <= slowingRadious)
+        //{
+        //    rb.velocity = SreeringBehaviours.arrival(basicAgent, basicAgent.targetPlayer.position, slowingRadious, thershold);
+        //}
+     
     }
  
     private enum AgentStates

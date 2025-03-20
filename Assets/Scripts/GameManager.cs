@@ -2,70 +2,120 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
+    [SerializeField] private GameObject pauseObj;
+    [SerializeField] private GameObject gameOver;
+    [SerializeField] private GameObject winner;
+    CameraPlayer camera;
     
-    ShooterAgentStates agentStates;
-
-    private int craft;
-    private int game;
-    void Start()
-    {
-       
-    }
-    /// <summary>
-    /// Realiza operaciones de f?sica y l?gica de juego a una velocidad fija.
-    /// </summary>
-    private void FixedUpdate()
-    {
-        decisionManager();
-    }
-
-    /// <summary>
-    /// Gestiona la percepci?n del agente y establece el objetivo.
-    /// </summary>
-   
-    void decisionManager()
-    {
-        if (craft == 1)
-        {
-            agentStates = ShooterAgentStates.Crafting;
-        }
-        if (craft == 1)
-        {
-            agentStates = ShooterAgentStates.InGame;
-        }
-        actionManager();
-    }
-    void actionManager()
-    {
-        switch (agentStates)
-        {
-            case ShooterAgentStates.InGame:
-                InGame();
-                break;
-            case ShooterAgentStates.Crafting:
-                Crafting();
-                break;
-        }
-    }
-    private enum ShooterAgentStates
+    public enum State
     {
         InGame,
-        Crafting,
+        Resume,
+        Pause,
+        InPuzzle,
+        GameOver,
+        Win
     }
-    public void OnCrafting(InputValue context)
+
+    private void Awake()
     {
-        craft = context.Get<int>();
+        // Implementación Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+           
+        }
+        else
+        {
+            ///Destroy(gameObject); // Si ya existe una instancia, destruye este objeto.
+        }
     }
-    private void InGame()
+
+    public State state;
+    private void Start()
     {
-      
+        camera = FindObjectOfType<CameraPlayer>();
     }
-    private void Crafting()
+    
+    public void changeState(State newState)
     {
+        if (newState == state)
+        {
+            return;
+        }
+        if(state == State.Pause&&newState != State.InGame)
+        {
+            return;
+        }
+        state = newState;
+
+        switch (state)
+        {
+            case State.InGame:
+                ButtonResume();
+                camera.LookMouse();
+                break;
+            case State.Resume:
+                ButtonResume();
+                break;
+            case State.Pause:
+                ButtonPause();
+                break;
+            case State.GameOver:
+                GameOver();
+                break;
+            case State.Win:
+                Winner();
+                break;
+            case State.InPuzzle:
+
+                break;
+        }
+    }
+    public void ButtonPlay()
+    {
+        SceneManager.LoadScene(1);
+        ButtonResume();
+    }
+    public void ButtonExit()
+    {
+        Application.Quit();
+    }
+    public void ButtonPause()
+    {
+        Time.timeScale = 0;
+        pauseObj.SetActive(true);
+    }
+    public void ButtonGoToMenu()
+    {
+        SceneManager.LoadScene(0);
+    } 
+    public void Reiniciar()
+    {
+        SceneManager.LoadScene(1);
+        Time.timeScale = 1;
+    }
+    public void ButtonResume()
+    {
+        Time.timeScale = 1;
+        pauseObj.SetActive(false);
+        changeState(GameManager.State.InGame);
+    }
+    public void GameOver()
+    {
+        gameOver.SetActive(true);
+        Time.timeScale = 0;
         
     }
+    public void Winner()
+    {
+        winner.SetActive(true);
+    }
+    
 }

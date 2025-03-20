@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 using UnityEngine.Windows;
-
+using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class CameraPlayer : MonoBehaviour
 {
@@ -19,27 +19,28 @@ public class CameraPlayer : MonoBehaviour
     [SerializeField] private float rotationSpeed;
     [SerializeField] private Camera camera;
     [SerializeField] private GameObject followTransform;
-
+    private PlayerInput playerInput;
     [Header("Cambio de Vista")]
     [Space(10)]
-    public float changeValue;
     public float speed;
     PlayerController player;
     Cinemachine.CinemachineImpulseSource source;
-
+    GameManager gameManager;
     private void Start()
     {
         player = GetComponent<PlayerController>();
+        gameManager=FindObjectOfType<GameManager>();
+
+        playerInput = GetComponent<PlayerInput>();
     }
     void Update()
     {
-        LookMouse();
+        if(gameManager.state == GameManager.State.InGame)
+        {
+            LookMouse();
+        }
     }
-    public void OnChangeCamera(InputValue value)
-    {
-        changeValue = value.Get<float>();
-        
-    }
+
     public void OnLook(InputValue value)
     {
         look = value.Get<Vector2>();
@@ -60,26 +61,29 @@ public class CameraPlayer : MonoBehaviour
         /// rotacion del jugador 
         /// </summary>
         followTransform.transform.rotation *= Quaternion.AngleAxis(look.x * rotationSpeed, Vector3.up);
-        /// <summary>
-        /// verificacion de rotacion actual en x del objetivo
-        /// </summary>
-        followTransform.transform.rotation *= Quaternion.AngleAxis(look.y * rotationSpeed, Vector3.right);
+     
+        followTransform.transform.rotation *= Quaternion.AngleAxis(look.y * -rotationSpeed, Vector3.right);
 
         var angles = followTransform.transform.localEulerAngles;
         angles.z = 0;
         var angle = followTransform.transform.localEulerAngles.x;
-
+        Debug.Log(angle);
+        Debug.Log(angles);
         /// <summary>
         /// anclamos la camara al objetivo para que este bloqueada en una rotacion vertical
         /// </summary>
         if (angle > 180 && angle < 340)
         {
+            PlayerController.Instance.horizontal -= playerInput.actions["Move"].ReadValue<Vector2>().y;
+            PlayerController.Instance.vertical -= playerInput.actions["Move"].ReadValue<Vector2>().x;
             angles.x = 340;
         }
         else if (angle < 180 && angle > 40)
         {
             angles.x = 40;
         }
+
+
         followTransform.transform.localEulerAngles = angles;
 
         nextRotation = Quaternion.Lerp(followTransform.transform.rotation, nextRotation, Time.deltaTime * rotationLerp);
@@ -91,22 +95,19 @@ public class CameraPlayer : MonoBehaviour
         {
             nextPosition = transform.position;
          
-            if (changeValue == 1)
+            if (GameManager.Instance.state == GameManager.State.InPuzzle)
             {
                 ///<summary>
                 ///Establecer la rotación del jugador basada en la transformación de la mirada
                 ///</summary>
-                transform.rotation = Quaternion.Euler(0, followTransform.transform.rotation.eulerAngles.y, 0);
+                transform.rotation = Quaternion.Euler(0, angles.y, 0);
                 ///<summary>
                 ///Restablecer la rotación en el eje Y de la transformación de la mirada
                 ///</summary>
                 followTransform.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
                 
             }
-            //if (changeValue != 1)
-            //{
-            //    transform.rotation = Quaternion.identity;
-            //}
+           
             return;
         }
         float moveSpeed = speed / 100f;

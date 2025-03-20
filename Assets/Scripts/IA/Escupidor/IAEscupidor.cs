@@ -6,9 +6,9 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class IAEscupidor : MonoBehaviour
 {
+    [SerializeField] Animator animator;
     [SerializeField] private float eyesPerceptRadious, earsPerceptRadious, damageHeal;
     [SerializeField] private Transform eyesPercept, earsPercept;
-    [SerializeField] private float explosionDistance = 5f; // Definir la distancia para detonar la explosión
     Rigidbody rb;
     Collider[] col_eyesPerceibed, col_earspPerceibed;
     BasicAgent basicAgent;
@@ -22,10 +22,12 @@ public class IAEscupidor : MonoBehaviour
     float timerBullet, timerEvade;
     bool evadir,inEyes,inEars;
     public string enemyTag;
+
     void Start()
     {
         basicAgent = GetComponent<BasicAgent>();
         rb = GetComponent<Rigidbody>();
+        //Debug.Log(rb+"  "+gameObject.name);
         agentStates = ShooterAgentStates.None;
         inEyes = false;
         inEars = false;
@@ -46,11 +48,11 @@ public class IAEscupidor : MonoBehaviour
     /// <summary>
     /// Gestiona la percepci?n del agente y establece el objetivo.
     /// </summary>
-    public void perceptionManager()
+   public void perceptionManager()
     {
         basicAgent.targetPlayer = null;
         inEyes = false;
-        inEars = false;
+        inEars = false; 
         
         if (col_eyesPerceibed != null)
         {
@@ -103,14 +105,20 @@ public class IAEscupidor : MonoBehaviour
         switch (agentStates)
         {
             case ShooterAgentStates.None:
+                animator.SetBool("isIdling", true);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isRunning", false);
                 break;
             case ShooterAgentStates.Shoot:
-                ShootTower();
+                animator.SetBool("isIdling", false);
+                animator.SetBool("isAttacking", true);
+                animator.SetBool("isRunning", false);
                 break;
             case ShooterAgentStates.Evade:
+                animator.SetBool("isIdling", false);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isRunning", true);
                 break;
-                
-       
         }
     }
     void movementManager()
@@ -121,6 +129,7 @@ public class IAEscupidor : MonoBehaviour
                 rb.velocity = Vector3.zero;
                 break;
             case ShooterAgentStates.Shoot:
+                ShootTower();
                 rb.velocity = Vector3.zero;
                 break;
             case ShooterAgentStates.Evade:
@@ -131,11 +140,12 @@ public class IAEscupidor : MonoBehaviour
     }
     private void Evade()
     {
-        rb.velocity = SreeringBehaviours.Evade(basicAgent, basicAgent.targetPlayer);
+        rb.velocity = SreeringBehaviours.Evade(basicAgent, basicAgent.targetPlayer.parent);
+        SreeringBehaviours.rotation2(transform, 5, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
     }
     private void ShootTower()
     {
-        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.GetComponent<BasicAgent>());
+        SreeringBehaviours.rotation(transform, 5, basicAgent.targetPlayer.parent.GetComponent<BasicAgent>());
         timerBullet += Time.deltaTime;
         if (timerBullet >= 2f)
         {

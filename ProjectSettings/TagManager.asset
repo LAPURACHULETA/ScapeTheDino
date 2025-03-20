@@ -9,16 +9,24 @@ TagManager:
   - Obstacle
   - Wall
   - Ground
+  - Torre
+  - DoorCombo
+  - DoorKeypad
+  - Trampa
+  - Pendulum
+  - Barbs
+  - Bomb
+  - Molotov
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Trampa
+  - Torre
+  - Post Processing
   - 
   - 
   - 

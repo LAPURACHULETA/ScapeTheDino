@@ -20,7 +20,6 @@ public class Bullets : MonoBehaviour
     /// </summary>
     public void Start()
     {
-        //basicAgent = GetComponent<BasicAgent>();
         basicAgent = FindObjectOfType<BasicAgent>();
         rb = GetComponent<Rigidbody>();
     }
@@ -47,11 +46,10 @@ public class Bullets : MonoBehaviour
             {
                 if (tmp.CompareTag(enemyTag))
                 {
-                    //if (tmp.GetComponent<LifePlayer>() is var life && life != null)
-                    //{
-                    //    life.TakeDamagePlayer(bulletDamage);
-                       Destroy(gameObject);
-                    //}
+                    if (tmp.transform.parent.GetComponent<HealthPlayer>() is var life && life != null)
+                    {
+                        life.DamagePlayer(bulletDamage); 
+                    }
                 }
                 else if (tmp.CompareTag(isGroundTag))
                 {

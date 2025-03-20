@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UI;
 
 public class HealthPlayer : MonoBehaviour
 {
-    [Header("Vida de Jugador")]
-    [Space(10)]
-    [SerializeField]private Image imagenSangre;
+    //[Header("Vida de Jugador")]
 
+    //[Space(10)]
+    [SerializeField]private Image imagenSangre; 
     BasicAgent basicAgent;
     private float r;
     private float g;
@@ -20,6 +21,7 @@ public class HealthPlayer : MonoBehaviour
     private void Start()
     {
         basicAgent=GetComponent<BasicAgent>();
+       
         r = imagenSangre.color.r;
         g = imagenSangre.color.g;
         b = imagenSangre.color.b;
@@ -34,16 +36,19 @@ public class HealthPlayer : MonoBehaviour
         MyHelath();
     }
 
-    public void DamagePlayer()
+    public void DamagePlayer(float damage)
     {
-        basicAgent.TakeDamage(5);
+        basicAgent.TakeDamage(damage);
         a += 1f;
+        MyHelath();
     }
     private void MyHelath()
     {
-        if(basicAgent.m_vida <= 0)
+        if(basicAgent.m_vidaActual <= 0)
         {
-            basicAgent.Die(this.gameObject);
+            GameManager.Instance.changeState(GameManager.State.GameOver);
+            this.gameObject.SetActive(false);
+            //basicAgent.Die(this.gameObject);
         }
     }
     private void ChangeColor()

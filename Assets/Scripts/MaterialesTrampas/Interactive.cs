@@ -1,12 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Interactive : MonoBehaviour
 {
-    public void TakeObject()
+    
+    private LaserPuzle laser;
+
+    private void Start()
     {
-        Debug.Log("interactua");
+        laser=gameObject.GetComponent<LaserPuzle>();
     }
    
+    public void RatateLaser()
+    {
+       laser.isRotating = true;
+    }
+    
 }

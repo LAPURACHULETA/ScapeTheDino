@@ -10,28 +10,35 @@ public class ChangeCameraPerson : MonoBehaviour
 
     public GameObject thirdPerson;
     public GameObject firtsPerson;
- 
 
+    private Quaternion originalRotation;
     // Start is called before the first frame update
     void Start()
     {
         input = GetComponent<CameraPlayer>();
+        originalRotation = transform.rotation;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (input.changeValue == 1f && !firtsPerson.activeInHierarchy)
+        Change();
+    }
+
+    private void Change()
+    {
+        if (GameManager.Instance.state == GameManager.State.InPuzzle && !firtsPerson.activeInHierarchy)
         {
             thirdPerson.SetActive(false);
             firtsPerson.SetActive(true);
 
             StartCoroutine(ShowReticle());
         }
-        else if (input.changeValue == 1f && !thirdPerson.activeInHierarchy)
+        else if (GameManager.Instance.state == GameManager.State.InGame && !thirdPerson.activeInHierarchy)
         {
             thirdPerson.SetActive(true);
             firtsPerson.SetActive(false);
+            transform.rotation = originalRotation;
         }
 
     }
