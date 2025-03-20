@@ -226,18 +226,18 @@ public class SpawnManagerLevel : MonoBehaviour
         {
             case LevelStates.None:
                 break;
-            case LevelStates.Level_1:
-                SpawnLevel1Trampas();
-                SpawnLevel1Enemys();
-                break;
-            case LevelStates.Level_2:
-                SpawnLevel2Enemys();
-                SpawnLevel2Trampas();
-                break;
-            case LevelStates.Level_3:
-                SpawnLevel3Enemys();
-                SpawnLevel3Trampas();
-                break;
+            //case LevelStates.Level_1:
+            //    SpawnLevel1Trampas();
+            //    SpawnLevel1Enemys();
+            //    break;
+            //case LevelStates.Level_2:
+            //    SpawnLevel2Enemys();
+            //    SpawnLevel2Trampas();
+            //    break;
+            //case LevelStates.Level_3:
+            //    SpawnLevel3Enemys();
+            //    SpawnLevel3Trampas();
+            //    break;
 
         }
     }
